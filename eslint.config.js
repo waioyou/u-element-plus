@@ -17,4 +17,10 @@ export default [
   ...pluginVue.configs['flat/essential'],
   ...defineConfigWithVueTs(vueTsConfigs.recommended),
   skipFormatting,
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
+    },
+  },
 ]
