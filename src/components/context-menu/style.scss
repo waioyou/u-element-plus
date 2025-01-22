@@ -1,0 +1,16 @@
+.u-context-menu {
+  --u-context-menu-bg-color: var(--el-bg-color, #fff);
+  --u-context-menu-border-radius: var(--el-border-radius-base, 4px);
+  --u-context-menu-box-shadow: var(--el-box-shadow-light, 0 2px 12px 0 rgba(0, 0, 0, 0.1));
+  --u-context-menu-z-index: 999;
+  --u-context-menu-padding: 12px;
+  & {
+    position: absolute;
+    text-align: center;
+    padding: var(--u-context-menu-padding);
+    background-color: var(--u-context-menu-bg-color);
+    border-radius: var(--u-context-menu-border-radius);
+    box-shadow: var(--u-context-menu-box-shadow);
+    z-index: var(--u-context-menu-z-index);
+  }
+}
