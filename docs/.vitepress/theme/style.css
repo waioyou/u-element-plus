@@ -129,3 +129,8 @@
 .VPDoc.has-aside .content-container {
   max-width: 1440px !important;
 }
+
+.vp-doc table:not(:where(.vp-raw *)) {
+  display: table;
+  width: 100%;
+}
