@@ -30,3 +30,6 @@ coverage
 *.tsbuildinfo
 
 .cursorrules
+
+docs/.vitepress/dist
+docs/.vitepress/cache

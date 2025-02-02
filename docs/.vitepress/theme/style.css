@@ -1,0 +1,131 @@
+/**
+ * 通过覆盖 CSS 变量来自定义默认主题样式：
+ * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ */
+
+/**
+ * 颜色系统
+ *
+ * 每种颜色都有相同的颜色级别系统，包含3个不同亮度的纯色和1个柔和色。
+ *
+ * - `XXX-1`：最纯的颜色，主要用于彩色文本。在 `XXX-soft` 背景上使用时
+ *   必须满足对比度要求。
+ *
+ * - `XXX-2`：主要用于按钮悬停状态的颜色。
+ *
+ * - `XXX-3`：用于实心背景的颜色，如按钮的背景色。
+ *   必须确保与纯白色(#ffffff)文本之间有足够的对比度。
+ *
+ * - `XXX-soft`：用于柔和背景的颜色，如自定义容器或徽章。
+ *   当 `XXX-1` 颜色在其上面时必须满足对比度要求。
+ *
+ *   柔和色必须使用半透明的 alpha 通道。这一点很重要，
+ *   因为它允许多个"柔和"颜色叠加来创建强调效果，
+ *   比如在自定义容器内部的内联代码块。
+ *
+ * - `default`：用于细微提示的颜色，没有特殊含义，
+ *   如菜单悬停状态的背景色。
+ *
+ * - `brand`：用于主要品牌颜色，如链接文本、品牌主题按钮等。
+ *
+ * - `tip`：用于表示有用信息。默认主题默认使用品牌色。
+ *
+ * - `warning`：用于向用户显示警告信息。用于自定义容器、徽章等。
+ *
+ * - `danger`：用于显示错误或危险信息。用于自定义容器、徽章等。
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-c-default-1: var(--vp-c-gray-1);
+  --vp-c-default-2: var(--vp-c-gray-2);
+  --vp-c-default-3: var(--vp-c-gray-3);
+  --vp-c-default-soft: var(--vp-c-gray-soft);
+
+  --vp-c-brand-1: var(--vp-c-indigo-1);
+  --vp-c-brand-2: var(--vp-c-indigo-2);
+  --vp-c-brand-3: var(--vp-c-indigo-3);
+  --vp-c-brand-soft: var(--vp-c-indigo-soft);
+
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-3: var(--vp-c-brand-3);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
+
+  --vp-c-warning-1: var(--vp-c-yellow-1);
+  --vp-c-warning-2: var(--vp-c-yellow-2);
+  --vp-c-warning-3: var(--vp-c-yellow-3);
+  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+
+  --vp-c-danger-1: var(--vp-c-red-1);
+  --vp-c-danger-2: var(--vp-c-red-2);
+  --vp-c-danger-3: var(--vp-c-red-3);
+  --vp-c-danger-soft: var(--vp-c-red-soft);
+
+  --vp-layout-max-width: 100vw;
+}
+
+/**
+ * 组件：按钮
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vp-c-white);
+  --vp-button-brand-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vp-c-white);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+/**
+ * 组件：首页
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
+
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%);
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(68px);
+  }
+}
+
+/**
+ * 组件：自定义块
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-custom-block-tip-border: transparent;
+  --vp-custom-block-tip-text: var(--vp-c-text-1);
+  --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
+  --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
+}
+
+/**
+ * 组件：Algolia 搜索
+ * -------------------------------------------------------------------------- */
+
+.DocSearch {
+  --docsearch-primary-color: var(--vp-c-brand-1) !important;
+}
+
+/* 
+ * 设置最大宽度
+ */
+.VPDoc.has-aside .content-container {
+  max-width: 1440px !important;
+}
