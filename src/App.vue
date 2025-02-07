@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UContextMenu from '@/components/context-menu'
-
+import UTable from '@/components/table/u-table.vue'
 const show = () => {
   console.log('show')
 }
@@ -16,6 +16,7 @@ const hide = () => {
         <div>123</div>
       </template>
     </UContextMenu>
+    <UTable />
   </div>
 </template>
 
