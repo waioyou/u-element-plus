@@ -38,6 +38,7 @@
     ]
   },
   "dependencies": {
+    "element-plus": "^2.9.4",
     "vue": "3.4.21"
   },
   "devDependencies": {
