@@ -1,13 +1,17 @@
 import type {
   FormProps as ElFormProps,
   FormItemProps as ElFormItemProps,
+  FormInstance as ElFormInstance,
   FormItemRule,
 } from 'element-plus'
 import type { CSSProperties, VNode, Component } from 'vue'
+
 /** 表单属性 */
 export interface FormProps extends Omit<ElFormProps, 'model'> {
   /** 是否查看模式 */
   view?: boolean
+  /** 表单配置项 */
+  options: FormOptions
 }
 
 /** 表单事件 */
@@ -17,14 +21,21 @@ export type FormEmits = {
   /** 任一表单项值发生变化时触发 */
   change: [name: string, item: FormOptionItem]
 }
-export type FormOptions<T = any> = {
-  [K in keyof T]: FormOptionItem<T[K]>
-}
-/** 表单配置项 */
 
-export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, 'prop'>> {
-  /** 类型: 对应element-plus的表单组件、以及一些拓展组件 */
-  type?: FormItemType
+/** 表单实例 */
+export interface FormInstance extends ElFormInstance {
+  /** 获取表单数据 */
+  getFormData: <T = any>(validate?: boolean) => Promise<T | false>
+}
+
+/** 表单配置项 */
+export type FormOptions<T = any> = {
+  [K in keyof T & string]: FormOptionItem<T[K]>
+}
+
+export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, 'prop' | 'rules'>> {
+  /** 展示元素: 对应element-plus的表单组件、以及一些拓展组件 */
+  element?: FormItemElement
   /** 值 */
   value?: V
   /** 标签 */
@@ -38,23 +49,25 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   /** 是否查看模式 */
   view?: boolean
   /** 查看模式下格式化显示内容 */
-  formatter?: (item: FormOptionItem) => VNode
+  formatter?: (item: FormOptionItem) => VNode | string | number
   /** 是否渲染 */
-  if?: boolean
+  if?: boolean | ((options: FormOptions) => boolean)
   /** 是否展示 */
-  show?: boolean
+  show?: boolean | ((options: FormOptions) => boolean)
   /** 动态组件 */
   component?: Component
   /** 样式 */
   style?: CSSProperties
   /** 类名 */
   class?: string
+  /** 分割比例 */
+  divide?: string
   /** 属性 */
   attrs?: Record<string, any>
 }
 
 /** 表单项元素类型枚举 */
-export enum FormItemType {
+export const enum FormItemElementEnum {
   /** 自动补全输入框 */
   AutoComplete = 'el-autocomplete',
   /** 级联选择器 */
@@ -101,5 +114,29 @@ export enum FormItemType {
   /** 上传 */
   Upload = 'el-upload',
 }
+
+/** 表单项元素类型 */
+export type FormItemElement =
+  | 'el-autocomplete' /** 自动补全输入框 */
+  | 'el-cascader' /** 级联选择器 */
+  | 'el-checkbox-group' /** 多选框组 */
+  | 'el-color-picker' /** 取色器 */
+  | 'el-date-picker' /** 日期选择器 */
+  | 'el-input' /** 输入框 */
+  | 'el-input-number' /** 数字输入框 */
+  | 'el-input-tag' /** 标签输入框 @since ElementPlus 2.9.0 */
+  | 'el-mention' /** 提及 */
+  | 'el-radio-group' /** 单选框组 */
+  | 'el-rate' /** 评分 */
+  | 'el-select' /** 选择器 */
+  | 'el-select-v2' /** 虚拟化选择器 */
+  | 'el-slider' /** 滑块 */
+  | 'el-switch' /** 开关 */
+  | 'el-time-picker' /** 时间选择器 */
+  | 'el-time-select' /** 时间选择 */
+  | 'el-transfer' /** 穿梭框 */
+  | 'el-tree-select' /** 树形选择 */
+  | 'el-input-group' /** 输入框组 */
+  | 'el-upload' /** 上传 */
 
 type FormOptionItemSlot = 'default' | 'label' | 'error'

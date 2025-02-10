@@ -1,0 +1,237 @@
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
+import { omit } from '@/utils'
+import type { FormProps, FormEmits, FormOptions, FormOptionItem, FormInstance } from './type'
+import { FormItemElementEnum } from './type'
+import type { FormInstance as ElFormInstance } from 'element-plus'
+defineOptions({
+  name: 'UForm',
+})
+const emit = defineEmits<FormEmits>()
+
+const props = withDefaults(defineProps<FormProps>(), {
+  /** 是否为查看模式 */
+  view: false,
+  /** 是否为行内表单模式 */
+  inline: false,
+  /** 标签的位置 */
+  labelPosition: 'right',
+  /** 标签的宽度 */
+  labelWidth: 'auto',
+  /** 标签的后缀 */
+  labelSuffix: '',
+  /** 是否隐藏必填字段的星号 */
+  hideRequiredAsterisk: false,
+  /** 必填星号的位置 */
+  requireAsteriskPosition: 'left',
+  /** 是否显示校验信息 */
+  showMessage: true,
+  /** 是否显示内联提示信息 */
+  inlineMessage: false,
+  /** 是否显示状态图标 */
+  statusIcon: false,
+  /** 是否在规则变化时进行验证 */
+  validateOnRuleChange: true,
+  /** 表单项的尺寸 */
+  size: 'default',
+  /** 是否禁用表单 */
+  disabled: false,
+  /** 是否滚动到错误字段 */
+  scrollToError: false,
+  /** 滚动到视图选项 */
+  scrollIntoViewOptions: false,
+})
+
+const formOptions = defineModel<FormOptions>('options', { default: () => ({}) })
+
+const formRef = ref<ElFormInstance>()
+
+/** 过滤出 ElForm 需要的属性 */
+const filterElFormProps = computed(() => {
+  return omit(props, ['view', 'rules', 'options'])
+})
+
+/** 过滤出 ElFormItem 需要的属性 */
+const filterElFormItemProps = (item: FormOptionItem) => {
+  return omit(item, ['divide', 'element', 'value', 'attrs', 'if', 'show'])
+}
+
+/** 获取表单项的校验规则 */
+const getElFormItemRules = (item: FormOptionItem) => {
+  if (!item.rules) return []
+  return item.rules.map((rule) => {
+    const inputElement = [
+      FormItemElementEnum.AutoComplete,
+      FormItemElementEnum.Input,
+      FormItemElementEnum.InputGroup,
+      FormItemElementEnum.InputNumber,
+      FormItemElementEnum.InputTag,
+      FormItemElementEnum.Mention,
+    ]
+    if (inputElement.includes(item.element as FormItemElementEnum)) {
+      return { message: `请输入`, ...rule }
+    } else {
+      return { message: `请选择`, ...rule }
+    }
+  })
+}
+
+/** 处理表单项的 if 属性 */
+const handleIf = (item: FormOptionItem) => {
+  if (typeof item.if === 'function') {
+    return item.if(formOptions.value)
+  }
+  return Reflect.has(item, 'if') ? item.if : true
+}
+
+/** 处理表单项的 show 属性 */
+const handleShow = (item: FormOptionItem) => {
+  if (typeof item.show === 'function') {
+    return item.show(formOptions.value)
+  }
+  return Reflect.has(item, 'show') ? item.show : true
+}
+
+/** 处理表单项的 change 事件 */
+const handleChange = (key: string, item: FormOptionItem) => {
+  emit('change', key, item)
+}
+
+/** 获取表单数据 */
+const getFormData: FormInstance['getFormData'] = async (validate: boolean = false) => {
+  const result = {} as any
+  const getResult = () => {
+    Object.keys(formOptions.value).forEach((key) => {
+      const item = formOptions.value[key]
+      if (Reflect.has(item, 'value')) {
+        result[key] = item.value
+      }
+    })
+  }
+  if (validate) {
+    return formRef.value
+      ?.validate()
+      .then(() => {
+        getResult()
+        return result
+      })
+      .catch(() => {
+        return false
+      })
+  } else {
+    getResult()
+    return result
+  }
+}
+
+defineExpose(
+  new Proxy(
+    {
+      getFormData,
+    },
+    {
+      get(target, key) {
+        if (key === 'getFormData') {
+          return getFormData
+        }
+        return (formRef.value as any)?.[key]
+      },
+      has(target, key) {
+        if (key === 'getFormData') {
+          return true
+        }
+        return Reflect.has(formRef.value!, key)
+      },
+    },
+  ),
+)
+</script>
+
+<template>
+  <el-form
+    ref="formRef"
+    v-if="formOptions"
+    class="u-form"
+    v-bind="filterElFormProps"
+    :model="formOptions"
+  >
+    <template v-for="(item, key) in formOptions" :key="key">
+      <el-form-item
+        v-if="handleIf(item)"
+        v-show="handleShow(item)"
+        v-bind="filterElFormItemProps(item)"
+        :prop="`${key}.value`"
+        :rules="getElFormItemRules(item)"
+        class="u-form-item"
+      >
+        <!-- error插槽处理 -->
+        <template v-if="item.slot && item.slot.includes('error')" #error="slotProps">
+          <slot :name="`${key}Error`" :prop="key" v-bind="slotProps" :item="item"></slot>
+        </template>
+        <!-- label插槽处理 -->
+        <template v-if="item.slot && item.slot.includes('label')" #label="slotProps">
+          <slot :name="`${key}Label`" :prop="key" v-bind="slotProps" :item="item"></slot>
+        </template>
+        <template #default>
+          <!-- 默认插槽处理 -->
+          <slot
+            v-if="item.slot && item.slot.includes('default')"
+            :name="key"
+            :prop="key"
+            :item="item"
+          ></slot>
+          <!-- 渲染表单项 -->
+          <template v-if="item.element">
+            <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
+            <el-cascader
+              v-if="item.element === FormItemElementEnum.Cascader"
+              v-model="item.value"
+              v-bind="item.attrs"
+              @change="handleChange(key, item)"
+            />
+            <component
+              v-else
+              v-model="item.value"
+              :is="item.element"
+              v-bind="item.attrs"
+              @change="handleChange(key, item)"
+            >
+              <template v-if="item.attrs?.options">
+                <!-- 选择器 选项 -->
+                <template v-if="item.element === FormItemElementEnum.Select">
+                  <el-option
+                    v-for="option in item.attrs.options"
+                    :key="option.value"
+                    v-bind="option"
+                  />
+                </template>
+                <!-- 多选框组 选项-->
+                <template v-else-if="item.element === FormItemElementEnum.CheckboxGroup">
+                  <el-checkbox
+                    v-for="option in item.attrs.options"
+                    :key="option.value"
+                    v-bind="option"
+                  />
+                </template>
+                <!-- 单选框组 选项-->
+                <template v-else-if="item.element === FormItemElementEnum.RadioGroup">
+                  <el-radio
+                    v-for="option in item.attrs.options"
+                    :key="option.value"
+                    v-bind="option"
+                  />
+                </template>
+              </template>
+            </component>
+          </template>
+        </template>
+      </el-form-item>
+    </template>
+  </el-form>
+</template>
+
+<style lang="scss" scoped>
+.u-form {
+  width: 100%;
+}
+</style>
