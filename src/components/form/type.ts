@@ -7,7 +7,7 @@ import type {
 import type { CSSProperties, VNode, Component } from 'vue'
 
 /** 表单属性 */
-export interface FormProps extends Omit<ElFormProps, 'model'> {
+export interface FormProps extends Omit<ElFormProps, 'model' | 'inline'> {
   /** 是否查看模式 */
   view?: boolean
   /** 表单配置项 */
@@ -60,8 +60,8 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   style?: CSSProperties
   /** 类名 */
   class?: string
-  /** 分割比例 */
-  divide?: string
+  /** 表单项宽度占一行比例：[numerator, denominator]，默认[1,1] */
+  ratio?: [number, number]
   /** 属性 */
   attrs?: Record<string, any>
 }

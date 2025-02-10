@@ -12,8 +12,6 @@ const emit = defineEmits<FormEmits>()
 const props = withDefaults(defineProps<FormProps>(), {
   /** 是否为查看模式 */
   view: false,
-  /** 是否为行内表单模式 */
-  inline: false,
   /** 标签的位置 */
   labelPosition: 'right',
   /** 标签的宽度 */
@@ -53,7 +51,7 @@ const filterElFormProps = computed(() => {
 
 /** 过滤出 ElFormItem 需要的属性 */
 const filterElFormItemProps = (item: FormOptionItem) => {
-  return omit(item, ['divide', 'element', 'value', 'attrs', 'if', 'show'])
+  return omit(item, ['ratio', 'element', 'value', 'attrs', 'if', 'show', 'style'])
 }
 
 /** 获取表单项的校验规则 */
@@ -74,6 +72,18 @@ const getElFormItemRules = (item: FormOptionItem) => {
       return { message: `请选择`, ...rule }
     }
   })
+}
+
+/** 获取表单项的样式 */
+const getFormItemStyle = (item: FormOptionItem) => {
+  const style = item?.style ?? { width: '100%' }
+  if (item.ratio && item.ratio.length === 2) {
+    const [numerator, denominator] = item.ratio
+    if (numerator > 0 && denominator > 0 && numerator < denominator) {
+      style.width = `${(numerator / denominator) * 100}%`
+    }
+  }
+  return style
 }
 
 /** 处理表单项的 if 属性 */
@@ -148,13 +158,7 @@ defineExpose(
 </script>
 
 <template>
-  <el-form
-    ref="formRef"
-    v-if="formOptions"
-    class="u-form"
-    v-bind="filterElFormProps"
-    :model="formOptions"
-  >
+  <el-form ref="formRef" class="u-form" v-bind="filterElFormProps" :model="formOptions" inline>
     <template v-for="(item, key) in formOptions" :key="key">
       <el-form-item
         v-if="handleIf(item)"
@@ -162,6 +166,7 @@ defineExpose(
         v-bind="filterElFormItemProps(item)"
         :prop="`${key}.value`"
         :rules="getElFormItemRules(item)"
+        :style="getFormItemStyle(item)"
         class="u-form-item"
       >
         <!-- error插槽处理 -->
@@ -233,5 +238,10 @@ defineExpose(
 <style lang="scss" scoped>
 .u-form {
   width: 100%;
+  .el-form-item {
+    margin-right: 0;
+    box-sizing: border-box;
+    padding-right: 16px;
+  }
 }
 </style>
