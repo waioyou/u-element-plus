@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { omit } from '@/utils'
+import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
 import type { FormProps, FormEmits, FormOptions, FormOptionItem, FormInstance } from './type'
 import { FormItemElementEnum } from './type'
-import type { FormInstance as ElFormInstance } from 'element-plus'
+import { type FormInstance as ElFormInstance } from 'element-plus'
+import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 defineOptions({
   name: 'UForm',
 })
@@ -107,6 +108,61 @@ const handleChange = (key: string, item: FormOptionItem) => {
   emit('change', key, item)
 }
 
+/** 获取表单项的查看节点 */
+const getViewVNode = (item: FormOptionItem) => {
+  if (item.value === undefined || item.value === null) {
+    return ''
+  }
+  if (item.formatter) {
+    return item.formatter(item)
+  }
+  const attrs = item?.attrs ?? {}
+  if (item.element === FormItemElementEnum.Cascader) {
+    // 级联选择器根据value获取label，进行拼接
+    const {
+      label: labelKey = 'label',
+      value: valueKey = 'value',
+      children = 'children',
+    } = attrs?.props ?? {}
+    const options = treeToList(attrs?.options ?? [], children)
+    return getOptionText(options, item.value, { labelKey, valueKey })
+  } else if (item.element === FormItemElementEnum.Transfer) {
+    const { label: labelKey = 'label', value: valueKey = 'key' } = attrs?.props ?? {}
+    return getOptionText(attrs?.data ?? [], item.value, { labelKey, valueKey })
+  } else if (
+    // 选择器、多选框组、单选框组、穿梭框
+    [
+      FormItemElementEnum.Select,
+      FormItemElementEnum.CheckboxGroup,
+      FormItemElementEnum.RadioGroup,
+    ].includes(item.element as FormItemElementEnum)
+  ) {
+    return getOptionText(attrs?.options ?? [], item.value)
+  } else if (item.element === FormItemElementEnum.Switch) {
+    // 开关
+    const { activeText = '是', inactiveText = '否', activeValue = true } = attrs ?? {}
+    return item.value === activeValue ? activeText : inactiveText
+  } else if (
+    [FormItemElementEnum.TimePicker, FormItemElementEnum.TimeSelect].includes(
+      item.element as FormItemElementEnum,
+    )
+  ) {
+    const format = attrs?.format ?? 'HH:mm:ss'
+    return Array.isArray(item.value)
+      ? item.value.map((d) => formatterDate(d, format)).join('-')
+      : formatterDate(item.value, format)
+  } else if (item.element === FormItemElementEnum.DatePicker) {
+    let format = getDateTypeFormat(attrs?.type ?? 'date')
+    if (item.attrs?.format) {
+      format = item.attrs?.format
+    }
+    return Array.isArray(item.value)
+      ? item.value.map((d) => formatterDate(d, format)).join('-')
+      : formatterDate(item.value, format)
+  }
+  return item.value?.toString() ?? ''
+}
+
 /** 获取表单数据 */
 const getFormData: FormInstance['getFormData'] = async (validate: boolean = false) => {
   const result = {} as any
@@ -185,8 +241,23 @@ defineExpose(
             :prop="key"
             :item="item"
           ></slot>
+          <!-- 动态组件 -->
+          <template v-else-if="item.component">
+            <component :is="item.component" v-model="item.value" v-bind="item.attrs" />
+          </template>
+          <!-- 查看模式 -->
+          <template v-else-if="view || item.view">
+            <component
+              v-if="item.element === FormItemElementEnum.Rate"
+              :is="item.element"
+              v-model="item.value"
+              v-bind="item.attrs"
+              :disabled="true"
+            />
+            <RenderVNode v-else :v-node="getViewVNode(item)" />
+          </template>
           <!-- 渲染表单项 -->
-          <template v-if="item.element">
+          <template v-else-if="item.element">
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader
               v-if="item.element === FormItemElementEnum.Cascader"

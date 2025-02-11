@@ -111,8 +111,6 @@ export const enum FormItemElementEnum {
   TreeSelect = 'el-tree-select',
   /** 输入框组 */
   InputGroup = 'el-input-group',
-  /** 上传 */
-  Upload = 'el-upload',
 }
 
 /** 表单项元素类型 */
@@ -137,6 +135,5 @@ export type FormItemElement =
   | 'el-transfer' /** 穿梭框 */
   | 'el-tree-select' /** 树形选择 */
   | 'el-input-group' /** 输入框组 */
-  | 'el-upload' /** 上传 */
 
 type FormOptionItemSlot = 'default' | 'label' | 'error'

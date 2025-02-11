@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UForm from '@/components/form/form.vue'
-import { ref } from 'vue'
+import { h, ref } from 'vue'
 import { FormItemElementEnum } from './components/form/type'
 import type { FormOptions, FormInstance } from './components/form/type'
 
@@ -16,7 +16,7 @@ const formOptions = ref<FormOptions>({
   autocomplete: {
     label: '自动补全输入框',
     element: FormItemElementEnum.AutoComplete,
-    value: '',
+    value: '1',
     attrs: {
       placeholder: '请输入',
       clearable: true,
@@ -33,7 +33,10 @@ const formOptions = ref<FormOptions>({
   cascader: {
     label: '级联选择器',
     element: FormItemElementEnum.Cascader,
-    value: [],
+    value: [
+      ['FuJian', 'Fuzhou'],
+      ['FuJian', 'Xiamen'],
+    ],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '请选择',
@@ -55,13 +58,17 @@ const formOptions = ref<FormOptions>({
           ],
         },
       ],
+      props: {
+        emitPath: true,
+        multiple: false,
+      },
     },
     ratio: [1, 3],
   },
   checkboxGroup: {
     label: '多选框组',
     element: FormItemElementEnum.CheckboxGroup,
-    value: [],
+    value: ['sing', 'dance'],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       options: [
@@ -70,6 +77,9 @@ const formOptions = ref<FormOptions>({
         { label: 'rap', value: 'rap' },
         { label: '篮球', value: 'basketball' },
       ],
+    },
+    formatter: (item) => {
+      return h('span', item.value.join(', '))
     },
     ratio: [1, 3],
   },
@@ -83,11 +93,11 @@ const formOptions = ref<FormOptions>({
   datePicker: {
     label: '日期选择器',
     element: FormItemElementEnum.DatePicker,
-    value: '',
+    value: '2024-01-01',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '选择日期',
-      type: 'date',
+      type: 'datetime',
       format: 'YYYY-MM-DD',
       clearable: true,
     },
@@ -96,7 +106,7 @@ const formOptions = ref<FormOptions>({
   input: {
     label: '输入框',
     element: FormItemElementEnum.Input,
-    value: '',
+    value: '输入框',
     rules: [{ required: true, trigger: 'blur' }],
     attrs: {
       placeholder: '请输入',
@@ -119,7 +129,7 @@ const formOptions = ref<FormOptions>({
   radioGroup: {
     label: '单选框组',
     element: FormItemElementEnum.RadioGroup,
-    value: '',
+    value: 'A',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       options: [
@@ -144,7 +154,7 @@ const formOptions = ref<FormOptions>({
   select: {
     label: '选择器',
     element: FormItemElementEnum.Select,
-    value: '',
+    value: '1',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '请选择',
@@ -183,19 +193,20 @@ const formOptions = ref<FormOptions>({
   timePicker: {
     label: '时间选择器',
     element: FormItemElementEnum.TimePicker,
-    value: '',
+    value: '20:05:01',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '选择时间',
       format: 'HH:mm:ss',
       clearable: true,
+      valueFormat: 'HH:mm:ss',
     },
     ratio: [1, 2],
   },
   transfer: {
     label: '穿梭框',
     element: FormItemElementEnum.Transfer,
-    value: [],
+    value: [1, 2],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       data: [
@@ -204,24 +215,6 @@ const formOptions = ref<FormOptions>({
         { key: 3, label: '选项3' },
       ],
       titles: ['源列表', '目标列表'],
-    },
-    ratio: [1, 1],
-  },
-  upload: {
-    label: '上传',
-    element: FormItemElementEnum.Upload,
-    value: [],
-    rules: [{ required: false, trigger: 'change' }],
-    attrs: {
-      action: 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15',
-      listType: 'picture-card',
-      limit: 3,
-      onPreview: (file: any) => {
-        console.log(file)
-      },
-      onRemove: (file: any, fileList: any) => {
-        console.log(file, fileList)
-      },
     },
     ratio: [1, 1],
   },
@@ -239,13 +232,16 @@ const handleChange = (key: string, item: any) => {
   console.log('🚀 ~ handleChange ~ key:', key)
   console.log('🚀 ~ handleChange ~ item:', item)
 }
+
+const view = ref(false)
 </script>
 
 <template>
   <div style="width: 100%; height: 100vh">
-    <div class="p-4" style="width: 1200px">
-      <UForm ref="formRef" v-model:options="formOptions" @change="handleChange" />
+    <div class="p-4">
+      <UForm ref="formRef" v-model:options="formOptions" @change="handleChange" :view="view" />
       <el-button @click="handleGetFormData">获取表单数据</el-button>
+      <el-button @click="view = !view">{{ view ? '编辑模式' : '查看模式' }}</el-button>
     </div>
   </div>
 </template>
