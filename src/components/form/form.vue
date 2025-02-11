@@ -214,7 +214,7 @@ defineExpose(
 </script>
 
 <template>
-  <el-form ref="formRef" class="u-form" v-bind="filterElFormProps" :model="formOptions" inline>
+  <el-form ref="formRef" class="u-form" v-bind="filterElFormProps" :model="formOptions">
     <template v-for="(item, key) in formOptions" :key="key">
       <el-form-item
         v-if="handleIf(item)"
@@ -247,12 +247,18 @@ defineExpose(
           </template>
           <!-- 查看模式 -->
           <template v-else-if="view || item.view">
-            <component
+            <el-rate
               v-if="item.element === FormItemElementEnum.Rate"
-              :is="item.element"
               v-model="item.value"
               v-bind="item.attrs"
               :disabled="true"
+            />
+            <el-upload
+              v-else-if="item.element === FormItemElementEnum.Upload"
+              :file-list="item.value"
+              v-bind="item.attrs"
+              :disabled="true"
+              class="is-view"
             />
             <RenderVNode v-else :v-node="getViewVNode(item)" />
           </template>
@@ -265,6 +271,17 @@ defineExpose(
               v-bind="item.attrs"
               @change="handleChange(key, item)"
             />
+            <!-- 上传 -->
+            <el-upload
+              v-else-if="item.element === FormItemElementEnum.Upload"
+              v-model:file-list="item.value"
+              v-bind="item.attrs"
+              @change="handleChange(key, item)"
+            >
+              <el-button v-if="item.attrs?.listType !== 'picture-card'" type="primary">
+                点击上传
+              </el-button>
+            </el-upload>
             <component
               v-else
               v-model="item.value"
@@ -310,9 +327,15 @@ defineExpose(
 .u-form {
   width: 100%;
   .el-form-item {
+    display: inline-flex;
     margin-right: 0;
     box-sizing: border-box;
     padding-right: 16px;
+  }
+  .is-view {
+    :deep(.el-upload) {
+      display: none;
+    }
   }
 }
 </style>

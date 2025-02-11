@@ -23,6 +23,14 @@ export default [
       '@typescript-eslint/no-this-alias': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
       'vue/multi-word-component-names': 'off',
+      'vue/block-lang': [
+        'error',
+        {
+          script: {
+            lang: ['ts', 'tsx'],
+          },
+        },
+      ],
     },
   },
 ]

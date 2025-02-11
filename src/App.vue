@@ -1,18 +1,12 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import UForm from '@/components/form/form.vue'
 import { h, ref } from 'vue'
 import { FormItemElementEnum } from './components/form/type'
 import type { FormOptions, FormInstance } from './components/form/type'
+import { ElButton } from 'element-plus'
 
 const formRef = ref<FormInstance>()
 const formOptions = ref<FormOptions>({
-  secbar1: {
-    label: '基础信息',
-    element: FormItemElementEnum.Input,
-    if: (options) => {
-      return options.checkboxGroup.value.length > 0
-    },
-  },
   autocomplete: {
     label: '自动补全输入框',
     element: FormItemElementEnum.AutoComplete,
@@ -216,7 +210,35 @@ const formOptions = ref<FormOptions>({
       ],
       titles: ['源列表', '目标列表'],
     },
-    ratio: [1, 1],
+    ratio: [1, 2],
+  },
+  upload: {
+    label: '上传',
+    element: FormItemElementEnum.Upload,
+    value: [
+      {
+        name: 'element-plus-logo.svg',
+        url: 'https://element-plus.org/images/element-plus-logo.svg',
+      },
+      {
+        name: 'element-plus-logo2.svg',
+        url: 'https://element-plus.org/images/element-plus-logo.svg',
+      },
+    ],
+    rules: [{ required: false, trigger: 'change' }],
+    view: false,
+    attrs: {
+      action: 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15',
+      listType: 'picture',
+      limit: 3,
+      onPreview: (file: any) => {
+        console.log(file)
+      },
+      onRemove: (file: any, fileList: any) => {
+        console.log(file, fileList)
+      },
+    },
+    ratio: [1, 2],
   },
 })
 
