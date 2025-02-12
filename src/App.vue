@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import UForm from '@/components/form/form.vue'
 import { h, ref } from 'vue'
 import type { FormOptions, FormInstance, FormItemElementAttrs } from './components/form/type'
