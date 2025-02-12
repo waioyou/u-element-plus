@@ -1,8 +1,33 @@
 import type {
+  ComponentPropsWithoutValue,
+  InstancePropsType,
+  InstancePropsTypeOmitValue,
+} from '@/utils'
+import type {
   FormProps as ElFormProps,
   FormItemProps as ElFormItemProps,
   FormInstance as ElFormInstance,
   FormItemRule,
+  InputProps,
+  CascaderProps,
+  AutocompleteProps,
+  CheckboxGroupProps,
+  ColorPickerProps,
+  DatePickerProps,
+  InputNumberProps,
+  InputTagProps,
+  MentionProps,
+  RadioGroupProps,
+  RateProps,
+  TimeSelectProps,
+  SliderProps,
+  SwitchProps,
+  TimePickerDefaultProps,
+  TransferProps,
+  UploadProps,
+  ElTreeSelect,
+  ElSelect,
+  ElSelectV2,
 } from 'element-plus'
 import type { CSSProperties, VNode, Component } from 'vue'
 
@@ -65,78 +90,80 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   /** 属性 */
   attrs?: Record<string, any>
 }
-
-/** 表单项元素类型枚举 */
-export const enum FormItemElementEnum {
-  /** 自动补全输入框 */
-  AutoComplete = 'el-autocomplete',
-  /** 级联选择器 */
-  Cascader = 'el-cascader',
-  /** 多选框组 */
-  CheckboxGroup = 'el-checkbox-group',
-  /** 取色器 */
-  ColorPicker = 'el-color-picker',
-  /** 日期选择器 */
-  DatePicker = 'el-date-picker',
-  /** 输入框 */
-  Input = 'el-input',
-  /** 数字输入框 */
-  InputNumber = 'el-input-number',
-  /**
-   * 标签输入框
-   * @since ElementPlus 2.9.0
-   */
-  InputTag = 'el-input-tag',
-  /** 提及 */
-  Mention = 'el-mention',
-  /** 单选框组 */
-  RadioGroup = 'el-radio-group',
-  /** 评分 */
-  Rate = 'el-rate',
-  /** 选择器 */
-  Select = 'el-select',
-  /** 虚拟化选择器 */
-  SelectV2 = 'el-select-v2',
-  /** 滑块 */
-  Slider = 'el-slider',
-  /** 开关 */
-  Switch = 'el-switch',
-  /** 时间选择器 */
-  TimePicker = 'el-time-picker',
-  /** 时间选择 */
-  TimeSelect = 'el-time-select',
-  /** 穿梭框 */
-  Transfer = 'el-transfer',
-  /** 树形选择 */
-  TreeSelect = 'el-tree-select',
-  /** 输入框组 */
-  InputGroup = 'el-input-group',
-  /** 上传 */
-  Upload = 'el-upload',
-}
+type FormOptionItemSlot = 'default' | 'label' | 'error'
 
 /** 表单项元素类型 */
 export type FormItemElement =
-  | 'el-autocomplete' /** 自动补全输入框 */
-  | 'el-cascader' /** 级联选择器 */
-  | 'el-checkbox-group' /** 多选框组 */
-  | 'el-color-picker' /** 取色器 */
-  | 'el-date-picker' /** 日期选择器 */
-  | 'el-input' /** 输入框 */
-  | 'el-input-number' /** 数字输入框 */
-  | 'el-input-tag' /** 标签输入框 @since ElementPlus 2.9.0 */
-  | 'el-mention' /** 提及 */
-  | 'el-radio-group' /** 单选框组 */
-  | 'el-rate' /** 评分 */
-  | 'el-select' /** 选择器 */
-  | 'el-select-v2' /** 虚拟化选择器 */
-  | 'el-slider' /** 滑块 */
-  | 'el-switch' /** 开关 */
-  | 'el-time-picker' /** 时间选择器 */
-  | 'el-time-select' /** 时间选择 */
-  | 'el-transfer' /** 穿梭框 */
-  | 'el-tree-select' /** 树形选择 */
-  | 'el-input-group' /** 输入框组 */
-  | 'el-upload' /** 上传 */
+  | 'autocomplete' /** 自动补全输入框 */
+  | 'cascader' /** 级联选择器 */
+  | 'checkbox-group' /** 多选框组 */
+  | 'color-picker' /** 取色器 */
+  | 'date-picker' /** 日期选择器 */
+  | 'input' /** 输入框 */
+  | 'input-number' /** 数字输入框 */
+  | 'input-tag' /** 标签输入框 @since ElementPlus 2.9.0 */
+  | 'mention' /** 提及 */
+  | 'radio-group' /** 单选框组 */
+  | 'rate' /** 评分 */
+  | 'select' /** 选择器 */
+  | 'select-v2' /** 虚拟化选择器 */
+  | 'slider' /** 滑块 */
+  | 'switch' /** 开关 */
+  | 'time-picker' /** 时间选择器 */
+  | 'time-select' /** 时间选择 */
+  | 'transfer' /** 穿梭框 */
+  | 'tree-select' /** 树形选择 */
+  | 'input-group' /** 输入框组 */
+  | 'upload' /** 上传 */
 
-type FormOptionItemSlot = 'default' | 'label' | 'error'
+type ElAutocompleteAttrs = ComponentPropsWithoutValue<AutocompleteProps>
+type ElCascaderAttrs = ComponentPropsWithoutValue<CascaderProps>
+type ElCheckboxGroupAttrs = ComponentPropsWithoutValue<CheckboxGroupProps>
+type ElColorPickerAttrs = ComponentPropsWithoutValue<ColorPickerProps>
+type ElDatePickerAttrs = ComponentPropsWithoutValue<DatePickerProps>
+type ElInputAttrs = ComponentPropsWithoutValue<InputProps>
+type ElInputNumberAttrs = ComponentPropsWithoutValue<InputNumberProps>
+type ElInputTagAttrs = ComponentPropsWithoutValue<InputTagProps>
+type ElMentionAttrs = ComponentPropsWithoutValue<MentionProps>
+type ElRadioGroupAttrs = ComponentPropsWithoutValue<RadioGroupProps>
+type ElRateAttrs = ComponentPropsWithoutValue<RateProps>
+type ElSelectAttrs = InstancePropsTypeOmitValue<typeof ElSelect>
+type ElSelectV2Attrs = InstancePropsTypeOmitValue<typeof ElSelectV2>
+type ElSliderAttrs = ComponentPropsWithoutValue<SliderProps>
+type ElSwitchAttrs = ComponentPropsWithoutValue<SwitchProps>
+type ElTimePickerAttrs = ComponentPropsWithoutValue<TimePickerDefaultProps>
+type ElTimeSelectAttrs = ComponentPropsWithoutValue<TimeSelectProps>
+type ElTransferAttrs = ComponentPropsWithoutValue<TransferProps>
+type ElTreeSelectAttrs = InstancePropsType<typeof ElTreeSelect>
+type ElInputGroupAttrs = ComponentPropsWithoutValue<any>
+type ElUploadAttrs = ComponentPropsWithoutValue<UploadProps>
+
+// 定义查找表类型
+type ElementAttrsMap = {
+  autocomplete: ElAutocompleteAttrs
+  cascader: ElCascaderAttrs
+  'checkbox-group': ElCheckboxGroupAttrs
+  'color-picker': ElColorPickerAttrs
+  'date-picker': ElDatePickerAttrs
+  input: ElInputAttrs
+  'input-number': ElInputNumberAttrs
+  'input-tag': ElInputTagAttrs
+  mention: ElMentionAttrs
+  'radio-group': ElRadioGroupAttrs
+  rate: ElRateAttrs
+  select: ElSelectAttrs
+  'select-v2': ElSelectV2Attrs
+  slider: ElSliderAttrs
+  switch: ElSwitchAttrs
+  'time-picker': ElTimePickerAttrs
+  'time-select': ElTimeSelectAttrs
+  transfer: ElTransferAttrs
+  'tree-select': ElTreeSelectAttrs
+  'input-group': ElInputGroupAttrs
+  upload: ElUploadAttrs
+}
+
+// 定义每个表单元素对应的属性类型
+export type FormItemElementAttrs<T extends FormItemElement> = T extends keyof ElementAttrsMap
+  ? ElementAttrsMap[T]
+  : undefined

@@ -1,8 +1,14 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
-import type { FormProps, FormEmits, FormOptions, FormOptionItem, FormInstance } from './type'
-import { FormItemElementEnum } from './type'
+import type {
+  FormProps,
+  FormEmits,
+  FormOptions,
+  FormOptionItem,
+  FormInstance,
+  FormItemElement,
+} from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 defineOptions({
@@ -59,15 +65,14 @@ const filterElFormItemProps = (item: FormOptionItem) => {
 const getElFormItemRules = (item: FormOptionItem) => {
   if (!item.rules) return []
   return item.rules.map((rule) => {
-    const inputElement = [
-      FormItemElementEnum.AutoComplete,
-      FormItemElementEnum.Input,
-      FormItemElementEnum.InputGroup,
-      FormItemElementEnum.InputNumber,
-      FormItemElementEnum.InputTag,
-      FormItemElementEnum.Mention,
+    const inputElement: FormItemElement[] = [
+      'autocomplete',
+      'input',
+      'input-number',
+      'input-tag',
+      'mention',
     ]
-    if (inputElement.includes(item.element as FormItemElementEnum)) {
+    if (inputElement.includes(item.element!)) {
       return { message: `请输入`, ...rule }
     } else {
       return { message: `请选择`, ...rule }
@@ -117,7 +122,7 @@ const getViewVNode = (item: FormOptionItem) => {
     return item.formatter(item)
   }
   const attrs = item?.attrs ?? {}
-  if (item.element === FormItemElementEnum.Cascader) {
+  if (item.element === 'cascader') {
     // 级联选择器根据value获取label，进行拼接
     const {
       label: labelKey = 'label',
@@ -126,32 +131,24 @@ const getViewVNode = (item: FormOptionItem) => {
     } = attrs?.props ?? {}
     const options = treeToList(attrs?.options ?? [], children)
     return getOptionText(options, item.value, { labelKey, valueKey })
-  } else if (item.element === FormItemElementEnum.Transfer) {
+  } else if (item.element === 'transfer') {
     const { label: labelKey = 'label', value: valueKey = 'key' } = attrs?.props ?? {}
     return getOptionText(attrs?.data ?? [], item.value, { labelKey, valueKey })
   } else if (
     // 选择器、多选框组、单选框组、穿梭框
-    [
-      FormItemElementEnum.Select,
-      FormItemElementEnum.CheckboxGroup,
-      FormItemElementEnum.RadioGroup,
-    ].includes(item.element as FormItemElementEnum)
+    ['select', 'checkbox-group', 'radio-group'].includes(item.element!)
   ) {
     return getOptionText(attrs?.options ?? [], item.value)
-  } else if (item.element === FormItemElementEnum.Switch) {
+  } else if (item.element === 'switch') {
     // 开关
     const { activeText = '是', inactiveText = '否', activeValue = true } = attrs ?? {}
     return item.value === activeValue ? activeText : inactiveText
-  } else if (
-    [FormItemElementEnum.TimePicker, FormItemElementEnum.TimeSelect].includes(
-      item.element as FormItemElementEnum,
-    )
-  ) {
+  } else if (['time-picker', 'time-select'].includes(item.element!)) {
     const format = attrs?.format ?? 'HH:mm:ss'
     return Array.isArray(item.value)
       ? item.value.map((d) => formatterDate(d, format)).join('-')
       : formatterDate(item.value, format)
-  } else if (item.element === FormItemElementEnum.DatePicker) {
+  } else if (item.element === 'date-picker') {
     let format = getDateTypeFormat(attrs?.type ?? 'date')
     if (item.attrs?.format) {
       format = item.attrs?.format
@@ -248,13 +245,13 @@ defineExpose(
           <!-- 查看模式 -->
           <template v-else-if="view || item.view">
             <el-rate
-              v-if="item.element === FormItemElementEnum.Rate"
+              v-if="item.element === 'rate'"
               v-model="item.value"
               v-bind="item.attrs"
               :disabled="true"
             />
             <el-upload
-              v-else-if="item.element === FormItemElementEnum.Upload"
+              v-else-if="item.element === 'upload'"
               :file-list="item.value"
               v-bind="item.attrs"
               :disabled="true"
@@ -266,14 +263,14 @@ defineExpose(
           <template v-else-if="item.element">
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader
-              v-if="item.element === FormItemElementEnum.Cascader"
+              v-if="item.element === 'cascader'"
               v-model="item.value"
               v-bind="item.attrs"
               @change="handleChange(key, item)"
             />
             <!-- 上传 -->
             <el-upload
-              v-else-if="item.element === FormItemElementEnum.Upload"
+              v-else-if="item.element === 'upload'"
               v-model:file-list="item.value"
               v-bind="item.attrs"
               @change="handleChange(key, item)"
@@ -285,13 +282,13 @@ defineExpose(
             <component
               v-else
               v-model="item.value"
-              :is="item.element"
+              :is="`el-${item.element}`"
               v-bind="item.attrs"
               @change="handleChange(key, item)"
             >
               <template v-if="item.attrs?.options">
                 <!-- 选择器 选项 -->
-                <template v-if="item.element === FormItemElementEnum.Select">
+                <template v-if="item.element === 'select'">
                   <el-option
                     v-for="option in item.attrs.options"
                     :key="option.value"
@@ -299,7 +296,7 @@ defineExpose(
                   />
                 </template>
                 <!-- 多选框组 选项-->
-                <template v-else-if="item.element === FormItemElementEnum.CheckboxGroup">
+                <template v-else-if="item.element === 'checkbox-group'">
                   <el-checkbox
                     v-for="option in item.attrs.options"
                     :key="option.value"
@@ -307,7 +304,7 @@ defineExpose(
                   />
                 </template>
                 <!-- 单选框组 选项-->
-                <template v-else-if="item.element === FormItemElementEnum.RadioGroup">
+                <template v-else-if="item.element === 'radio-group'">
                   <el-radio
                     v-for="option in item.attrs.options"
                     :key="option.value"

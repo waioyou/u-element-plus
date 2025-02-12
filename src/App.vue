@@ -1,15 +1,14 @@
 <script setup lang="tsx">
 import UForm from '@/components/form/form.vue'
 import { h, ref } from 'vue'
-import { FormItemElementEnum } from './components/form/type'
-import type { FormOptions, FormInstance } from './components/form/type'
+import type { FormOptions, FormInstance, FormItemElementAttrs } from './components/form/type'
 import { ElButton } from 'element-plus'
 
 const formRef = ref<FormInstance>()
 const formOptions = ref<FormOptions>({
   autocomplete: {
     label: '自动补全输入框',
-    element: FormItemElementEnum.AutoComplete,
+    element: 'autocomplete',
     value: '1',
     attrs: {
       placeholder: '请输入',
@@ -26,7 +25,7 @@ const formOptions = ref<FormOptions>({
   },
   cascader: {
     label: '级联选择器',
-    element: FormItemElementEnum.Cascader,
+    element: 'cascader',
     value: [
       ['FuJian', 'Fuzhou'],
       ['FuJian', 'Xiamen'],
@@ -61,7 +60,7 @@ const formOptions = ref<FormOptions>({
   },
   checkboxGroup: {
     label: '多选框组',
-    element: FormItemElementEnum.CheckboxGroup,
+    element: 'checkbox-group',
     value: ['sing', 'dance'],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -79,14 +78,14 @@ const formOptions = ref<FormOptions>({
   },
   colorPicker: {
     label: '取色器',
-    element: FormItemElementEnum.ColorPicker,
+    element: 'color-picker',
     value: '#9B86D6',
     rules: [{ required: true, trigger: 'change' }],
     ratio: [1, 3],
   },
   datePicker: {
     label: '日期选择器',
-    element: FormItemElementEnum.DatePicker,
+    element: 'date-picker',
     value: '2024-01-01',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -99,7 +98,7 @@ const formOptions = ref<FormOptions>({
   },
   input: {
     label: '输入框',
-    element: FormItemElementEnum.Input,
+    element: 'input',
     value: '输入框',
     rules: [{ required: true, trigger: 'blur' }],
     attrs: {
@@ -110,7 +109,7 @@ const formOptions = ref<FormOptions>({
   },
   inputNumber: {
     label: '数字输入框',
-    element: FormItemElementEnum.InputNumber,
+    element: 'input-number',
     value: 0,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -122,7 +121,7 @@ const formOptions = ref<FormOptions>({
   },
   radioGroup: {
     label: '单选框组',
-    element: FormItemElementEnum.RadioGroup,
+    element: 'radio-group',
     value: 'A',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -136,7 +135,7 @@ const formOptions = ref<FormOptions>({
   },
   rate: {
     label: '评分',
-    element: FormItemElementEnum.Rate,
+    element: 'rate',
     value: 3,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -147,7 +146,7 @@ const formOptions = ref<FormOptions>({
   },
   select: {
     label: '选择器',
-    element: FormItemElementEnum.Select,
+    element: 'select',
     value: '1',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -163,7 +162,7 @@ const formOptions = ref<FormOptions>({
   },
   slider: {
     label: '滑块',
-    element: FormItemElementEnum.Slider,
+    element: 'slider',
     value: 50,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -175,7 +174,7 @@ const formOptions = ref<FormOptions>({
   },
   switch: {
     label: '开关',
-    element: FormItemElementEnum.Switch,
+    element: 'switch',
     value: false,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -186,7 +185,7 @@ const formOptions = ref<FormOptions>({
   },
   timePicker: {
     label: '时间选择器',
-    element: FormItemElementEnum.TimePicker,
+    element: 'time-picker',
     value: '20:05:01',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -199,7 +198,7 @@ const formOptions = ref<FormOptions>({
   },
   transfer: {
     label: '穿梭框',
-    element: FormItemElementEnum.Transfer,
+    element: 'transfer',
     value: [1, 2],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
@@ -214,7 +213,7 @@ const formOptions = ref<FormOptions>({
   },
   upload: {
     label: '上传',
-    element: FormItemElementEnum.Upload,
+    element: 'upload',
     value: [
       {
         name: 'element-plus-logo.svg',
