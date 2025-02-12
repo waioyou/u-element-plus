@@ -70,7 +70,7 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   /** 校验规则 */
   rules?: FormItemRule[]
   /** 插槽 */
-  slot?: FormOptionItemSlot | FormOptionItemSlot[]
+  slot?: FormItemSlot
   /** 是否查看模式 */
   view?: boolean
   /** 查看模式下格式化显示内容 */
@@ -88,9 +88,25 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   /** 表单项宽度占一行比例：[numerator, denominator]，默认[1,1] */
   ratio?: [number, number]
   /** 属性 */
-  attrs?: Record<string, any>
+  attrs?: {
+    /** 表单项的占位符 */
+    placeholder?: string
+    /** 是否禁用 */
+    disabled?: boolean
+    /** 选项列表 */
+    options?: any[]
+    /** 选择器的属性 */
+    multiple?: boolean
+    [key: string]: any
+  }
 }
-type FormOptionItemSlot = 'default' | 'label' | 'error'
+// type FormItemSlotKey =
+type FormItemSlot = 'default' | 'label' | 'error' | ('default' | 'label' | 'error')[]
+// | {
+//     default?: (item: FormOptionItem) => VNode | string
+//     label?: (item: FormOptionItem, slotProps: { label: string }) => VNode | string
+//     error?: (item: FormOptionItem, slotProps: { error: string }) => VNode | string
+//   }
 
 /** 表单项元素类型 */
 export type FormItemElement =
