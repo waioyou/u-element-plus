@@ -1,5 +1,3 @@
-/// <reference types="vitest" />
-
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
@@ -21,9 +19,5 @@ export default defineConfig({
         api: 'modern-compiler',
       },
     },
-  },
-  test: {
-    environment: 'jsdom',
-    globals: true,
   },
 })

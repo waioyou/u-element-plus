@@ -45,6 +45,9 @@ importers:
       '@vitepress-demo-preview/plugin':
         specifier: ^1.2.3
         version: 1.2.3(markdown-it-container@3.0.0)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.10.7)(async-validator@4.2.5)(postcss@8.5.1)(sass@1.83.4)(search-insights@2.17.3)(typescript@5.6.3))(vue@3.4.21(typescript@5.6.3))
+      '@vitest/eslint-plugin':
+        specifier: ^1.1.30
+        version: 1.1.30(@typescript-eslint/utils@8.20.0(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3))(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3)(vitest@3.0.3(@types/node@22.10.7)(jiti@2.4.2)(jsdom@26.0.0)(sass@1.83.4)(yaml@2.6.1))
       '@vue/eslint-config-prettier':
         specifier: ^10.1.0
         version: 10.2.0(eslint@9.18.0(jiti@2.4.2))(prettier@3.4.2)
@@ -1223,6 +1226,19 @@ packages:
       markdown-it-container: ^3.0.0
       vitepress: '*'
       vue: ^3.2.0
+
+  '@vitest/eslint-plugin@1.1.30':
+    resolution: {integrity: sha512-gka7VmgfDXmVagcs/SV5Ft23LLrqSzvjX8ATZMLTXIswVRx+i1XfIgy+w2WDrLvhio/eyR6EEb1qM0+hmlF00w==}
+    peerDependencies:
+      '@typescript-eslint/utils': '>= 8.0'
+      eslint: '>= 8.57.0'
+      typescript: '>= 5.0.0'
+      vitest: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      vitest:
+        optional: true
 
   '@vitest/expect@3.0.3':
     resolution: {integrity: sha512-SbRCHU4qr91xguu+dH3RUdI5dC86zm8aZWydbp961aIR7G8OYNN6ZiayFuf9WAngRbFOfdrLHCGgXTj3GtoMRQ==}
@@ -4420,6 +4436,14 @@ snapshots:
       markdown-it-container: 3.0.0
       vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.10.7)(async-validator@4.2.5)(postcss@8.5.1)(sass@1.83.4)(search-insights@2.17.3)(typescript@5.6.3)
       vue: 3.4.21(typescript@5.6.3)
+
+  '@vitest/eslint-plugin@1.1.30(@typescript-eslint/utils@8.20.0(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3))(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3)(vitest@3.0.3(@types/node@22.10.7)(jiti@2.4.2)(jsdom@26.0.0)(sass@1.83.4)(yaml@2.6.1))':
+    dependencies:
+      '@typescript-eslint/utils': 8.20.0(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3)
+      eslint: 9.18.0(jiti@2.4.2)
+    optionalDependencies:
+      typescript: 5.6.3
+      vitest: 3.0.3(@types/node@22.10.7)(jiti@2.4.2)(jsdom@26.0.0)(sass@1.83.4)(yaml@2.6.1)
 
   '@vitest/expect@3.0.3':
     dependencies:
