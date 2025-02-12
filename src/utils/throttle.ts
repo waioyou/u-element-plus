@@ -1,6 +1,7 @@
 import type { Fn } from './types'
 
 /**
+ * @deprecated
  * 节流函数
  * @param fn 需要节流的函数
  * @param wait 等待时间

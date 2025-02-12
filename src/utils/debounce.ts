@@ -1,6 +1,7 @@
 import type { Fn } from './types'
 
 /**
+ * @deprecated
  * 防抖函数
  * @param fn 需要防抖的函数
  * @param wait 等待时间
