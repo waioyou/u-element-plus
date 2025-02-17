@@ -159,6 +159,8 @@ export type FormItemElement =
   | 'tree-select' /** 树形选择 */
   | 'input-group' /** 输入框组 */
   | 'upload' /** 上传 */
+  /** 以下是拓展组件 */
+  | 'title' /** 标题 */
 
 type ElAutocompleteAttrs = ComponentPropsWithoutValue<AutocompleteProps>
 type ElCascaderAttrs = ComponentPropsWithoutValue<CascaderProps>

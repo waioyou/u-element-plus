@@ -1,0 +1,33 @@
+.u-form {
+  & {
+    width: 100%;
+  }
+  .el-form-item {
+    display: inline-flex;
+    margin-right: 0;
+    box-sizing: border-box;
+    padding-right: 16px;
+  }
+  .u-form-item--title {
+    .el-form-item__label-wrap {
+      margin-left: 0px !important;
+    }
+    .el-form-item__label {
+      display: flex;
+      align-items: center;
+    }
+
+    .el-form-item__label::before {
+      margin-right: 6px;
+      content: '';
+      width: 4px;
+      height: calc(var(--el-form-label-font-size) * 1.25);
+      background: var(--el-color-primary-dark-2);
+    }
+  }
+  .is-view {
+    :deep(.el-upload) {
+      display: none;
+    }
+  }
+}

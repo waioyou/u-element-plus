@@ -228,6 +228,7 @@ defineExpose(
         :rules="getElFormItemRules(item)"
         :style="getFormItemStyle(key, item)"
         class="u-form-item"
+        :class="item.element === 'title' ? 'u-form-item--title' : ''"
       >
         <!-- label 插槽处理 -->
         <template v-if="item.slot?.label || $slots[`label-${key}`]" #label="slotProps">
@@ -284,9 +285,11 @@ defineExpose(
           </template>
           <!-- 渲染表单项 -->
           <template v-else-if="item.element">
+            <!-- 标题 -->
+            <template v-if="item.element === 'title'"> </template>
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader
-              v-if="item.element === 'cascader'"
+              v-else-if="item.element === 'cascader'"
               v-model="item.value"
               v-bind="item.attrs"
               @change="handleChange(key, item)"
@@ -346,22 +349,3 @@ defineExpose(
     </template>
   </el-form>
 </template>
-
-<style lang="scss" scoped>
-.u-form {
-  & {
-    width: 100%;
-  }
-  .el-form-item {
-    display: inline-flex;
-    margin-right: 0;
-    box-sizing: border-box;
-    padding-right: 16px;
-  }
-  .is-view {
-    :deep(.el-upload) {
-      display: none;
-    }
-  }
-}
-</style>

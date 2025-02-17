@@ -6,6 +6,11 @@ import { ElButton } from 'element-plus'
 
 const formRef = ref<FormInstance>()
 const formOptions = ref<FormOptions>({
+  title: {
+    label: '基础信息',
+    element: 'title',
+    span: '1/1',
+  },
   autocomplete: {
     label: '自动补全输入框',
     element: 'autocomplete',
