@@ -21,7 +21,7 @@ const formOptions = ref<FormOptions>({
         ])
       },
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   cascader: {
     label: '级联选择器',
@@ -56,7 +56,7 @@ const formOptions = ref<FormOptions>({
         multiple: false,
       },
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   checkboxGroup: {
     label: '多选框组',
@@ -74,14 +74,14 @@ const formOptions = ref<FormOptions>({
     formatter: (item) => {
       return h('span', item.value.join(', '))
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   colorPicker: {
     label: '取色器',
     element: 'color-picker',
     value: '#9B86D6',
     rules: [{ required: true, trigger: 'change' }],
-    ratio: [1, 3],
+    span: '1/3',
   },
   datePicker: {
     label: '日期选择器',
@@ -94,7 +94,7 @@ const formOptions = ref<FormOptions>({
       format: 'YYYY-MM-DD',
       clearable: true,
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   input: {
     label: '输入框',
@@ -105,7 +105,7 @@ const formOptions = ref<FormOptions>({
       placeholder: '请输入',
       clearable: true,
     },
-    ratio: [1, 3],
+    span: '1/3',
     slot: {
       label: (item, label) => `${item.element}-${label}`,
       error: (item, error) => `${item.element}-${error}`,
@@ -121,7 +121,7 @@ const formOptions = ref<FormOptions>({
       max: 100,
       step: 1,
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   radioGroup: {
     label: '单选框组',
@@ -135,7 +135,7 @@ const formOptions = ref<FormOptions>({
         { label: '选项C', value: 'C' },
       ],
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   rate: {
     label: '评分',
@@ -146,7 +146,7 @@ const formOptions = ref<FormOptions>({
       max: 5,
       allowHalf: true,
     },
-    ratio: [1, 3],
+    span: '1/3',
   },
   select: {
     label: '选择器',
@@ -162,7 +162,7 @@ const formOptions = ref<FormOptions>({
         { label: 'Option 3', value: '3' },
       ],
     },
-    ratio: [1, 2],
+    span: '1/2',
   },
   slider: {
     label: '滑块',
@@ -174,7 +174,7 @@ const formOptions = ref<FormOptions>({
       max: 100,
       step: 1,
     },
-    ratio: [1, 2],
+    span: '1/2',
   },
   switch: {
     label: '开关',
@@ -185,7 +185,7 @@ const formOptions = ref<FormOptions>({
       activeText: '开',
       inactiveText: '关',
     },
-    ratio: [1, 2],
+    span: '1/2',
   },
   timePicker: {
     label: '时间选择器',
@@ -198,7 +198,7 @@ const formOptions = ref<FormOptions>({
       clearable: true,
       valueFormat: 'HH:mm:ss',
     },
-    ratio: [1, 2],
+    span: '1/2',
   },
   transfer: {
     label: '穿梭框',
@@ -213,7 +213,7 @@ const formOptions = ref<FormOptions>({
       ],
       titles: ['源列表', '目标列表'],
     },
-    ratio: [1, 2],
+    span: '2/1',
   },
   upload: {
     label: '上传',
@@ -241,7 +241,7 @@ const formOptions = ref<FormOptions>({
         console.log(file, fileList)
       },
     },
-    ratio: [1, 2],
+    span: '1/1',
   },
 })
 

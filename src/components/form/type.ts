@@ -112,8 +112,10 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   style?: CSSProperties
   /** 类名 */
   class?: string
-  /** 表单项宽度占一行比例：[numerator, denominator]，默认[1,1] */
-  ratio?: [number, number]
+  /** 表单项宽度占一行比例
+   * @example '1/2'
+   */
+  span?: string
   /** 属性 */
   attrs?: {
     /** 表单项的占位符 */

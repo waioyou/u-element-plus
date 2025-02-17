@@ -84,12 +84,16 @@ const getElFormItemRules = (item: FormOptionItem) => {
 }
 
 /** 获取表单项的样式 */
-const getFormItemStyle = (item: FormOptionItem) => {
+const getFormItemStyle = (name: string, item: FormOptionItem) => {
   const style = item?.style ?? { width: '100%' }
-  if (item.ratio && item.ratio.length === 2) {
-    const [numerator, denominator] = item.ratio
-    if (numerator > 0 && denominator > 0 && numerator < denominator) {
+  const span = item.span?.split('/') ?? []
+  if (span.length === 2) {
+    const numerator = parseInt(span[0])
+    const denominator = parseInt(span[1])
+    if (numerator > 0 && denominator > 0 && numerator <= denominator) {
       style.width = `${(numerator / denominator) * 100}%`
+    } else {
+      console.warn(`表单项【${name}】的【span】属性配置错误，请检查配置; 正确格式如：'1/2'`)
     }
   }
   return style
@@ -222,7 +226,7 @@ defineExpose(
         v-bind="filterElFormItemProps(item)"
         :prop="`${key}.value`"
         :rules="getElFormItemRules(item)"
-        :style="getFormItemStyle(item)"
+        :style="getFormItemStyle(key, item)"
         class="u-form-item"
       >
         <!-- label 插槽处理 -->
