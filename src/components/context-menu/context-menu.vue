@@ -110,7 +110,3 @@ defineExpose<ContextMenuInstance>({
     </div>
   </teleport>
 </template>
-
-<style lang="scss" scoped>
-@use './style.scss';
-</style>
