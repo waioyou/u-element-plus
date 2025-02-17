@@ -258,6 +258,10 @@ const handleChange = (key: string, item: any) => {
   console.log('🚀 ~ handleChange ~ item:', item)
 }
 
+const handleResetForm = () => {
+  formRef.value?.resetFields()
+}
+
 const view = ref(false)
 </script>
 
@@ -280,6 +284,7 @@ const view = ref(false)
       </UForm>
       <el-button @click="handleGetFormData">获取表单数据</el-button>
       <el-button @click="view = !view">{{ view ? '编辑模式' : '查看模式' }}</el-button>
+      <el-button @click="handleResetForm">重置表单</el-button>
     </div>
   </div>
 </template>

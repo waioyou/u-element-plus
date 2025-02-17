@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, getCurrentInstance, ref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
 import type {
   FormProps,
@@ -12,11 +12,11 @@ import type {
 } from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
+
 defineOptions({
   name: 'UForm',
 })
 const emit = defineEmits<FormEmits>()
-
 const props = withDefaults(defineProps<FormProps>(), {
   /** 是否为查看模式 */
   view: false,
@@ -47,11 +47,9 @@ const props = withDefaults(defineProps<FormProps>(), {
   /** 滚动到视图选项 */
   scrollIntoViewOptions: false,
 })
-
 defineSlots<FormSlots>()
-
+const instance = getCurrentInstance()!
 const formOptions = defineModel<FormOptions>('options', { default: () => ({}) })
-
 const formRef = ref<ElFormInstance>()
 
 /** 过滤出 ElForm 需要的属性 */
@@ -93,7 +91,7 @@ const getFormItemStyle = (name: string, item: FormOptionItem) => {
     if (numerator > 0 && denominator > 0 && numerator <= denominator) {
       style.width = `${(numerator / denominator) * 100}%`
     } else {
-      console.warn(`表单项【${name}】的【span】属性配置错误，请检查配置; 正确格式如：'1/2'`)
+      console.warn(`表单项【${name}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
     }
   }
   return style
@@ -194,6 +192,7 @@ const getFormData: FormInstance['getFormData'] = async (validate: boolean = fals
   }
 }
 
+/** 不使用formRef，使用refs，避免组件多次渲染 */
 defineExpose(
   new Proxy(
     {
@@ -204,7 +203,8 @@ defineExpose(
         if (key === 'getFormData') {
           return getFormData
         }
-        return (formRef.value as any)?.[key]
+        const formInstance: any = instance.refs?.formRef ?? {}
+        return formInstance[key]
       },
       has(target, key) {
         if (key === 'getFormData') {
