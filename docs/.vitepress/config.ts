@@ -31,6 +31,7 @@ export default defineConfig({
         text: '组件',
         items: [
           { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
+          { text: 'Form 表单', link: '/components/form' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' },
         ],
