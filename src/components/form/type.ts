@@ -44,7 +44,7 @@ export type FormEmits = {
   /** @todo 任一表单项被校验后触发 */
   validate: any
   /** 任一表单项值发生变化时触发 */
-  change: [name: string, item: FormOptionItem]
+  change: [name: string, item: FormItemOption]
 }
 
 /** 表单实例 */
@@ -54,27 +54,27 @@ export interface FormInstance extends ElFormInstance {
 }
 
 // export type FormSlotProps<T extends string> = T extends `label-${string}`
-//   ? { item: FormOptionItem; label: string }
+//   ? { item: FormItemOption; label: string }
 //   : T extends `error-${string}`
-//     ? { item: FormOptionItem; error: string }
-//     : { item: FormOptionItem }
+//     ? { item: FormItemOption; error: string }
+//     : { item: FormItemOption }
 
 // export type FormSlots =
 //   | {
-//       [K in `label-${string}`]: { item: FormOptionItem; label: string }
+//       [K in `label-${string}`]: { item: FormItemOption; label: string }
 //     }
 //   | {
-//       [K in `error-${string}`]: { item: FormOptionItem; error: string }
+//       [K in `error-${string}`]: { item: FormItemOption; error: string }
 //     }
 //   | {
 //       [K in string as K extends `label-${string}` | `error-${string}` ? never : K]: {
-//         item: FormOptionItem
+//         item: FormItemOption
 //       }
 //     }
 
 export type FormSlots = {
   [key: string]: {
-    item: FormOptionItem
+    item: FormItemOption
     label?: string
     error?: string
   }
@@ -82,10 +82,10 @@ export type FormSlots = {
 
 /** 表单配置项 */
 export type FormOptions<T = any> = {
-  [K in keyof T & string]: FormOptionItem<T[K]>
+  [K in keyof T & string]: FormItemOption<T[K]>
 }
 
-export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, 'prop' | 'rules'>> {
+export interface FormItemOption<V = any> extends Partial<Omit<ElFormItemProps, 'prop' | 'rules'>> {
   /** 展示元素: 对应element-plus的表单组件、以及一些拓展组件 */
   element?: FormItemElement
   /** 值 */
@@ -101,7 +101,7 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
   /** 是否查看模式 */
   view?: boolean
   /** 查看模式下格式化显示内容 */
-  formatter?: (item: FormOptionItem) => VNode | string | number
+  formatter?: (item: FormItemOption) => VNode | string | number
   /** 是否渲染 */
   if?: boolean | ((options: FormOptions) => boolean)
   /** 是否展示 */
@@ -131,9 +131,9 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
 }
 
 type FormItemSlot = {
-  label?: (item: FormOptionItem, label: string) => VNode | string | number
-  error?: (item: FormOptionItem, error: string) => VNode | string | number
-  default?: (item: FormOptionItem, view: boolean) => VNode | string | number
+  label?: (item: FormItemOption, label: string) => VNode | string | number
+  error?: (item: FormItemOption, error: string) => VNode | string | number
+  default?: (item: FormItemOption, view: boolean) => VNode | string | number
 }
 
 /** 表单项元素类型 */

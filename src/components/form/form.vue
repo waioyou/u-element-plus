@@ -5,7 +5,7 @@ import type {
   FormProps,
   FormEmits,
   FormOptions,
-  FormOptionItem,
+  FormItemOption,
   FormInstance,
   FormItemElement,
   FormSlots,
@@ -58,12 +58,12 @@ const filterElFormProps = computed(() => {
 })
 
 /** 过滤出 ElFormItem 需要的属性 */
-const filterElFormItemProps = (item: FormOptionItem) => {
+const filterElFormItemProps = (item: FormItemOption) => {
   return omit(item, ['ratio', 'element', 'value', 'attrs', 'if', 'show', 'style'])
 }
 
 /** 获取表单项的校验规则 */
-const getElFormItemRules = (item: FormOptionItem) => {
+const getElFormItemRules = (item: FormItemOption) => {
   if (!item.rules) return []
   return item.rules.map((rule) => {
     const inputElement: FormItemElement[] = [
@@ -82,7 +82,7 @@ const getElFormItemRules = (item: FormOptionItem) => {
 }
 
 /** 获取表单项的样式 */
-const getFormItemStyle = (name: string, item: FormOptionItem) => {
+const getFormItemStyle = (name: string, item: FormItemOption) => {
   const style = item?.style ?? { width: '100%' }
   const span = item.span?.split('/') ?? []
   if (span.length === 2) {
@@ -98,7 +98,7 @@ const getFormItemStyle = (name: string, item: FormOptionItem) => {
 }
 
 /** 处理表单项的 if 属性 */
-const handleIf = (item: FormOptionItem) => {
+const handleIf = (item: FormItemOption) => {
   if (typeof item.if === 'function') {
     return item.if(formOptions.value)
   }
@@ -106,7 +106,7 @@ const handleIf = (item: FormOptionItem) => {
 }
 
 /** 处理表单项的 show 属性 */
-const handleShow = (item: FormOptionItem) => {
+const handleShow = (item: FormItemOption) => {
   if (typeof item.show === 'function') {
     return item.show(formOptions.value)
   }
@@ -114,12 +114,12 @@ const handleShow = (item: FormOptionItem) => {
 }
 
 /** 处理表单项的 change 事件 */
-const handleChange = (key: string, item: FormOptionItem) => {
+const handleChange = (key: string, item: FormItemOption) => {
   emit('change', key, item)
 }
 
 /** 获取表单项的查看节点 */
-const getViewVNode = (item: FormOptionItem) => {
+const getViewVNode = (item: FormItemOption) => {
   if (item.value === undefined || item.value === null) {
     return ''
   }
