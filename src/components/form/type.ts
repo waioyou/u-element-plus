@@ -53,6 +53,33 @@ export interface FormInstance extends ElFormInstance {
   getFormData: <T = any>(validate?: boolean) => Promise<T | false>
 }
 
+// export type FormSlotProps<T extends string> = T extends `label-${string}`
+//   ? { item: FormOptionItem; label: string }
+//   : T extends `error-${string}`
+//     ? { item: FormOptionItem; error: string }
+//     : { item: FormOptionItem }
+
+// export type FormSlots =
+//   | {
+//       [K in `label-${string}`]: { item: FormOptionItem; label: string }
+//     }
+//   | {
+//       [K in `error-${string}`]: { item: FormOptionItem; error: string }
+//     }
+//   | {
+//       [K in string as K extends `label-${string}` | `error-${string}` ? never : K]: {
+//         item: FormOptionItem
+//       }
+//     }
+
+export type FormSlots = {
+  [key: string]: {
+    item: FormOptionItem
+    label?: string
+    error?: string
+  }
+}
+
 /** 表单配置项 */
 export type FormOptions<T = any> = {
   [K in keyof T & string]: FormOptionItem<T[K]>
@@ -100,13 +127,12 @@ export interface FormOptionItem<V = any> extends Partial<Omit<ElFormItemProps, '
     [key: string]: any
   }
 }
-// type FormItemSlotKey =
-type FormItemSlot = 'default' | 'label' | 'error' | ('default' | 'label' | 'error')[]
-// | {
-//     default?: (item: FormOptionItem) => VNode | string
-//     label?: (item: FormOptionItem, slotProps: { label: string }) => VNode | string
-//     error?: (item: FormOptionItem, slotProps: { error: string }) => VNode | string
-//   }
+
+type FormItemSlot = {
+  label?: (item: FormOptionItem, label: string) => VNode | string | number
+  error?: (item: FormOptionItem, error: string) => VNode | string | number
+  default?: (item: FormOptionItem, view: boolean) => VNode | string | number
+}
 
 /** 表单项元素类型 */
 export type FormItemElement =

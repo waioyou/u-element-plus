@@ -8,6 +8,7 @@ import type {
   FormOptionItem,
   FormInstance,
   FormItemElement,
+  FormSlots,
 } from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
@@ -46,6 +47,8 @@ const props = withDefaults(defineProps<FormProps>(), {
   /** 滚动到视图选项 */
   scrollIntoViewOptions: false,
 })
+
+defineSlots<FormSlots>()
 
 const formOptions = defineModel<FormOptions>('options', { default: () => ({}) })
 
@@ -222,28 +225,35 @@ defineExpose(
         :style="getFormItemStyle(item)"
         class="u-form-item"
       >
-        <!-- error插槽处理 -->
-        <template v-if="item.slot && item.slot.includes('error')" #error="slotProps">
-          <slot :name="`${key}Error`" :prop="key" v-bind="slotProps" :item="item"></slot>
+        <!-- label 插槽处理 -->
+        <template v-if="item.slot?.label || $slots[`label-${key}`]" #label="slotProps">
+          <slot
+            v-if="$slots[`label-${key}`]"
+            :name="`label-${key}`"
+            :item="item"
+            v-bind="slotProps"
+          />
+          <RenderVNode
+            v-else-if="item.slot?.label"
+            :v-node="item.slot.label(item, slotProps.label)"
+          />
         </template>
-        <!-- label插槽处理 -->
-        <template v-if="item.slot && item.slot.includes('label')" #label="slotProps">
-          <slot :name="`${key}Label`" :prop="key" v-bind="slotProps" :item="item"></slot>
+        <!-- error 插槽处理 -->
+        <template v-if="item.slot?.error || $slots[`error-${key}`]" #error="slotProps">
+          <slot
+            v-if="$slots[`error-${key}`]"
+            :name="`error-${key}`"
+            :item="item"
+            v-bind="slotProps"
+          />
+          <RenderVNode
+            v-else-if="item.slot?.error"
+            :v-node="item.slot.error(item, slotProps.error)"
+          />
         </template>
         <template #default>
-          <!-- 默认插槽处理 -->
-          <slot
-            v-if="item.slot && item.slot.includes('default')"
-            :name="key"
-            :prop="key"
-            :item="item"
-          ></slot>
-          <!-- 动态组件 -->
-          <template v-else-if="item.component">
-            <component :is="item.component" v-model="item.value" v-bind="item.attrs" />
-          </template>
           <!-- 查看模式 -->
-          <template v-else-if="view || item.view">
+          <template v-if="view || item.view">
             <el-rate
               v-if="item.element === 'rate'"
               v-model="item.value"
@@ -258,6 +268,15 @@ defineExpose(
               class="is-view"
             />
             <RenderVNode v-else :v-node="getViewVNode(item)" />
+          </template>
+          <!-- 默认插槽处理 -->
+          <template v-else-if="item.slot?.default || $slots[key]">
+            <slot v-if="$slots[key]" :name="key" :item="item" :view="view"></slot>
+            <RenderVNode v-else-if="item.slot?.default" :v-node="item.slot.default(item, view)" />
+          </template>
+          <!-- 动态组件 -->
+          <template v-else-if="item.component">
+            <component :is="item.component" v-model="item.value" v-bind="item.attrs" :view="view" />
           </template>
           <!-- 渲染表单项 -->
           <template v-else-if="item.element">
@@ -314,6 +333,10 @@ defineExpose(
               </template>
             </component>
           </template>
+          <!-- 错误配置项提示 -->
+          <template v-else>
+            <el-text type="danger">{{ `请检查表单项【${key}】的配置` }}</el-text>
+          </template>
         </template>
       </el-form-item>
     </template>
@@ -322,7 +345,9 @@ defineExpose(
 
 <style lang="scss" scoped>
 .u-form {
-  width: 100%;
+  & {
+    width: 100%;
+  }
   .el-form-item {
     display: inline-flex;
     margin-right: 0;

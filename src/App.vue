@@ -106,6 +106,10 @@ const formOptions = ref<FormOptions>({
       clearable: true,
     },
     ratio: [1, 3],
+    slot: {
+      label: (item, label) => `${item.element}-${label}`,
+      error: (item, error) => `${item.element}-${error}`,
+    },
   },
   inputNumber: {
     label: '数字输入框',
@@ -260,7 +264,20 @@ const view = ref(false)
 <template>
   <div style="width: 100%; height: 100vh">
     <div class="p-4">
-      <UForm ref="formRef" v-model:options="formOptions" @change="handleChange" :view="view" />
+      <UForm ref="formRef" v-model:options="formOptions" @change="handleChange" :view="view">
+        <template #label-cascader="{ label }">
+          <el-text type="primary">{{ `label-${label}` }}</el-text>
+        </template>
+        <template #error-cascader="{ item, error }">
+          <el-text type="info">{{ `error-${error}` }}</el-text>
+        </template>
+        <template #cascader="{ item }">
+          <el-text type="primary">{{ `default-${item.value}` }}</el-text>
+        </template>
+        <template #error-input="{ item, error }">
+          <el-text type="info">{{ `error-${error}` }}</el-text>
+        </template>
+      </UForm>
       <el-button @click="handleGetFormData">获取表单数据</el-button>
       <el-button @click="view = !view">{{ view ? '编辑模式' : '查看模式' }}</el-button>
     </div>
