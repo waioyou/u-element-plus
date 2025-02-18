@@ -5,11 +5,19 @@ import { containerPreview, componentPreview } from '@vitepress-demo-preview/plug
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'U Element Plus',
+  head: [['link', { rel: 'icon', href: '/public/favicon.ico' }]],
   description: '基于Element Plus的二次封装,实现如表格组件,表单组件等功能.',
   vite: {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('../../src', import.meta.url)),
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
       },
     },
   },

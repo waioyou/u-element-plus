@@ -1,2 +1,2 @@
-@import '@/components/form/style.scss';
-@import '@/components/context-menu/style.scss';
+@use '@/components/form/style.scss' as *;
+@use '@/components/context-menu/style.scss' as *;
