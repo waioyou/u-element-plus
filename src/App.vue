@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import UForm from '@/components/form/form.vue'
 import { h, ref } from 'vue'
-import type { FormOptions, FormInstance, FormItemElementAttrs } from './components/form/type'
+import type { FormOptions, FormInstance } from './components/form/type'
 import { ElButton } from 'element-plus'
 
 const formRef = ref<FormInstance>()
@@ -36,6 +36,9 @@ const formOptions = ref<FormOptions>({
       ['FuJian', 'Xiamen'],
     ],
     rules: [{ required: true, trigger: 'change' }],
+    slot: {
+      label: (item, label) => `${item.element}-${label}`,
+    },
     attrs: {
       placeholder: '请选择',
       clearable: true,

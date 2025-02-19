@@ -1,7 +1,8 @@
 import type {
-  ComponentPropsWithoutValue,
+  PropsWithoutValue,
   InstancePropsType,
   InstancePropsTypeOmitValue,
+  TypeNoReadonly,
 } from '@/utils'
 import type {
   FormProps as ElFormProps,
@@ -9,8 +10,6 @@ import type {
   FormInstance as ElFormInstance,
   FormItemRule,
   InputProps,
-  CascaderProps,
-  AutocompleteProps,
   CheckboxGroupProps,
   ColorPickerProps,
   DatePickerProps,
@@ -28,6 +27,7 @@ import type {
   ElTreeSelect,
   ElSelect,
   ElSelectV2,
+  ElCascader,
 } from 'element-plus'
 import type { CSSProperties, VNode, Component } from 'vue'
 
@@ -53,43 +53,37 @@ export interface FormInstance extends ElFormInstance {
   getFormData: <T = any>(validate?: boolean) => Promise<T | false>
 }
 
-// export type FormSlotProps<T extends string> = T extends `label-${string}`
-//   ? { item: FormItemOption; label: string }
-//   : T extends `error-${string}`
-//     ? { item: FormItemOption; error: string }
-//     : { item: FormItemOption }
+/** 表单配置 */
+export type FormOptions = Record<string, FormItemOption>
 
-// export type FormSlots =
-//   | {
-//       [K in `label-${string}`]: { item: FormItemOption; label: string }
-//     }
-//   | {
-//       [K in `error-${string}`]: { item: FormItemOption; error: string }
-//     }
-//   | {
-//       [K in string as K extends `label-${string}` | `error-${string}` ? never : K]: {
-//         item: FormItemOption
-//       }
-//     }
+/** 表单项配置 */
+export type FormItemOption =
+  | FormItemOptionWithAutoComplete
+  | FormItemOptionWithCascader
+  | FormItemOptionWithCheckboxGroup
+  | FormItemOptionWithColorPicker
+  | FormItemOptionWithDatePicker
+  | FormItemOptionWithInput
+  | FormItemOptionWithInputNumber
+  | FormItemOptionWithInputTag
+  | FormItemOptionWithMention
+  | FormItemOptionWithRadioGroup
+  | FormItemOptionWithRate
+  | FormItemOptionWithSelect
+  | FormItemOptionWithSelectV2
+  | FormItemOptionWithSlider
+  | FormItemOptionWithSwitch
+  | FormItemOptionWithTimePicker
+  | FormItemOptionWithTimeSelect
+  | FormItemOptionWithTransfer
+  | FormItemOptionWithTreeSelect
+  | FormItemOptionWithInputGroup
+  | FormItemOptionWithUpload
+  | FormItemOptionWithTitle
 
-export type FormSlots = {
-  [key: string]: {
-    item: FormItemOption
-    label?: string
-    error?: string
-  }
-}
-
-/** 表单配置项 */
-export type FormOptions<T = any> = {
-  [K in keyof T & string]: FormItemOption<T[K]>
-}
-
-export interface FormItemOption<V = any> extends Partial<Omit<ElFormItemProps, 'prop' | 'rules'>> {
-  /** 展示元素: 对应element-plus的表单组件、以及一些拓展组件 */
-  element?: FormItemElement
+export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
   /** 值 */
-  value?: V
+  value?: any
   /** 标签 */
   label?: string
   /** 是否必填 */
@@ -101,7 +95,7 @@ export interface FormItemOption<V = any> extends Partial<Omit<ElFormItemProps, '
   /** 是否查看模式 */
   view?: boolean
   /** 查看模式下格式化显示内容 */
-  formatter?: (item: FormItemOption) => VNode | string | number
+  formatter?: (item: any) => VNode | string | number
   /** 是否渲染 */
   if?: boolean | ((options: FormOptions) => boolean)
   /** 是否展示 */
@@ -116,18 +110,7 @@ export interface FormItemOption<V = any> extends Partial<Omit<ElFormItemProps, '
    * @example '1/2'
    */
   span?: string
-  /** 属性 */
-  attrs?: {
-    /** 表单项的占位符 */
-    placeholder?: string
-    /** 是否禁用 */
-    disabled?: boolean
-    /** 选项列表 */
-    options?: any[]
-    /** 选择器的属性 */
-    multiple?: boolean
-    [key: string]: any
-  }
+  attrs?: any
 }
 
 type FormItemSlot = {
@@ -136,80 +119,170 @@ type FormItemSlot = {
   default?: (item: FormItemOption, view: boolean) => VNode | string | number
 }
 
-/** 表单项元素类型 */
-export type FormItemElement =
-  | 'autocomplete' /** 自动补全输入框 */
-  | 'cascader' /** 级联选择器 */
-  | 'checkbox-group' /** 多选框组 */
-  | 'color-picker' /** 取色器 */
-  | 'date-picker' /** 日期选择器 */
-  | 'input' /** 输入框 */
-  | 'input-number' /** 数字输入框 */
-  | 'input-tag' /** 标签输入框 @since ElementPlus 2.9.0 */
-  | 'mention' /** 提及 */
-  | 'radio-group' /** 单选框组 */
-  | 'rate' /** 评分 */
-  | 'select' /** 选择器 */
-  | 'select-v2' /** 虚拟化选择器 */
-  | 'slider' /** 滑块 */
-  | 'switch' /** 开关 */
-  | 'time-picker' /** 时间选择器 */
-  | 'time-select' /** 时间选择 */
-  | 'transfer' /** 穿梭框 */
-  | 'tree-select' /** 树形选择 */
-  | 'input-group' /** 输入框组 */
-  | 'upload' /** 上传 */
-  /** 以下是拓展组件 */
-  | 'title' /** 标题 */
-
-type ElAutocompleteAttrs = ComponentPropsWithoutValue<AutocompleteProps>
-type ElCascaderAttrs = ComponentPropsWithoutValue<CascaderProps>
-type ElCheckboxGroupAttrs = ComponentPropsWithoutValue<CheckboxGroupProps>
-type ElColorPickerAttrs = ComponentPropsWithoutValue<ColorPickerProps>
-type ElDatePickerAttrs = ComponentPropsWithoutValue<DatePickerProps>
-type ElInputAttrs = ComponentPropsWithoutValue<InputProps>
-type ElInputNumberAttrs = ComponentPropsWithoutValue<InputNumberProps>
-type ElInputTagAttrs = ComponentPropsWithoutValue<InputTagProps>
-type ElMentionAttrs = ComponentPropsWithoutValue<MentionProps>
-type ElRadioGroupAttrs = ComponentPropsWithoutValue<RadioGroupProps>
-type ElRateAttrs = ComponentPropsWithoutValue<RateProps>
-type ElSelectAttrs = InstancePropsTypeOmitValue<typeof ElSelect>
-type ElSelectV2Attrs = InstancePropsTypeOmitValue<typeof ElSelectV2>
-type ElSliderAttrs = ComponentPropsWithoutValue<SliderProps>
-type ElSwitchAttrs = ComponentPropsWithoutValue<SwitchProps>
-type ElTimePickerAttrs = ComponentPropsWithoutValue<TimePickerDefaultProps>
-type ElTimeSelectAttrs = ComponentPropsWithoutValue<TimeSelectProps>
-type ElTransferAttrs = ComponentPropsWithoutValue<TransferProps>
-type ElTreeSelectAttrs = InstancePropsType<typeof ElTreeSelect>
-type ElInputGroupAttrs = ComponentPropsWithoutValue<any>
-type ElUploadAttrs = ComponentPropsWithoutValue<UploadProps>
-
-// 定义查找表类型
-type ElementAttrsMap = {
-  autocomplete: ElAutocompleteAttrs
-  cascader: ElCascaderAttrs
-  'checkbox-group': ElCheckboxGroupAttrs
-  'color-picker': ElColorPickerAttrs
-  'date-picker': ElDatePickerAttrs
-  input: ElInputAttrs
-  'input-number': ElInputNumberAttrs
-  'input-tag': ElInputTagAttrs
-  mention: ElMentionAttrs
-  'radio-group': ElRadioGroupAttrs
-  rate: ElRateAttrs
-  select: ElSelectAttrs
-  'select-v2': ElSelectV2Attrs
-  slider: ElSliderAttrs
-  switch: ElSwitchAttrs
-  'time-picker': ElTimePickerAttrs
-  'time-select': ElTimeSelectAttrs
-  transfer: ElTransferAttrs
-  'tree-select': ElTreeSelectAttrs
-  'input-group': ElInputGroupAttrs
-  upload: ElUploadAttrs
+interface FormItemOptionWithAutoComplete extends BaseFormItemOption {
+  element: 'autocomplete'
+  attrs?: AutocompleteAttrs
+}
+interface FormItemOptionWithCascader extends BaseFormItemOption {
+  element: 'cascader'
+  attrs?: CascaderAttrs
+}
+interface FormItemOptionWithCheckboxGroup extends BaseFormItemOption {
+  element: 'checkbox-group'
+  attrs?: CheckboxGroupAttrs
+}
+interface FormItemOptionWithColorPicker extends BaseFormItemOption {
+  element: 'color-picker'
+  attrs?: ColorPickerAttrs
+}
+interface FormItemOptionWithDatePicker extends BaseFormItemOption {
+  element: 'date-picker'
+  attrs?: DatePickerAttrs
+}
+interface FormItemOptionWithInput extends BaseFormItemOption {
+  element: 'input'
+  attrs?: InputAttrs
+}
+interface FormItemOptionWithInputNumber extends BaseFormItemOption {
+  element: 'input-number'
+  attrs?: InputNumberAttrs
+}
+interface FormItemOptionWithInputTag extends BaseFormItemOption {
+  element: 'input-tag'
+  attrs?: InputTagAttrs
+}
+interface FormItemOptionWithMention extends BaseFormItemOption {
+  element: 'mention'
+  attrs?: MentionAttrs
+}
+interface FormItemOptionWithRadioGroup extends BaseFormItemOption {
+  element: 'radio-group'
+  attrs?: RadioGroupAttrs
+}
+interface FormItemOptionWithRate extends BaseFormItemOption {
+  element: 'rate'
+  attrs?: RateAttrs
+}
+interface FormItemOptionWithSelect extends BaseFormItemOption {
+  element: 'select'
+  attrs?: SelectAttrs
+}
+interface FormItemOptionWithSelectV2 extends BaseFormItemOption {
+  element: 'select-v2'
+  attrs?: SelectV2Attrs
+}
+interface FormItemOptionWithSlider extends BaseFormItemOption {
+  element: 'slider'
+  attrs?: SliderAttrs
+}
+interface FormItemOptionWithSwitch extends BaseFormItemOption {
+  element: 'switch'
+  attrs?: SwitchAttrs
+}
+interface FormItemOptionWithTimePicker extends BaseFormItemOption {
+  element: 'time-picker'
+  attrs?: TimePickerAttrs
+}
+interface FormItemOptionWithTimeSelect extends BaseFormItemOption {
+  element: 'time-select'
+  attrs?: TimeSelectAttrs
+}
+interface FormItemOptionWithTransfer extends BaseFormItemOption {
+  element: 'transfer'
+  attrs?: TransferAttrs
+}
+interface FormItemOptionWithTreeSelect extends BaseFormItemOption {
+  element: 'tree-select'
+  attrs?: TreeSelectAttrs
+}
+interface FormItemOptionWithInputGroup extends BaseFormItemOption {
+  element: 'input-group'
+  attrs?: InputGroupAttrs
+}
+interface FormItemOptionWithUpload extends BaseFormItemOption {
+  element: 'upload'
+  attrs?: UploadAttrs
+}
+interface FormItemOptionWithTitle extends BaseFormItemOption {
+  element: 'title'
+  attrs?: never
 }
 
-// 定义每个表单元素对应的属性类型
-export type FormItemElementAttrs<T extends FormItemElement> = T extends keyof ElementAttrsMap
-  ? ElementAttrsMap[T]
-  : undefined
+export type AutocompleteAttrs = {
+  /** 输入框占位文本 */
+  placeholder?: string
+  /** 是否可清空	 */
+  clearable?: boolean
+  /** 自动补全组件是否被禁用 */
+  disabled?: boolean
+  /** 输入建议对象中用于显示的键名 */
+  valueKey?: string
+  /** 获取输入建议的防抖延时，单位为毫秒 */
+  debounce?: number
+  /** 菜单弹出位置 */
+  placement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end'
+  /**获取输入建议的方法， 仅当你的输入建议数据 resolve 时，通过调用 callback(data:[])  来返回它 */
+  fetchSuggestions?: (queryString: string, callback: (data: any[]) => void) => void
+  /** 是否在输入框 focus 时显示建议列表 */
+  triggerOnFocus?: boolean
+  /** 在输入没有任何匹配建议的情况下，按下回车是否触发 select 事件 */
+  selectWhenUnmatched?: boolean
+  /** 原生输入框 name 属性 */
+  name?: string
+  /** @since 2.7.2 原生 aria-label属性 */
+  ariaLabel?: string
+  /** 是否隐藏远程加载时的加载图标 */
+  hideLoading?: boolean
+  /** 自定下拉列表的类名 */
+  popperClass?: string
+  /** teleported	是否将下拉列表元素插入 append-to 指向的元素下 */
+  teleported?: boolean
+  /** 指定插入元素 */
+  appendTo?: string
+  /** 是否突出显示查询字串 */
+  highlightFirstItem?: boolean
+  fitInputWidth?: boolean
+  /** @deprecated 是否将下拉列表插入至 body 元素。 在下拉列表的定位出现问题时，可将该属性设置为 false	 */
+  popperAppendToBody?: boolean
+  /** 在输入框失去焦点时触发 */
+  onBlur?: (event: FocusEvent) => void
+  /** 在输入框获得焦点时触发 */
+  onFocus?: (event: FocusEvent) => void
+  /** 输入时触发 */
+  onInput?: (value: any) => void
+  /** 在输入框清空时触发 */
+  onClear?: () => void
+  /** 选中建议项时触发 */
+  onSelect?: (item: any) => void
+  /** 在 Input 值改变时触发	 */
+  onChange?: (value: any) => void
+  [key: string]: any
+}
+
+// 各个组件的属性类型定义
+export type CascaderAttrs = InstancePropsTypeOmitValue<typeof ElCascader>
+export type CheckboxGroupAttrs = PropsWithoutValue<CheckboxGroupProps> & {
+  options: { label: string; value: any }[]
+}
+export type ColorPickerAttrs = PropsWithoutValue<ColorPickerProps>
+export type DatePickerAttrs = PropsWithoutValue<DatePickerProps>
+export type InputAttrs = PropsWithoutValue<InputProps>
+export type InputNumberAttrs = PropsWithoutValue<InputNumberProps>
+export type InputTagAttrs = PropsWithoutValue<InputTagProps>
+export type MentionAttrs = PropsWithoutValue<MentionProps>
+export type RadioGroupAttrs = PropsWithoutValue<RadioGroupProps> & {
+  options: { label: string; value: any }[]
+}
+export type RateAttrs = PropsWithoutValue<RateProps>
+export type SelectAttrs = InstancePropsTypeOmitValue<typeof ElSelect> & {
+  options: { label: string; value: any }[]
+}
+export type SelectV2Attrs = InstancePropsTypeOmitValue<typeof ElSelectV2>
+export type SliderAttrs = PropsWithoutValue<SliderProps>
+export type SwitchAttrs = PropsWithoutValue<SwitchProps>
+export type TimePickerAttrs = PropsWithoutValue<TimePickerDefaultProps>
+export type TimeSelectAttrs = PropsWithoutValue<TimeSelectProps>
+export type TransferAttrs = PropsWithoutValue<TransferProps>
+export type TreeSelectAttrs = InstancePropsType<typeof ElTreeSelect>
+export type InputGroupAttrs = PropsWithoutValue<any>
+export type UploadAttrs = PropsWithoutValue<UploadProps>

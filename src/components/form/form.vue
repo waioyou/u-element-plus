@@ -1,15 +1,7 @@
 <script lang="ts" setup>
 import { computed, getCurrentInstance, ref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
-import type {
-  FormProps,
-  FormEmits,
-  FormOptions,
-  FormItemOption,
-  FormInstance,
-  FormItemElement,
-  FormSlots,
-} from './type'
+import type { FormProps, FormEmits, FormOptions, FormItemOption, FormInstance } from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 
@@ -47,7 +39,7 @@ const props = withDefaults(defineProps<FormProps>(), {
   /** 滚动到视图选项 */
   scrollIntoViewOptions: false,
 })
-defineSlots<FormSlots>()
+
 const instance = getCurrentInstance()!
 const formOptions = defineModel<FormOptions>('options', { default: () => ({}) })
 const formRef = ref<ElFormInstance>()
@@ -66,13 +58,7 @@ const filterElFormItemProps = (item: FormItemOption) => {
 const getElFormItemRules = (item: FormItemOption) => {
   if (!item.rules) return []
   return item.rules.map((rule) => {
-    const inputElement: FormItemElement[] = [
-      'autocomplete',
-      'input',
-      'input-number',
-      'input-tag',
-      'mention',
-    ]
+    const inputElement = ['autocomplete', 'input', 'input-number', 'input-tag', 'mention']
     if (inputElement.includes(item.element!)) {
       return { message: `请输入`, ...rule }
     } else {
@@ -126,41 +112,38 @@ const getViewVNode = (item: FormItemOption) => {
   if (item.formatter) {
     return item.formatter(item)
   }
-  const attrs = item?.attrs ?? {}
+  const attrs = item.attrs ?? {}
   if (item.element === 'cascader') {
-    // 级联选择器根据value获取label，进行拼接
-    const {
-      label: labelKey = 'label',
-      value: valueKey = 'value',
-      children = 'children',
-    } = attrs?.props ?? {}
-    const options = treeToList(attrs?.options ?? [], children)
-    return getOptionText(options, item.value, { labelKey, valueKey })
+    const { props = {}, options = [] } = item.attrs ?? {}
+    const list = treeToList(options, props.children)
+    return getOptionText(list, item.value, props)
   } else if (item.element === 'transfer') {
-    const { label: labelKey = 'label', value: valueKey = 'key' } = attrs?.props ?? {}
-    return getOptionText(attrs?.data ?? [], item.value, { labelKey, valueKey })
+    const { props = {}, data = [] } = item.attrs ?? {}
+    return getOptionText(data, item.value, { label: props.label, value: props.key ?? 'key' })
   } else if (
     // 选择器、多选框组、单选框组、穿梭框
     ['select', 'checkbox-group', 'radio-group'].includes(item.element!)
   ) {
-    return getOptionText(attrs?.options ?? [], item.value)
+    const { options = [] } = item.attrs as any
+    return getOptionText(options, item.value)
   } else if (item.element === 'switch') {
     // 开关
-    const { activeText = '是', inactiveText = '否', activeValue = true } = attrs ?? {}
+    const { activeText = '是', inactiveText = '否', activeValue = true } = item.attrs ?? {}
     return item.value === activeValue ? activeText : inactiveText
   } else if (['time-picker', 'time-select'].includes(item.element!)) {
-    const format = attrs?.format ?? 'HH:mm:ss'
+    const { format = 'HH:mm:ss' } = (item.attrs as any) ?? {}
     return Array.isArray(item.value)
       ? item.value.map((d) => formatterDate(d, format)).join('-')
       : formatterDate(item.value, format)
   } else if (item.element === 'date-picker') {
-    let format = getDateTypeFormat(attrs?.type ?? 'date')
-    if (item.attrs?.format) {
-      format = item.attrs?.format
+    const { type = 'date', format } = item.attrs ?? {}
+    let _format = getDateTypeFormat(type)
+    if (format) {
+      _format = format
     }
     return Array.isArray(item.value)
-      ? item.value.map((d) => formatterDate(d, format)).join('-')
-      : formatterDate(item.value, format)
+      ? item.value.map((d) => formatterDate(d, _format)).join('-')
+      : formatterDate(item.value, _format)
   }
   return item.value?.toString() ?? ''
 }
@@ -312,7 +295,7 @@ defineExpose(
               v-bind="item.attrs"
               @change="handleChange(key, item)"
             >
-              <template v-if="item.attrs?.options">
+              <template v-if="item.attrs && (item.attrs as any).options">
                 <!-- 选择器 选项 -->
                 <template v-if="item.element === 'select'">
                   <el-option

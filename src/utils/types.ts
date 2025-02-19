@@ -20,5 +20,5 @@ export type InstancePropsTypeOmitValue<T extends abstract new (...args: any) => 
   'value' | 'modelValue'
 >
 
-/** 移除组件Props的value和modelValue属性 */
-export type ComponentPropsWithoutValue<T> = Omit<Partial<T>, 'value' | 'modelValue'>
+/** 移除组件Props的value和modelValue属性,同时去除 readonly限制 */
+export type PropsWithoutValue<T> = Partial<Omit<TypeNoReadonly<T>, 'value' | 'modelValue'>>
