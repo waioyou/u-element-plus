@@ -31,15 +31,15 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '首页', link: '/' },
-      { text: '组件', link: '/components/context-menu' },
+      { text: '组件', link: '/components/form' },
     ],
 
     sidebar: [
       {
         text: '组件',
         items: [
-          { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
           { text: 'Form 表单', link: '/components/form' },
+          { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' },
         ],

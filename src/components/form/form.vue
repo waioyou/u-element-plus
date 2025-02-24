@@ -4,6 +4,7 @@ import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } fro
 import type { FormProps, FormEmits, FormOptions, FormItemOption, FormInstance } from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
+import { InfoFilled } from '@element-plus/icons-vue'
 
 defineOptions({
   name: 'UForm',
@@ -214,7 +215,7 @@ defineExpose(
         :class="item.element === 'title' ? 'u-form-item--title' : ''"
       >
         <!-- label 插槽处理 -->
-        <template v-if="item.slot?.label || $slots[`label-${key}`]" #label="slotProps">
+        <template #label="slotProps">
           <slot
             v-if="$slots[`label-${key}`]"
             :name="`label-${key}`"
@@ -225,9 +226,17 @@ defineExpose(
             v-else-if="item.slot?.label"
             :v-node="item.slot.label(item, slotProps.label)"
           />
+          <template v-else>
+            <span>{{ item.label }}</span>
+            <el-tooltip v-if="item.tooltip" :content="item.tooltip" placement="top">
+              <slot name="tooltip-icon">
+                <el-icon><InfoFilled /></el-icon>
+              </slot>
+            </el-tooltip>
+          </template>
         </template>
         <!-- error 插槽处理 -->
-        <template v-if="item.slot?.error || $slots[`error-${key}`]" #error="slotProps">
+        <template #error="slotProps">
           <slot
             v-if="$slots[`error-${key}`]"
             :name="`error-${key}`"

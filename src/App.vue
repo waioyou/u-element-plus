@@ -15,6 +15,7 @@ const formOptions = ref<FormOptions>({
     label: '自动补全输入框',
     element: 'autocomplete',
     value: '1',
+    tooltip: '自动补全输入框',
     attrs: {
       placeholder: '请输入',
       clearable: true,
