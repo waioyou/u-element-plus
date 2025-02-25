@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import UForm from '../../../src/components/form'
-import type { FormOptions, FormItemElementAttrs } from '../../../src/components/form'
+import type { FormOptions } from '../../../src/components/form'
 
 const formOptions = ref<FormOptions>({
   title: {
@@ -13,6 +13,7 @@ const formOptions = ref<FormOptions>({
     label: '自动补全输入框',
     element: 'autocomplete',
     value: '',
+    tooltip: '自动补全输入框',
     attrs: {
       placeholder: '请输入',
       clearable: true,
@@ -30,7 +31,7 @@ const formOptions = ref<FormOptions>({
           ].filter((item) => item.value.includes(queryString)),
         )
       },
-    } as FormItemElementAttrs<'autocomplete'>,
+    },
     span: '1/2',
   },
   cascader: {
@@ -65,7 +66,7 @@ const formOptions = ref<FormOptions>({
         emitPath: true,
         multiple: false,
       },
-    } as FormItemElementAttrs<'cascader'>,
+    },
     span: '1/2',
   },
 
@@ -81,7 +82,7 @@ const formOptions = ref<FormOptions>({
         { label: 'rap', value: 'rap' },
         { label: '篮球', value: 'basketball' },
       ],
-    } as FormItemElementAttrs<'checkbox-group'>,
+    },
     span: '1/2',
   },
   colorPicker: {
@@ -92,7 +93,7 @@ const formOptions = ref<FormOptions>({
     span: '1/2',
     attrs: {
       showAlpha: true,
-    } as FormItemElementAttrs<'color-picker'>,
+    },
   },
   datePicker: {
     label: '日期选择器',
@@ -104,7 +105,7 @@ const formOptions = ref<FormOptions>({
       type: 'datetime',
       format: 'YYYY-MM-DD',
       clearable: true,
-    } as FormItemElementAttrs<'date-picker'>,
+    },
     span: '1/2',
   },
   input: {
@@ -115,7 +116,8 @@ const formOptions = ref<FormOptions>({
     attrs: {
       placeholder: '请输入',
       clearable: true,
-    } as FormItemElementAttrs<'input'>,
+      suffix: () => '2',
+    },
     span: '1/2',
   },
   inputNumber: {
@@ -127,7 +129,7 @@ const formOptions = ref<FormOptions>({
       min: 0,
       max: 100,
       step: 1,
-    } as FormItemElementAttrs<'input-number'>,
+    },
     span: '1/2',
   },
   radioGroup: {
@@ -141,7 +143,7 @@ const formOptions = ref<FormOptions>({
         { label: '选项B', value: 'B' },
         { label: '选项C', value: 'C' },
       ],
-    } as FormItemElementAttrs<'radio-group'>,
+    },
     span: '1/2',
   },
   rate: {
@@ -152,7 +154,7 @@ const formOptions = ref<FormOptions>({
     attrs: {
       max: 5,
       allowHalf: true,
-    } as FormItemElementAttrs<'rate'>,
+    },
     span: '1/2',
   },
   select: {
@@ -167,7 +169,7 @@ const formOptions = ref<FormOptions>({
         label: `选项 ${i + 1}`,
         value: i + 1,
       })),
-    } as FormItemElementAttrs<'select'>,
+    },
     span: '1/2',
   },
   'select-v2': {
@@ -182,7 +184,7 @@ const formOptions = ref<FormOptions>({
         label: `选项 ${i + 1}`,
         value: i + 1,
       })),
-    } as FormItemElementAttrs<'select'>,
+    },
     span: '1/2',
   },
   slider: {
@@ -194,7 +196,7 @@ const formOptions = ref<FormOptions>({
       min: 0,
       max: 100,
       step: 1,
-    } as FormItemElementAttrs<'slider'>,
+    },
     span: '1/2',
   },
   switch: {
@@ -205,7 +207,7 @@ const formOptions = ref<FormOptions>({
     attrs: {
       activeText: '开',
       inactiveText: '关',
-    } as FormItemElementAttrs<'switch'>,
+    },
     span: '1/2',
   },
   timePicker: {
@@ -218,7 +220,7 @@ const formOptions = ref<FormOptions>({
       format: 'HH:mm:ss',
       clearable: true,
       valueFormat: 'HH:mm:ss',
-    } as FormItemElementAttrs<'time-picker'>,
+    },
     span: '1/2',
   },
   transfer: {
@@ -233,7 +235,7 @@ const formOptions = ref<FormOptions>({
         disabled: i % 2 === 0,
       })),
       titles: ['源列表', '目标列表'],
-    } as FormItemElementAttrs<'transfer'>,
+    },
     span: '1/1',
   },
   treeSelect: {
@@ -257,7 +259,7 @@ const formOptions = ref<FormOptions>({
           })),
         })),
       })),
-    } as FormItemElementAttrs<'tree-select'>,
+    },
     span: '1/1',
   },
   upload: {
@@ -285,7 +287,7 @@ const formOptions = ref<FormOptions>({
       onRemove: (file: any, fileList: any) => {
         console.log(file, fileList)
       },
-    } as FormItemElementAttrs<'upload'>,
+    },
     span: '1/1',
   },
 })

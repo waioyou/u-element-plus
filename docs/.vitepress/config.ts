@@ -27,7 +27,7 @@ export default defineConfig({
       md.use(componentPreview)
     },
     //显示行数
-    lineNumbers: true,
+    lineNumbers: false,
     //中文配置
     container: {
       tipLabel: '提示',
@@ -39,6 +39,8 @@ export default defineConfig({
     },
   },
   lang: 'zh-CN',
+
+  lastUpdated: true, // 启用最后更新时间
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -58,6 +60,9 @@ export default defineConfig({
         ],
       },
     ],
+
+    // 添加最后更新时间的中文设置
+    lastUpdatedText: '最后更新于',
 
     // 添加外观切换的中文设置
     darkModeSwitchLabel: '切换主题',
