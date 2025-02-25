@@ -80,12 +80,15 @@ export type FormItemOption =
   | FormItemOptionWithInputGroup
   | FormItemOptionWithUpload
   | FormItemOptionWithTitle
+  | BaseFormItemOption
 
 export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
   /** 值 */
   value?: any
   /** 标签 */
   label?: string
+  /** 元素 */
+  element?: never
   /** 是否必填 */
   required?: boolean
   /** 校验规则 */
@@ -120,91 +123,91 @@ export type FormItemSlot = {
   default?: (item: FormItemOption, view: boolean) => VNode | string | number
 }
 
-export interface FormItemOptionWithAutoComplete extends BaseFormItemOption {
+export interface FormItemOptionWithAutoComplete extends Omit<BaseFormItemOption, 'element'> {
   element: 'autocomplete'
   attrs?: AutocompleteAttrs
 }
-export interface FormItemOptionWithCascader extends BaseFormItemOption {
+export interface FormItemOptionWithCascader extends Omit<BaseFormItemOption, 'element'> {
   element: 'cascader'
   attrs?: CascaderAttrs
 }
-export interface FormItemOptionWithCheckboxGroup extends BaseFormItemOption {
+export interface FormItemOptionWithCheckboxGroup extends Omit<BaseFormItemOption, 'element'> {
   element: 'checkbox-group'
   attrs?: CheckboxGroupAttrs
 }
-export interface FormItemOptionWithColorPicker extends BaseFormItemOption {
+export interface FormItemOptionWithColorPicker extends Omit<BaseFormItemOption, 'element'> {
   element: 'color-picker'
   attrs?: ColorPickerAttrs
 }
-export interface FormItemOptionWithDatePicker extends BaseFormItemOption {
+export interface FormItemOptionWithDatePicker extends Omit<BaseFormItemOption, 'element'> {
   element: 'date-picker'
   attrs?: DatePickerAttrs
 }
-export interface FormItemOptionWithInput extends BaseFormItemOption {
+export interface FormItemOptionWithInput extends Omit<BaseFormItemOption, 'element'> {
   element: 'input'
   attrs?: InputAttrs
 }
-export interface FormItemOptionWithInputNumber extends BaseFormItemOption {
+export interface FormItemOptionWithInputNumber extends Omit<BaseFormItemOption, 'element'> {
   element: 'input-number'
   attrs?: InputNumberAttrs
 }
-export interface FormItemOptionWithInputTag extends BaseFormItemOption {
+export interface FormItemOptionWithInputTag extends Omit<BaseFormItemOption, 'element'> {
   element: 'input-tag'
   attrs?: InputTagAttrs
 }
-export interface FormItemOptionWithMention extends BaseFormItemOption {
+export interface FormItemOptionWithMention extends Omit<BaseFormItemOption, 'element'> {
   element: 'mention'
   attrs?: MentionAttrs
 }
-export interface FormItemOptionWithRadioGroup extends BaseFormItemOption {
+export interface FormItemOptionWithRadioGroup extends Omit<BaseFormItemOption, 'element'> {
   element: 'radio-group'
   attrs?: RadioGroupAttrs
 }
-export interface FormItemOptionWithRate extends BaseFormItemOption {
+export interface FormItemOptionWithRate extends Omit<BaseFormItemOption, 'element'> {
   element: 'rate'
   attrs?: RateAttrs
 }
-export interface FormItemOptionWithSelect extends BaseFormItemOption {
+export interface FormItemOptionWithSelect extends Omit<BaseFormItemOption, 'element'> {
   element: 'select'
   attrs?: SelectAttrs
 }
-export interface FormItemOptionWithSelectV2 extends BaseFormItemOption {
+export interface FormItemOptionWithSelectV2 extends Omit<BaseFormItemOption, 'element'> {
   element: 'select-v2'
   attrs?: SelectV2Attrs
 }
-export interface FormItemOptionWithSlider extends BaseFormItemOption {
+export interface FormItemOptionWithSlider extends Omit<BaseFormItemOption, 'element'> {
   element: 'slider'
   attrs?: SliderAttrs
 }
-export interface FormItemOptionWithSwitch extends BaseFormItemOption {
+export interface FormItemOptionWithSwitch extends Omit<BaseFormItemOption, 'element'> {
   element: 'switch'
   attrs?: SwitchAttrs
 }
-export interface FormItemOptionWithTimePicker extends BaseFormItemOption {
+export interface FormItemOptionWithTimePicker extends Omit<BaseFormItemOption, 'element'> {
   element: 'time-picker'
   attrs?: TimePickerAttrs
 }
-export interface FormItemOptionWithTimeSelect extends BaseFormItemOption {
+export interface FormItemOptionWithTimeSelect extends Omit<BaseFormItemOption, 'element'> {
   element: 'time-select'
   attrs?: TimeSelectAttrs
 }
-export interface FormItemOptionWithTransfer extends BaseFormItemOption {
+export interface FormItemOptionWithTransfer extends Omit<BaseFormItemOption, 'element'> {
   element: 'transfer'
   attrs?: TransferAttrs
 }
-export interface FormItemOptionWithTreeSelect extends BaseFormItemOption {
+export interface FormItemOptionWithTreeSelect extends Omit<BaseFormItemOption, 'element'> {
   element: 'tree-select'
   attrs?: TreeSelectAttrs
 }
-export interface FormItemOptionWithInputGroup extends BaseFormItemOption {
+export interface FormItemOptionWithInputGroup extends Omit<BaseFormItemOption, 'element'> {
   element: 'input-group'
   attrs?: InputGroupAttrs
 }
-export interface FormItemOptionWithUpload extends BaseFormItemOption {
+export interface FormItemOptionWithUpload extends Omit<BaseFormItemOption, 'element'> {
   element: 'upload'
   attrs?: UploadAttrs
 }
-export interface FormItemOptionWithTitle extends BaseFormItemOption {
+export interface FormItemOptionWithTitle extends Omit<BaseFormItemOption, 'element'> {
   element: 'title'
   attrs?: never
 }

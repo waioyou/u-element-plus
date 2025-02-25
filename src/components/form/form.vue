@@ -70,7 +70,7 @@ const getElFormItemRules = (item: FormItemOption) => {
 
 /** 获取表单项的样式 */
 const getFormItemStyle = (name: string, item: FormItemOption) => {
-  const style = item?.style ?? { width: '100%' }
+  const style = item?.style ?? {}
   const span = item.span?.split('/') ?? []
   if (span.length === 2) {
     const numerator = parseInt(span[0])
@@ -113,7 +113,7 @@ const getViewVNode = (item: FormItemOption) => {
   if (item.formatter) {
     return item.formatter(item)
   }
-  const attrs = item.attrs ?? {}
+
   if (item.element === 'cascader') {
     const { props = {}, options = [] } = item.attrs ?? {}
     const list = treeToList(options, props.children)
@@ -227,7 +227,7 @@ defineExpose(
             :v-node="item.slot.label(item, slotProps.label)"
           />
           <template v-else>
-            <span>{{ item.label }}</span>
+            {{ item.label }}
             <el-tooltip v-if="item.tooltip" :content="item.tooltip" placement="top">
               <slot name="tooltip-icon">
                 <el-icon><InfoFilled /></el-icon>
