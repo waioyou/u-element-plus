@@ -110,10 +110,6 @@ const getViewVNode = (item: FormItemOption) => {
   if (item.value === undefined || item.value === null) {
     return ''
   }
-  if (item.formatter) {
-    return item.formatter(item)
-  }
-
   if (item.element === 'cascader') {
     const { props = {}, options = [] } = item.attrs ?? {}
     const list = treeToList(options, props.children)
@@ -251,8 +247,9 @@ defineExpose(
         <template #default>
           <!-- 查看模式 -->
           <template v-if="view || item.view">
+            <RenderVNode v-if="item.formatter" :v-node="item.formatter(item)" />
             <el-rate
-              v-if="item.element === 'rate'"
+              v-else-if="item.element === 'rate'"
               v-model="item.value"
               v-bind="item.attrs"
               :disabled="true"

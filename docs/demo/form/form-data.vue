@@ -20,6 +20,7 @@ const formOptions = ref<FormOptions>({
   title: {
     label: '个人信息',
     element: 'title',
+    span: '1/1',
   },
   name: {
     label: '姓名',
