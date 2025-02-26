@@ -32,11 +32,13 @@ import type {
 import type { CSSProperties, VNode, Component } from 'vue'
 
 /** 表单属性 */
-export interface FormProps extends Omit<ElFormProps, 'model' | 'inline'> {
+export interface FormProps extends Omit<ElFormProps, 'model'> {
   /** 是否查看模式 */
   view?: boolean
   /** 表单配置项 */
   options: FormOptions
+  /** 栅格间隔 */
+  gutter?: number
 }
 
 /** 表单事件 */
@@ -79,7 +81,7 @@ export type FormItemOption =
   | FormItemOptionWithTreeSelect
   | FormItemOptionWithInputGroup
   | FormItemOptionWithUpload
-  | FormItemOptionWithTitle
+  | FormItemOptionWithSectionHeader
   | BaseFormItemOption
 
 export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
@@ -207,8 +209,8 @@ export interface FormItemOptionWithUpload extends Omit<BaseFormItemOption, 'elem
   element: 'upload'
   attrs?: UploadAttrs
 }
-export interface FormItemOptionWithTitle extends Omit<BaseFormItemOption, 'element'> {
-  element: 'title'
+export interface FormItemOptionWithSectionHeader extends Omit<BaseFormItemOption, 'element'> {
+  element: 'section-header'
   attrs?: never
 }
 

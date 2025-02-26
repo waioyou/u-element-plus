@@ -6,7 +6,7 @@ import type { FormOptions } from '../../../src/components/form'
 const formOptions = ref<FormOptions>({
   sec1: {
     label: '关于"旅游体验"的动态关联问卷',
-    element: 'title',
+    element: 'section-header',
     span: '1/1',
   },
   q1: {

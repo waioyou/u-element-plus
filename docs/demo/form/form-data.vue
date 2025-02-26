@@ -17,9 +17,9 @@ type FormData = {
 const formRef = ref<FormInstance>()
 
 const formOptions = ref<FormOptions>({
-  title: {
+  sec1: {
     label: '个人信息',
-    element: 'title',
+    element: 'section-header',
     span: '1/1',
   },
   name: {

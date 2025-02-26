@@ -4,9 +4,9 @@ import UForm from '../../../src/components/form'
 import type { FormOptions } from '../../../src/components/form'
 
 const formOptions = ref<FormOptions>({
-  title: {
+  sec1: {
     label: '基础信息',
-    element: 'title',
+    element: 'section-header',
     span: '1/1',
   },
   autocomplete: {

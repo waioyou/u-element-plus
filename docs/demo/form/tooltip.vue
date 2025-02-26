@@ -14,7 +14,7 @@ const formOptions = ref<FormOptions>({
     },
     rules: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
     tooltip: '用户名最多10个字符',
-    span: '1/2',
+    span: '1/3',
   },
   password: {
     label: '密码',
@@ -30,14 +30,14 @@ const formOptions = ref<FormOptions>({
       { min: 6, message: '密码最少6个字符', trigger: 'blur' },
     ],
     tooltip: '密码最少6个字符,必须包含数字和字母',
-    span: '1/2',
+    span: '1/3',
   },
 })
 </script>
 
 <template>
   <div class="form-data">
-    <u-form v-model:options="formOptions"></u-form>
+    <u-form v-model:options="formOptions" inline></u-form>
   </div>
 </template>
 

@@ -1,32 +1,37 @@
 .u-form {
   & {
-    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &.el-form--inline {
+    .el-form-item {
+      margin-right: 0;
+      // padding-right: 20px;
+    }
   }
   .el-form-item {
-    display: inline-flex;
-    margin-right: 0;
-    box-sizing: border-box;
-    padding-right: 16px;
-  }
-  .el-form-item__label {
-    align-items: center;
-    gap: 4px;
-  }
-  .u-form-item--title {
-    .el-form-item__label-wrap {
-      margin-left: 0px !important;
-    }
-    .el-form-item__label::before {
-      margin-right: 2px;
-      content: '';
-      width: 4px;
-      height: calc(var(--el-form-label-font-size) * 1.25);
-      background: var(--el-color-primary-dark-2);
+    .el-form-item__label {
+      align-items: center;
     }
   }
-  .is-view {
-    :deep(.el-upload) {
+  &:not(.el-form--inline) {
+    .el-form-item {
+      .el-form-item__content > div {
+        width: 100%;
+      }
+    }
+  }
+
+  .u-form-item__tooltip-icon {
+    margin-left: 5px;
+  }
+  .u-form-item--section-header {
+    .el-form-item__label {
       display: none;
+    }
+    .el-form-item__label-wrap {
+      display: none;
+      margin-left: 0px !important;
     }
   }
 }

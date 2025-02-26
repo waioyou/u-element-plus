@@ -5,7 +5,7 @@ import type { FormProps, FormEmits, FormOptions, FormItemOption, FormInstance } 
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 import { InfoFilled } from '@element-plus/icons-vue'
-
+import USectionHeader from '@/components/section-header/section-header.vue'
 defineOptions({
   name: 'UForm',
 })
@@ -13,6 +13,8 @@ const emit = defineEmits<FormEmits>()
 const props = withDefaults(defineProps<FormProps>(), {
   /** 是否为查看模式 */
   view: false,
+  /** 栅格间隔 */
+  gutter: 20,
   /** 标签的位置 */
   labelPosition: 'right',
   /** 标签的宽度 */
@@ -50,9 +52,22 @@ const filterElFormProps = computed(() => {
   return omit(props, ['view', 'rules', 'options'])
 })
 
+/** 根据栅格间隔计算表单的样式 */
+const getFormStyle = computed(() => {
+  const gutter = Number(props.gutter)
+  if (gutter > 0) {
+    const margin = gutter / 2
+    return {
+      marginLeft: `${-margin}px`,
+      marginRight: `${-margin}px`,
+    }
+  }
+  return {}
+})
+
 /** 过滤出 ElFormItem 需要的属性 */
 const filterElFormItemProps = (item: FormItemOption) => {
-  return omit(item, ['ratio', 'element', 'value', 'attrs', 'if', 'show', 'style'])
+  return omit(item, ['span', 'element', 'value', 'attrs', 'if', 'show', 'style'])
 }
 
 /** 获取表单项的校验规则 */
@@ -72,6 +87,12 @@ const getElFormItemRules = (item: FormItemOption) => {
 const getFormItemStyle = (name: string, item: FormItemOption) => {
   const style = item?.style ?? {}
   const span = item.span?.split('/') ?? []
+  const gutter = Number(props.gutter)
+  if (gutter > 0) {
+    const padding = gutter / 2
+    style.paddingLeft = `${padding}px`
+    style.paddingRight = `${padding}px`
+  }
   if (span.length === 2) {
     const numerator = parseInt(span[0])
     const denominator = parseInt(span[1])
@@ -198,7 +219,13 @@ defineExpose(
 </script>
 
 <template>
-  <el-form ref="formRef" class="u-form" v-bind="filterElFormProps" :model="formOptions">
+  <el-form
+    ref="formRef"
+    class="u-form"
+    v-bind="filterElFormProps"
+    :model="formOptions"
+    :style="getFormStyle"
+  >
     <template v-for="(item, key) in formOptions" :key="key">
       <el-form-item
         v-if="handleIf(item)"
@@ -208,7 +235,8 @@ defineExpose(
         :rules="getElFormItemRules(item)"
         :style="getFormItemStyle(key, item)"
         class="u-form-item"
-        :class="item.element === 'title' ? 'u-form-item--title' : ''"
+        :class="item.element === 'section-header' ? 'u-form-item--section-header' : ''"
+        :label="item.element === 'section-header' ? '' : item.label"
       >
         <!-- label 插槽处理 -->
         <template #label="slotProps">
@@ -226,7 +254,7 @@ defineExpose(
             {{ item.label }}
             <el-tooltip v-if="item.tooltip" :content="item.tooltip" placement="top">
               <slot name="tooltip-icon">
-                <el-icon><InfoFilled /></el-icon>
+                <el-icon class="u-form-item__tooltip-icon"><InfoFilled /></el-icon>
               </slot>
             </el-tooltip>
           </template>
@@ -275,7 +303,9 @@ defineExpose(
           <!-- 渲染表单项 -->
           <template v-else-if="item.element">
             <!-- 标题 -->
-            <template v-if="item.element === 'title'"> </template>
+            <template v-if="item.element === 'section-header'">
+              <USectionHeader :title="item.label"></USectionHeader>
+            </template>
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader
               v-else-if="item.element === 'cascader'"

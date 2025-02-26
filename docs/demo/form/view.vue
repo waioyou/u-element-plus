@@ -6,9 +6,9 @@ import { ElTag } from 'element-plus'
 
 const isView = ref(false)
 const formOptions = ref<FormOptions>({
-  title: {
+  sec1: {
     label: '服务满意度评价',
-    element: 'title',
+    element: 'section-header',
     span: '1/1',
   },
   name: {
