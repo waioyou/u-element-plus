@@ -5,7 +5,7 @@
 包括如下组件：`el-autocomplete`、`el-cascader`、`el-checkbox-group`、`el-checkbox`、`el-color-picker`、`el-date-picker`、`el-datetime-picker`、`el-input`、`el-input-number`、`el-radio`、`el-radio-group`、`el-rate`、`el-select`、`el-select-v2`、`el-slider`、`el-switch`、`el-time-picker`、`el-time-select`、`el-transfer`、`el-tree-select`、`el-upload`以及拓展组件`title`。
 
 :::warning
-在使用`el-checkbox`或`el-radio`组件时，请使用`el-checkbox-group`或`el-radio-group`组件，并在`attrs`中配置选项列表`options`。
+在使用多个`el-checkbox`或`el-radio`组件时，请使用`el-checkbox-group`或`el-radio-group`组件，并在`attrs`中配置选项列表`options`。
 :::
 
 ## 基础用法
@@ -20,22 +20,32 @@
 
 ## 自定义表单项
 
+支持通过作用域插槽和表单项的`slot`属性来设置表单项的label、error、default插槽内容。
+
+::: tip
+作用域插槽优先级高于表单项的`slot`属性。
+:::
+
 <preview path="../demo/form/slot.vue"></preview>
 
 ## 查看模式
 
 通过设置表单属性 `view` 属性来控制表单是否为查看模式。同时也可以通过设置表单项的`view`属性来控制表单项是否为查看模式。
 
-表单属性 `view` 优先级高于表单项的 `view` 属性。
+可以通过表单项的`formatter`属性来自定义表单项查看模式的显示内容。
 
-可以通过表单项的`formatter`属性来控制表单项查看模式显示的内容。
+::: warning
+表单属性 `view` 优先级高于表单项的 `view` 属性。
+:::
 
 <preview path="../demo/form/view.vue"></preview>
 
 ## 动态表单
 
-可以通过表单`change`事件和表单项配置中的`if`和`show`字段进行结合，从而实现动态设置表单的展示。<br/>
-`change`事件会在表单数据发生变化时触发，它有两个参数`name`为当前触发事件的表单项`prop`，`item`为表单项配置。<br/>
+可以通过表单`change`事件和表单项配置中的`if`和`show`字段进行结合，从而实现动态设置表单的展示。
+
+`change`事件会在表单数据发生变化时触发，它有两个参数`name`为当前触发事件的表单项`prop`，`item`为表单项配置。
+
 `if`和`show`值均为`boolean`，用于控制表单项的隐藏和现实，分别对应`v-if`和`v-show`
 
 <preview path="../demo/form/dynamic.vue"></preview>

@@ -31,8 +31,7 @@ export default defineConfig({
     //中文配置
     container: {
       tipLabel: '提示',
-      warningLabel: '警告',
-      noteLabel: '注意',
+      warningLabel: '注意',
       dangerLabel: '危险',
       detailsLabel: '详情',
       infoLabel: '信息',
