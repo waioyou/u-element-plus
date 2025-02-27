@@ -133,4 +133,19 @@
 .vp-doc table:not(:where(.vp-raw *)) {
   display: table;
   width: 100%;
+  tr {
+    background-color: var(--vp-c-bg) !important;
+    th {
+      background-color: var(--vp-c-bg) !important;
+    }
+  }
+  th,
+  td {
+    white-space: nowrap;
+    border: none;
+    padding: 0.6em 1em;
+    text-align: left;
+    max-width: 250px;
+    white-space: pre-wrap;
+  }
 }
