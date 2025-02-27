@@ -14,7 +14,21 @@
 
 <preview path="../demo/form/basic.vue"></preview>
 
+## 混合布局
+
+通过配置`span`属性来设置表单项的宽度，如`1/2`表示占据父容器的二分之一宽度。
+
+通过表单的`gutter`属性来设置表单项之间的间距。默认为：`20`。
+
+<preview path="../demo/form/span.vue"></preview>
+
 ## 获取表单数据
+
+通过调用表单实例中的`getFormData`方法获取表单数据，并进行表单验证。
+
+:::warning
+如果表单项没有设置`value`属性，则在获取表单数据时会跳过该表单项。
+:::
 
 <preview path="../demo/form/form-data.vue"></preview>
 
@@ -55,8 +69,6 @@
 通过配置`tooltip`属性来设置表单项的提示信息。
 
 <preview path="../demo/form/tooltip.vue"></preview>
-
-## 布局
 
 ## API
 

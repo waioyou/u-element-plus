@@ -278,6 +278,7 @@ const formOptions = ref<FormOptions>({
     rules: [{ required: false, trigger: 'change' }],
     view: false,
     attrs: {
+      style: { width: '350px' },
       action: 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15',
       listType: 'picture',
       limit: 3,

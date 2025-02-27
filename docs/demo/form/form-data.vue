@@ -115,10 +115,14 @@ const formOptions = ref<FormOptions>({
     span: '1/1',
   },
 })
-
+const formData = ref<FormData>()
 const getFormData = async (valid = true) => {
-  const formData = await formRef.value?.getFormData<FormData>(valid)
-  console.log('🚀 ~ getFormData ~ formData:', formData)
+  const result = await formRef.value?.getFormData<FormData>(valid)
+  if (result) {
+    formData.value = result
+  } else {
+    formData.value = undefined
+  }
 }
 const reset = () => {
   formRef.value?.resetFields()
@@ -133,6 +137,10 @@ const reset = () => {
       <el-button type="primary" @click="getFormData(true)">获取表单数据并校验</el-button>
       <el-button type="primary" @click="reset()">重置</el-button>
     </div>
+    <div class="preview-content">
+      <h3>表单数据预览</h3>
+      <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
+    </div>
   </div>
 </template>
 
@@ -140,5 +148,24 @@ const reset = () => {
 .btn {
   display: flex;
   justify-content: center;
+}
+.form-preview {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+
+  h3 {
+    margin-top: 0;
+    color: #4a90e2;
+  }
+
+  pre {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    overflow: auto;
+    font-size: 13px;
+  }
 }
 </style>
