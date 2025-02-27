@@ -69,20 +69,26 @@ const getFormStyle = computed(() => {
 
 /** 过滤出 ElFormItem 需要的属性 */
 const filterElFormItemProps = (item: FormItemOption) => {
-  return omit(item, ['span', 'element', 'value', 'attrs', 'if', 'show', 'style'])
+  return omit(item, ['span', 'element', 'value', 'attrs', 'if', 'show', 'style', 'slot'])
 }
 
 /** 获取表单项的校验规则 */
 const getElFormItemRules = (item: FormItemOption) => {
+  const isInputType = ['autocomplete', 'input', 'input-number', 'input-tag', 'mention'].includes(
+    item.element!,
+  )
+  const defaultMessage = item.element ? (isInputType ? `请输入` : `请选择`) : '请输入'
+
+  if (item.required && !item.rules) {
+    return [{ required: true, message: defaultMessage }]
+  }
+
   if (!item.rules) return []
-  return item.rules.map((rule) => {
-    const inputElement = ['autocomplete', 'input', 'input-number', 'input-tag', 'mention']
-    if (inputElement.includes(item.element!)) {
-      return { message: `请输入`, ...rule }
-    } else {
-      return { message: `请选择`, ...rule }
-    }
-  })
+
+  return item.rules.map((rule) => ({
+    message: defaultMessage,
+    ...rule,
+  }))
 }
 
 /** 获取表单项的样式 */

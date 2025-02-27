@@ -26,7 +26,7 @@ const formOptions = ref<FormOptions>({
       clearable: true,
     },
     span: '1/2',
-    rules: [{ required: true, message: '请输入' }],
+    required: true,
     slot: {
       label: ({ item, label }) => {
         return h(
@@ -45,7 +45,7 @@ const formOptions = ref<FormOptions>({
     label: '邮箱',
     value: '',
     span: '1/2',
-    rules: [{ required: true, message: '请输入' }],
+    required: true,
     attrs: {
       placeholder: '请输入邮箱',
     },
@@ -81,7 +81,7 @@ const formOptions = ref<FormOptions>({
     },
     value: undefined,
     span: '1/2',
-    rules: [{ required: true, message: '请输入' }],
+    required: true,
     slot: {
       label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: User }, () => label),
     },
@@ -91,9 +91,10 @@ const formOptions = ref<FormOptions>({
     element: 'select',
     value: '',
     span: '1/2',
-    rules: [{ required: true, message: '请选择' }],
+    required: true,
     attrs: {
       placeholder: '请选择',
+      clearable: true,
       options: [
         { label: '前端工程师', value: '1' },
         { label: '后端工程师', value: '2' },
@@ -114,7 +115,7 @@ const formOptions = ref<FormOptions>({
     element: 'checkbox-group',
     value: [],
     span: '1/2',
-    rules: [{ required: true, message: '请选择' }],
+    required: true,
     attrs: {
       options: [
         { value: 'reading', label: '阅读' },
@@ -133,7 +134,7 @@ const formOptions = ref<FormOptions>({
     element: 'input',
     value: '',
     span: '1/1',
-    rules: [{ required: true, message: '请输入' }],
+    required: true,
     attrs: {
       type: 'textarea',
       rows: 3,
@@ -151,7 +152,7 @@ const formOptions = ref<FormOptions>({
     element: 'checkbox',
     value: false,
     span: '1/1',
-    rules: [{ required: true, message: '请同意条款', trigger: 'change' }],
+    required: true,
     attrs: {
       label: '我已阅读并同意用户协议和隐私政策',
     },
