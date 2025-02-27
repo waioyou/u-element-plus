@@ -46,7 +46,7 @@ export interface FormProps extends Omit<ElFormProps, 'model'> {
 /** 表单事件 */
 export type FormEmits = {
   /** @todo 任一表单项被校验后触发 */
-  validate: any
+  validate: [field: string, isValid: boolean, message: string]
   /** 任一表单项值发生变化时触发 */
   change: [field: string, item: FormItemOption]
 }
