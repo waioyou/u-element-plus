@@ -28,6 +28,8 @@ import type {
   ElSelect,
   ElSelectV2,
   ElCascader,
+  CheckboxProps,
+  RadioProps,
 } from 'element-plus'
 import type { CSSProperties, VNode, Component } from 'vue'
 
@@ -46,7 +48,7 @@ export type FormEmits = {
   /** @todo 任一表单项被校验后触发 */
   validate: any
   /** 任一表单项值发生变化时触发 */
-  change: [name: string, item: FormItemOption]
+  change: [field: string, item: FormItemOption]
 }
 
 /** 表单实例 */
@@ -63,6 +65,7 @@ export type FormItemOption =
   | FormItemOptionWithAutoComplete
   | FormItemOptionWithCascader
   | FormItemOptionWithCheckboxGroup
+  | FormItemOptionWithCheckbox
   | FormItemOptionWithColorPicker
   | FormItemOptionWithDatePicker
   | FormItemOptionWithInput
@@ -70,6 +73,7 @@ export type FormItemOption =
   | FormItemOptionWithInputTag
   | FormItemOptionWithMention
   | FormItemOptionWithRadioGroup
+  | FormItemOptionWithRadio
   | FormItemOptionWithRate
   | FormItemOptionWithSelect
   | FormItemOptionWithSelectV2
@@ -120,9 +124,9 @@ export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormIt
 }
 
 export type FormItemSlot = {
-  label?: (item: FormItemOption, label: string) => VNode | string | number
-  error?: (item: FormItemOption, error: string) => VNode | string | number
-  default?: (item: FormItemOption, view: boolean) => VNode | string | number
+  label?: ({ item, label }: { item: FormItemOption; label: string }) => VNode | string | number
+  error?: ({ item, error }: { item: FormItemOption; error: string }) => VNode | string | number
+  default?: ({ item, view }: { item: FormItemOption; view: boolean }) => VNode | string | number
 }
 
 export interface FormItemOptionWithAutoComplete extends Omit<BaseFormItemOption, 'element'> {
@@ -136,6 +140,10 @@ export interface FormItemOptionWithCascader extends Omit<BaseFormItemOption, 'el
 export interface FormItemOptionWithCheckboxGroup extends Omit<BaseFormItemOption, 'element'> {
   element: 'checkbox-group'
   attrs?: CheckboxGroupAttrs
+}
+export interface FormItemOptionWithCheckbox extends Omit<BaseFormItemOption, 'element'> {
+  element: 'checkbox'
+  attrs?: CheckboxAttrs
 }
 export interface FormItemOptionWithColorPicker extends Omit<BaseFormItemOption, 'element'> {
   element: 'color-picker'
@@ -164,6 +172,10 @@ export interface FormItemOptionWithMention extends Omit<BaseFormItemOption, 'ele
 export interface FormItemOptionWithRadioGroup extends Omit<BaseFormItemOption, 'element'> {
   element: 'radio-group'
   attrs?: RadioGroupAttrs
+}
+export interface FormItemOptionWithRadio extends Omit<BaseFormItemOption, 'element'> {
+  element: 'radio'
+  attrs?: RadioAttrs
 }
 export interface FormItemOptionWithRate extends Omit<BaseFormItemOption, 'element'> {
   element: 'rate'
@@ -270,6 +282,7 @@ export type CascaderAttrs = InstancePropsTypeOmitValue<typeof ElCascader>
 export type CheckboxGroupAttrs = PropsWithoutValue<CheckboxGroupProps> & {
   options: { label: string; value: any }[]
 }
+export type CheckboxAttrs = PropsWithoutValue<CheckboxProps>
 export type ColorPickerAttrs = PropsWithoutValue<ColorPickerProps>
 export type DatePickerAttrs = PropsWithoutValue<DatePickerProps>
 export type InputAttrs = PropsWithoutValue<InputProps>
@@ -279,6 +292,7 @@ export type MentionAttrs = PropsWithoutValue<MentionProps>
 export type RadioGroupAttrs = PropsWithoutValue<RadioGroupProps> & {
   options: { label: string; value: any }[]
 }
+export type RadioAttrs = PropsWithoutValue<RadioProps>
 export type RateAttrs = PropsWithoutValue<RateProps>
 export type SelectAttrs = InstancePropsTypeOmitValue<typeof ElSelect> & {
   options: { label: string; value: any }[]

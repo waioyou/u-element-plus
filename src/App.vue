@@ -8,7 +8,7 @@ const formRef = ref<FormInstance>()
 const formOptions = ref<FormOptions>({
   title: {
     label: '基础信息',
-    element: 'title',
+    element: 'section-header',
     span: '1/1',
   },
   autocomplete: {
@@ -38,7 +38,7 @@ const formOptions = ref<FormOptions>({
     ],
     rules: [{ required: true, trigger: 'change' }],
     slot: {
-      label: (item, label) => `${item.element}-${label}`,
+      label: ({ item, label }) => `${item.element}-${label}`,
     },
     attrs: {
       placeholder: '请选择',
@@ -116,8 +116,8 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
     slot: {
-      label: (item, label) => `${item.element}-${label}`,
-      error: (item, error) => `${item.element}-${error}`,
+      label: ({ item, label }) => `${item.element}-${label}`,
+      error: ({ item, error }) => `${item.element}-${error}`,
     },
   },
   inputNumber: {

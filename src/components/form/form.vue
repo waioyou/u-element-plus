@@ -15,6 +15,8 @@ const props = withDefaults(defineProps<FormProps>(), {
   view: false,
   /** 栅格间隔 */
   gutter: 20,
+  /** 内联模式 */
+  inline: false,
   /** 标签的位置 */
   labelPosition: 'right',
   /** 标签的宽度 */
@@ -84,7 +86,7 @@ const getElFormItemRules = (item: FormItemOption) => {
 }
 
 /** 获取表单项的样式 */
-const getFormItemStyle = (name: string, item: FormItemOption) => {
+const getFormItemStyle = (field: string, item: FormItemOption) => {
   const style = item?.style ?? {}
   const span = item.span?.split('/') ?? []
   const gutter = Number(props.gutter)
@@ -93,13 +95,16 @@ const getFormItemStyle = (name: string, item: FormItemOption) => {
     style.paddingLeft = `${padding}px`
     style.paddingRight = `${padding}px`
   }
+  if (!props.inline) {
+    style.width = '100%'
+  }
   if (span.length === 2) {
     const numerator = parseInt(span[0])
     const denominator = parseInt(span[1])
     if (numerator > 0 && denominator > 0 && numerator <= denominator) {
       style.width = `${(numerator / denominator) * 100}%`
     } else {
-      console.warn(`表单项【${name}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
+      console.warn(`表单项【${field}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
     }
   }
   return style
@@ -245,10 +250,10 @@ defineExpose(
             :name="`label-${key}`"
             :item="item"
             v-bind="slotProps"
-          />
+          ></slot>
           <RenderVNode
             v-else-if="item.slot?.label"
-            :v-node="item.slot.label(item, slotProps.label)"
+            :v-node="item.slot.label({ item, label: slotProps.label })"
           />
           <template v-else>
             {{ item.label }}
@@ -269,7 +274,7 @@ defineExpose(
           />
           <RenderVNode
             v-else-if="item.slot?.error"
-            :v-node="item.slot.error(item, slotProps.error)"
+            :v-node="item.slot.error({ item, error: slotProps.error })"
           />
         </template>
         <template #default>
@@ -293,12 +298,15 @@ defineExpose(
           </template>
           <!-- 默认插槽处理 -->
           <template v-else-if="item.slot?.default || $slots[key]">
-            <slot v-if="$slots[key]" :name="key" :item="item" :view="view"></slot>
-            <RenderVNode v-else-if="item.slot?.default" :v-node="item.slot.default(item, view)" />
+            <slot v-if="$slots[key]" :name="key" :item="item"></slot>
+            <RenderVNode
+              v-else-if="item.slot?.default"
+              :v-node="item.slot.default({ item, view })"
+            />
           </template>
           <!-- 动态组件 -->
           <template v-else-if="item.component">
-            <component :is="item.component" v-model="item.value" v-bind="item.attrs" :view="view" />
+            <component :is="item.component" v-model="item.value" v-bind="item.attrs" />
           </template>
           <!-- 渲染表单项 -->
           <template v-else-if="item.element">
@@ -324,6 +332,13 @@ defineExpose(
                 点击上传
               </el-button>
             </el-upload>
+            <!-- 多选框-->
+            <template v-else-if="item.element === 'checkbox'">
+              <el-checkbox v-model="item.value" v-bind="item.attrs" />
+            </template>
+            <template v-else-if="item.element === 'radio'">
+              <el-radio v-model="item.value" v-bind="item.attrs" />
+            </template>
             <component
               v-else
               v-model="item.value"
