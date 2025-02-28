@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import UContextMenu from '../../../src/components/context-menu'
-</script>
+<script setup lang="ts"></script>
 <template>
   <div class="trigger">
     <div class="trigger-area">仅在此区域内右键有效</div>

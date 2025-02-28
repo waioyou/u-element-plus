@@ -1,5 +1,6 @@
 // https://vitepress.dev/guide/custom-theme
 import { h } from 'vue'
+import type { App } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import './style.css'
 
@@ -8,7 +9,7 @@ import { ElementPlusContainer } from '@vitepress-demo-preview/component'
 import '@vitepress-demo-preview/component/dist/style.css'
 
 // 导入组件
-import UElementPlus from '../../../src/index'
+import UElementPlus from 'u-element-plus'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -21,11 +22,11 @@ export default {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
     })
   },
-  enhanceApp({ app }) {
+  enhanceApp({ app }: { app: App }) {
     app.component('demo-preview', ElementPlusContainer)
     app.use(ElementPlus, {
       locale: zhCn,
     })
-    app.use(UElementPlus)
+    app.use(UElementPlus as unknown as any)
   },
 }

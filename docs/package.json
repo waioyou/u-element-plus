@@ -1,0 +1,30 @@
+{
+  "name": "u-element-plus-docs",
+  "version": "1.0.0",
+  "description": "U Element Plus 组件库文档",
+  "keywords": [
+    "element-plus",
+    "vue3",
+    "components"
+  ],
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "docs:build": "vitepress build",
+    "docs:dev": "vitepress dev",
+    "docs:preview": "vitepress preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "element-plus": "^2.9.4"
+  },
+  "devDependencies": {
+    "@vitepress-demo-preview/component": "^2.3.2",
+    "@vitepress-demo-preview/plugin": "^1.2.3",
+    "sass": "^1.83.4",
+    "vitepress": "^1.6.3",
+    "vue": "^3.3.8"
+  }
+}

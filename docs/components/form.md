@@ -103,7 +103,8 @@
 ### FormItemOption 配置项
 
 <table style="width: 100%;">
-    <tr>
+   <tbody>
+ <tr>
         <th style="width: 30%;">名称</th>
         <th style="width: 30%;">说明</th>
         <th style="width: 40%;">类型</th>
@@ -192,6 +193,7 @@
         <td>插槽配置</td>
         <td><code>FormItemSlot</code></td>
     </tr>
+   </tbody>
 </table>
 
 :::details 查看 FormItemSlot 类型

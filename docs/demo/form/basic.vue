@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import UForm from '../../../src/components/form'
-import type { FormOptions } from '../../../src/components/form'
+import type { FormOptions } from 'u-element-plus'
 
 const formOptions = ref<FormOptions>({
   sec1: {
@@ -116,7 +115,6 @@ const formOptions = ref<FormOptions>({
     attrs: {
       placeholder: '请输入',
       clearable: true,
-      suffix: () => '2',
     },
     span: '1/2',
   },

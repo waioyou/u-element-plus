@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import UContextMenu from '../../../src/components/context-menu'
-</script>
+<script setup lang="ts"></script>
 <template>
   <!-- 在此区域内右键点击将显示菜单 -->
   <div class="basic">右键点击此区域</div>

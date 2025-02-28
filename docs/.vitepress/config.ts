@@ -11,6 +11,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('../../src', import.meta.url)),
+        'u-element-plus': fileURLToPath(new URL('../../src', import.meta.url)),
       },
     },
     css: {

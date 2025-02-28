@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ContextMenuInstance } from '../../../src/components/context-menu'
-import UContextMenu from '../../../src/components/context-menu'
+import type { ContextMenuInstance } from 'u-element-plus'
 
 const menuRef = ref<ContextMenuInstance>()
 const showContextMenu = (event: MouseEvent) => {
