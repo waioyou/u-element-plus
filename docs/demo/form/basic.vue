@@ -42,8 +42,6 @@ const formOptions = ref<FormOptions>({
     ],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
-      placeholder: '请选择',
-      clearable: true,
       options: [
         {
           label: '福建省',
@@ -115,6 +113,9 @@ const formOptions = ref<FormOptions>({
     attrs: {
       placeholder: '请输入',
       clearable: true,
+      onInput: (value) => {
+        console.log(value)
+      },
     },
     span: '1/2',
   },
@@ -182,6 +183,7 @@ const formOptions = ref<FormOptions>({
         label: `选项 ${i + 1}`,
         value: i + 1,
       })),
+      props: {},
     },
     span: '1/2',
   },

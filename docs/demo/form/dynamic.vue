@@ -96,7 +96,7 @@ const handleChange = (name: string, item: any) => {
     formOptions.value.q6.show = item.value === '1'
   } else if (name === 'q2') {
     formOptions.value.q3.if = item.value.length > 1
-    formOptions.value.q3.attrs.options = item.attrs.options.filter((d) =>
+    formOptions.value.q3.attrs.options = item.attrs.options.filter((d: any) =>
       item.value.includes(d.value),
     )
   } else if (name === 'q4') {
