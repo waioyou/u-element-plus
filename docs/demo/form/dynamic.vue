@@ -16,7 +16,7 @@ const formOptions = ref<FormOptions>([
   {
     prop: 'sec1',
     label: '关于"旅游体验"的动态关联问卷',
-    element: 'section-header',
+    element: 'title-bar',
     span: '1/1',
   },
   {

@@ -104,7 +104,7 @@ type FormItemElement =
   | 'transfer'
   | 'tree-select'
   | 'upload'
-  | 'section-header'
+  | 'title-bar'
 
 /** 表单元素属性查找表 */
 export interface FormItemElementAttrsMap {
@@ -130,7 +130,7 @@ export interface FormItemElementAttrsMap {
   transfer: TransferAttrs
   'tree-select': TreeSelectAttrs
   upload: UploadAttrs
-  'section-header': never
+  'title-bar': never
 }
 
 export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
@@ -263,6 +263,6 @@ export type FormItemSlot = {
 //   attrs?: UploadAttrs
 // }
 // export interface FormItemOptionWithSectionHeader extends Omit<BaseFormItemOption, 'element'> {
-//   element: 'section-header'
+//   element: 'title-bar'
 //   attrs?: never
 // }

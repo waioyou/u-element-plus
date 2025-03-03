@@ -2,7 +2,7 @@
 
 通过配置项（options）动态生成表单内容；包含了Element Plus表单组件中的所有组件，并支持对应组件所有的属性和事件。
 
-包括如下组件：`el-autocomplete`、`el-cascader`、`el-checkbox-group`、`el-checkbox`、`el-color-picker`、`el-date-picker`、`el-datetime-picker`、`el-input`、`el-input-number`、`el-radio`、`el-radio-group`、`el-rate`、`el-select`、`el-select-v2`、`el-slider`、`el-switch`、`el-time-picker`、`el-time-select`、`el-transfer`、`el-tree-select`、`el-upload`以及拓展组件`u-section-header`。
+包括如下组件：`el-autocomplete`、`el-cascader`、`el-checkbox-group`、`el-checkbox`、`el-color-picker`、`el-date-picker`、`el-datetime-picker`、`el-input`、`el-input-number`、`el-radio`、`el-radio-group`、`el-rate`、`el-select`、`el-select-v2`、`el-slider`、`el-switch`、`el-time-picker`、`el-time-select`、`el-transfer`、`el-tree-select`、`el-upload`以及拓展组件`u-title-bar`。
 
 :::warning
 在使用多个`el-checkbox`或`el-radio`组件时，请使用`el-checkbox-group`或`el-radio-group`组件，并在`attrs`中配置选项列表`options`。

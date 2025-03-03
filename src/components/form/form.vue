@@ -5,7 +5,7 @@ import type { FormProps, FormEmits, FormItemOption } from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 import { InfoFilled } from '@element-plus/icons-vue'
-import USectionHeader from '@/components/section-header/section-header.vue'
+import UTitleBar from '@/components/title-bar/title-bar.vue'
 defineOptions({
   name: 'UForm',
 })
@@ -203,8 +203,8 @@ defineExpose(
         :rules="getElFormItemRules(item)"
         :style="getFormItemStyle(item.prop, item)"
         class="u-form-item"
-        :class="item.element === 'section-header' ? 'u-form-item--section-header' : ''"
-        :label="item.element === 'section-header' ? '' : item.label"
+        :class="item.element === 'title-bar' ? 'u-form-item--title-bar' : ''"
+        :label="item.element === 'title-bar' ? '' : item.label"
       >
         <!-- label 插槽处理 -->
         <template #label="slotProps">
@@ -279,8 +279,8 @@ defineExpose(
           <!-- 渲染表单项 -->
           <template v-else-if="item.element">
             <!-- 标题 -->
-            <template v-if="item.element === 'section-header'">
-              <USectionHeader :title="item.label"></USectionHeader>
+            <template v-if="item.element === 'title-bar'">
+              <UTitleBar :title="item.label"></UTitleBar>
             </template>
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader

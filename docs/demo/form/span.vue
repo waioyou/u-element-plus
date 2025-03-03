@@ -17,7 +17,7 @@ const formOptions = ref<FormOptions>([
   {
     prop: 'sec1',
     label: '个人信息',
-    element: 'section-header',
+    element: 'title-bar',
     span: '1/1',
   },
   {

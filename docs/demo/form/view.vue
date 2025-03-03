@@ -19,7 +19,7 @@ const formOptions = ref<FormOptions>([
   {
     prop: 'sec1',
     label: '服务满意度评价',
-    element: 'section-header',
+    element: 'title-bar',
     span: '1/1',
   },
   {

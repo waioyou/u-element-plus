@@ -36,9 +36,9 @@ const formData = ref({
 
 const formOptions = ref<FormOptions>([
   {
-    prop: 'section-header',
+    prop: 'title-bar',
     label: '基础信息',
-    element: 'section-header',
+    element: 'title-bar',
     span: '1/1',
   },
   {
