@@ -22,7 +22,7 @@ import type {
   TreeSelectAttrs,
   UploadAttrs,
 } from '@/types/form'
-import type { TypeNoReadonly } from '@/types'
+import type { FormItemElement, TypeNoReadonly } from '@/types'
 import type {
   FormProps as ElFormProps,
   FormItemProps as ElFormItemProps,
@@ -81,31 +81,6 @@ export type FormOptions = FormItemOption[]
 //   | FormItemOptionWithSectionHeader
 //   | BaseFormItemOption
 
-type FormItemElement =
-  | 'autocomplete'
-  | 'cascader'
-  | 'checkbox-group'
-  | 'checkbox'
-  | 'color-picker'
-  | 'date-picker'
-  | 'input'
-  | 'input-number'
-  | 'input-tag'
-  | 'mention'
-  | 'radio-group'
-  | 'radio'
-  | 'rate'
-  | 'select'
-  | 'select-v2'
-  | 'slider'
-  | 'switch'
-  | 'time-picker'
-  | 'time-select'
-  | 'transfer'
-  | 'tree-select'
-  | 'upload'
-  | 'title-bar'
-
 /** 表单元素属性查找表 */
 export interface FormItemElementAttrsMap {
   autocomplete: AutocompleteAttrs
@@ -138,7 +113,7 @@ export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemPr
   /** 标签 */
   label?: string
   /** 元素 */
-  element?: FormItemElement
+  element?: FormItemElement | 'title-bar'
   /** 是否必填 */
   required?: boolean
   /** 校验规则 */
