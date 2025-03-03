@@ -1,7 +1,7 @@
-<script lang="ts" setup generic="T extends Record<string, any>">
+<script lang="ts" setup>
 import { computed, getCurrentInstance, ref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
-import type { FormProps, FormEmits, FormItemOption } from './type'
+import type { FormProps, FormEmits, FormOptions, FormItemOption, FormInstance } from './type'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 import { InfoFilled } from '@element-plus/icons-vue'
@@ -10,9 +10,7 @@ defineOptions({
   name: 'UForm',
 })
 const emit = defineEmits<FormEmits>()
-const modelValue = defineModel<T>('modelValue', { default: () => ({}) })
 const props = withDefaults(defineProps<FormProps>(), {
-  options: () => [],
   /** 是否为查看模式 */
   view: false,
   /** 栅格间隔 */
@@ -48,6 +46,7 @@ const props = withDefaults(defineProps<FormProps>(), {
 })
 
 const instance = getCurrentInstance()!
+const formOptions = defineModel<FormOptions>('options', { default: () => ({}) })
 const formRef = ref<ElFormInstance>()
 
 /** 过滤出 ElForm 需要的属性 */
@@ -67,16 +66,6 @@ const getFormStyle = computed(() => {
   }
   return {}
 })
-
-/** 处理表单验证 */
-const handleValidate = (prop: any, isValid: boolean, message: string) => {
-  emit('validate', prop, isValid, message)
-}
-
-/** 处理表单项的 change 事件 */
-const handleChange = (prop: string, item: FormItemOption) => {
-  emit('change', prop, item)
-}
 
 /** 过滤出 ElFormItem 需要的属性 */
 const filterElFormItemProps = (item: FormItemOption) => {
@@ -103,7 +92,7 @@ const getElFormItemRules = (item: FormItemOption) => {
 }
 
 /** 获取表单项的样式 */
-const getFormItemStyle = (prop: string, item: FormItemOption) => {
+const getFormItemStyle = (field: string, item: FormItemOption) => {
   const style = item?.style ?? {}
   const span = item.span?.split('/') ?? []
   const gutter = Number(props.gutter)
@@ -121,63 +110,118 @@ const getFormItemStyle = (prop: string, item: FormItemOption) => {
     if (numerator > 0 && denominator > 0 && numerator <= denominator) {
       style.width = `${(numerator / denominator) * 100}%`
     } else {
-      console.warn(`表单项【${prop}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
+      console.warn(`表单项【${field}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
     }
   }
   return style
 }
 
+/** 处理表单项的 if 属性 */
+const handleIf = (item: FormItemOption) => {
+  if (typeof item.if === 'function') {
+    return item.if(formOptions.value)
+  }
+  return Reflect.has(item, 'if') ? item.if : true
+}
+
+/** 处理表单项的 show 属性 */
+const handleShow = (item: FormItemOption) => {
+  if (typeof item.show === 'function') {
+    return item.show(formOptions.value)
+  }
+  return Reflect.has(item, 'show') ? item.show : true
+}
+
+/** 处理表单项的 change 事件 */
+const handleChange = (key: string, item: FormItemOption) => {
+  emit('change', key, item)
+}
+
 /** 获取表单项的查看节点 */
 const getViewVNode = (item: FormItemOption) => {
-  const itemValue = modelValue.value[item.prop]
-  if (itemValue === undefined || itemValue === null) {
+  if (item.value === undefined || item.value === null) {
     return ''
   }
   if (item.element === 'cascader') {
     const { props = {}, options = [] } = item.attrs ?? {}
     const list = treeToList(options, props.children)
-    return getOptionText(list, itemValue, props)
+    return getOptionText(list, item.value, props)
   } else if (item.element === 'transfer') {
     const { props = {}, data = [] } = item.attrs ?? {}
-    return getOptionText(data, itemValue, { label: props.label, value: props.key ?? 'key' })
+    return getOptionText(data, item.value, { label: props.label, value: props.key ?? 'key' })
   } else if (
     // 选择器、多选框组、单选框组、穿梭框
     ['select', 'checkbox-group', 'radio-group'].includes(item.element!)
   ) {
     const { options = [] } = item.attrs as any
-    return getOptionText(options, itemValue)
+    return getOptionText(options, item.value)
   } else if (item.element === 'switch') {
     // 开关
     const { activeText = '是', inactiveText = '否', activeValue = true } = item.attrs ?? {}
-    return itemValue === activeValue ? activeText : inactiveText
+    return item.value === activeValue ? activeText : inactiveText
   } else if (['time-picker', 'time-select'].includes(item.element!)) {
     const { format = 'HH:mm:ss' } = (item.attrs as any) ?? {}
-    return Array.isArray(itemValue)
-      ? itemValue.map((d) => formatterDate(d, format)).join('-')
-      : formatterDate(itemValue, format)
+    return Array.isArray(item.value)
+      ? item.value.map((d) => formatterDate(d, format)).join('-')
+      : formatterDate(item.value, format)
   } else if (item.element === 'date-picker') {
     const { type = 'date', format } = item.attrs ?? {}
     let _format = getDateTypeFormat(type)
     if (format) {
       _format = format
     }
-    return Array.isArray(itemValue)
-      ? itemValue.map((d) => formatterDate(d, _format)).join('-')
-      : formatterDate(itemValue, _format)
+    return Array.isArray(item.value)
+      ? item.value.map((d) => formatterDate(d, _format)).join('-')
+      : formatterDate(item.value, _format)
   }
-  return itemValue?.toString() ?? ''
+  return item.value?.toString() ?? ''
+}
+
+/** 获取表单数据 */
+const getFormData: FormInstance['getFormData'] = async (validate: boolean = false) => {
+  const result = {} as any
+  const getResult = () => {
+    Object.keys(formOptions.value).forEach((key) => {
+      const item = formOptions.value[key]
+      if (Reflect.has(item, 'value')) {
+        result[key] = item.value
+      }
+    })
+  }
+  if (validate) {
+    return formRef.value
+      ?.validate()
+      .then(() => {
+        getResult()
+        return result
+      })
+      .catch(() => {
+        return false
+      })
+  } else {
+    getResult()
+    return result
+  }
 }
 
 /** 不使用formRef，使用refs，避免组件多次渲染 */
 defineExpose(
   new Proxy(
-    {},
     {
-      get(_, key) {
+      getFormData,
+    },
+    {
+      get(target, key) {
+        if (key === 'getFormData') {
+          return getFormData
+        }
         const formInstance: any = instance.refs?.formRef ?? {}
         return formInstance[key]
       },
-      has(_, key) {
+      has(target, key) {
+        if (key === 'getFormData') {
+          return true
+        }
         return Reflect.has(formRef.value!, key)
       },
     },
@@ -190,18 +234,17 @@ defineExpose(
     ref="formRef"
     class="u-form"
     v-bind="filterElFormProps"
-    :model="modelValue"
+    :model="formOptions"
     :style="getFormStyle"
-    @validate="handleValidate"
   >
-    <template v-for="item in options" :key="item.prop">
+    <template v-for="(item, key) in formOptions" :key="key">
       <el-form-item
-        v-if="item?.if ?? true"
-        v-show="item?.show ?? true"
+        v-if="handleIf(item)"
+        v-show="handleShow(item)"
         v-bind="filterElFormItemProps(item)"
-        :prop="item.prop"
+        :prop="`${key}.value`"
         :rules="getElFormItemRules(item)"
-        :style="getFormItemStyle(item.prop, item)"
+        :style="getFormItemStyle(key, item)"
         class="u-form-item"
         :class="item.element === 'section-header' ? 'u-form-item--section-header' : ''"
         :label="item.element === 'section-header' ? '' : item.label"
@@ -209,8 +252,8 @@ defineExpose(
         <!-- label 插槽处理 -->
         <template #label="slotProps">
           <slot
-            v-if="$slots[`label-${item.prop}`]"
-            :name="`label-${item.prop}`"
+            v-if="$slots[`label-${key}`]"
+            :name="`label-${key}`"
             :item="item"
             v-bind="slotProps"
           ></slot>
@@ -230,8 +273,8 @@ defineExpose(
         <!-- error 插槽处理 -->
         <template #error="slotProps">
           <slot
-            v-if="$slots[`error-${item.prop}`]"
-            :name="`error-${item.prop}`"
+            v-if="$slots[`error-${key}`]"
+            :name="`error-${key}`"
             :item="item"
             v-bind="slotProps"
           />
@@ -246,13 +289,13 @@ defineExpose(
             <RenderVNode v-if="item.formatter" :v-node="item.formatter(item)" />
             <el-rate
               v-else-if="item.element === 'rate'"
-              v-model="modelValue[item.prop]"
+              v-model="item.value"
               v-bind="item.attrs"
               :disabled="true"
             />
             <el-upload
               v-else-if="item.element === 'upload'"
-              :file-list="modelValue[item.prop]"
+              :file-list="item.value"
               v-bind="item.attrs"
               :disabled="true"
               class="is-view"
@@ -260,8 +303,8 @@ defineExpose(
             <RenderVNode v-else :v-node="getViewVNode(item)" />
           </template>
           <!-- 默认插槽处理 -->
-          <template v-else-if="item.slot?.default || $slots[item.prop]">
-            <slot v-if="$slots[item.prop]" :name="item.prop" :item="item"></slot>
+          <template v-else-if="item.slot?.default || $slots[key]">
+            <slot v-if="$slots[key]" :name="key" :item="item"></slot>
             <RenderVNode
               v-else-if="item.slot?.default"
               :v-node="item.slot.default({ item, view })"
@@ -269,12 +312,7 @@ defineExpose(
           </template>
           <!-- 动态组件 -->
           <template v-else-if="item.component">
-            <component
-              :is="item.component"
-              v-model="modelValue[item.prop]"
-              v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
-            />
+            <component :is="item.component" v-model="item.value" v-bind="item.attrs" />
           </template>
           <!-- 渲染表单项 -->
           <template v-else-if="item.element">
@@ -285,16 +323,16 @@ defineExpose(
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader
               v-else-if="item.element === 'cascader'"
-              v-model="modelValue[item.prop]"
+              v-model="item.value"
               v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(key, item)"
             />
             <!-- 上传 -->
             <el-upload
               v-else-if="item.element === 'upload'"
-              v-model:file-list="modelValue[item.prop]"
+              v-model:file-list="item.value"
               v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(key, item)"
             >
               <el-button v-if="item.attrs?.listType !== 'picture-card'" type="primary">
                 点击上传
@@ -302,25 +340,17 @@ defineExpose(
             </el-upload>
             <!-- 多选框-->
             <template v-else-if="item.element === 'checkbox'">
-              <el-checkbox
-                v-model="modelValue[item.prop]"
-                v-bind="item.attrs"
-                @change="handleChange(item.prop, item)"
-              />
+              <el-checkbox v-model="item.value" v-bind="item.attrs" />
             </template>
             <template v-else-if="item.element === 'radio'">
-              <el-radio
-                v-model="modelValue[item.prop]"
-                v-bind="item.attrs"
-                @change="handleChange(item.prop, item)"
-              />
+              <el-radio v-model="item.value" v-bind="item.attrs" />
             </template>
             <component
               v-else
-              v-model="modelValue[item.prop]"
+              v-model="item.value"
               :is="`el-${item.element}`"
               v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(key, item)"
             >
               <template v-if="item.attrs && (item.attrs as any).options">
                 <!-- 选择器 选项 -->
@@ -352,7 +382,7 @@ defineExpose(
           </template>
           <!-- 错误配置项提示 -->
           <template v-else>
-            <el-text type="danger">{{ `请检查表单项【${item.prop}】的配置` }}</el-text>
+            <el-text type="danger">{{ `请检查表单项【${key}】的配置` }}</el-text>
           </template>
         </template>
       </el-form-item>

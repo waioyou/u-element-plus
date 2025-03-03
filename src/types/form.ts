@@ -25,6 +25,7 @@ import type {
   ElTreeSelect,
   UploadProps,
   TransferKey,
+  CascaderProps,
 } from 'element-plus'
 
 // import type { ColorPickerProps } from 'element-plus/lib/components/index.js'
@@ -59,7 +60,7 @@ export type CascaderAttrs = FormElementAttrsPlugin<any> & {
   /** 选项的数据源 */
   options?: any[]
   /** 配置选项 */
-  props?: object
+  props?: CascaderProps
   /** 尺寸 */
   size?: 'large' | 'default' | 'small'
   /** 输入框占位文本 */

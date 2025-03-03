@@ -3,10 +3,15 @@ import { ref } from 'vue'
 import UForm from '../../../src/components/form'
 import type { FormOptions } from '../../../src/components/form'
 
-const formOptions = ref<FormOptions>({
-  name: {
+const formData = ref({
+  name: '',
+  password: '',
+})
+
+const formOptions = ref<FormOptions>([
+  {
+    prop: 'name',
     label: '用户名',
-    value: '',
     element: 'input',
     attrs: {
       placeholder: '请输入用户名',
@@ -16,9 +21,9 @@ const formOptions = ref<FormOptions>({
     tooltip: '用户名最多10个字符',
     span: '1/3',
   },
-  password: {
+  {
+    prop: 'password',
     label: '密码',
-    value: '',
     element: 'input',
     attrs: {
       placeholder: '请输入密码',
@@ -32,12 +37,12 @@ const formOptions = ref<FormOptions>({
     tooltip: '密码最少6个字符,必须包含数字和字母',
     span: '1/3',
   },
-})
+])
 </script>
 
 <template>
   <div class="form-data">
-    <u-form v-model:options="formOptions" inline></u-form>
+    <u-form v-model="formData" :options="formOptions" inline></u-form>
   </div>
 </template>
 

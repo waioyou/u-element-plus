@@ -5,35 +5,46 @@ import type { FormOptions } from '../../../src/components/form'
 import { ElTag } from 'element-plus'
 
 const isView = ref(false)
-const formOptions = ref<FormOptions>({
-  sec1: {
+const nameIsView = ref(false)
+
+const formData = ref({
+  name: '张三',
+  tel: '18888888888',
+  date: '2024-01-01',
+  type: '1',
+  satisfaction: 3,
+})
+
+const formOptions = ref<FormOptions>([
+  {
+    prop: 'sec1',
     label: '服务满意度评价',
     element: 'section-header',
     span: '1/1',
   },
-  name: {
+  {
+    prop: 'name',
     label: '您的姓名',
     element: 'input',
-    value: '张三',
     attrs: {
       placeholder: '请输入姓名',
       clearable: true,
       maxlength: 10,
     },
     span: '1/2',
-    view: false,
+    view: nameIsView,
   },
-  tel: {
+  {
+    prop: 'tel',
     label: '您的联系方式',
     element: 'input',
-    value: '18888888888',
     span: '1/2',
     view: false,
   },
-  date: {
+  {
+    prop: 'date',
     label: '接受服务的日期',
     element: 'date-picker',
-    value: '2024-01-01',
     attrs: {
       type: 'date',
       format: 'YYYY-MM-DD',
@@ -42,10 +53,10 @@ const formOptions = ref<FormOptions>({
     span: '1/2',
     view: false,
   },
-  type: {
+  {
+    prop: 'type',
     label: '服务类型',
     element: 'select',
-    value: '1',
     attrs: {
       options: [
         { label: '普通陪诊', value: '1' },
@@ -56,10 +67,10 @@ const formOptions = ref<FormOptions>({
     span: '1/2',
     view: false,
   },
-  satisfaction: {
+  {
+    prop: 'satisfaction',
     label: '整体评价',
     element: 'rate',
-    value: 3,
     span: '1/2',
     attrs: {
       texts: ['非常不满意', '不满意', '一般', '满意', '非常满意'],
@@ -69,26 +80,23 @@ const formOptions = ref<FormOptions>({
     formatter: (item) => {
       return h(
         ElTag,
-        { type: item.value > 3 ? 'success' : 'danger' },
-        () => item.attrs.texts[item.value - 1],
+        { type: formData.value.satisfaction > 3 ? 'success' : 'danger' },
+        () => item.attrs!.texts[formData.value.satisfaction - 1],
       )
     },
   },
-})
-const handleSetNameIsView = () => {
-  formOptions.value.name.view = !formOptions.value.name.view
-}
+])
 </script>
 
 <template>
   <div class="form-data">
-    <u-form :view="isView" v-model:options="formOptions"></u-form>
+    <u-form v-model="formData" :options="formOptions" :view="isView"></u-form>
     <div class="btn">
       <el-button type="primary" @click="isView = !isView">
         {{ isView ? '编辑模式' : '查看模式' }}
       </el-button>
-      <el-button type="primary" @click="handleSetNameIsView">
-        {{ formOptions.name.view ? '设置姓名为编辑模式' : '设置姓名为查看模式' }}
+      <el-button type="primary" @click="nameIsView = !nameIsView">
+        {{ nameIsView ? '设置姓名为编辑模式' : '设置姓名为查看模式' }}
       </el-button>
     </div>
   </div>

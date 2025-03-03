@@ -1,20 +1,47 @@
 <script setup lang="ts">
 import UForm from '@/components/form/form.vue'
-import { h, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 import type { FormOptions, FormInstance } from './components/form/type'
 import { ElButton } from 'element-plus'
 
+const formData = ref({
+  autocomplete: '1',
+  cascader: ['FuJian', 'Fuzhou'],
+  checkboxGroup: ['sing', 'dance'],
+  colorPicker: '#9B86D6',
+  datePicker: '2024-01-01',
+  input: '输入框',
+  inputNumber: 0,
+  radioGroup: 'A',
+  rate: 3,
+  select: '1',
+  slider: 50,
+  switch: true,
+  timePicker: '20:05:01',
+  transfer: [1, 2],
+  upload: [
+    {
+      name: 'element-plus-logo.svg',
+      url: 'https://element-plus.org/images/element-plus-logo.svg',
+    },
+    {
+      name: 'element-plus-logo2.svg',
+      url: 'https://element-plus.org/images/element-plus-logo.svg',
+    },
+  ],
+})
 const formRef = ref<FormInstance>()
-const formOptions = ref<FormOptions>({
-  title: {
+const formOptions = ref<FormOptions>([
+  {
+    prop: 'section-header',
     label: '基础信息',
     element: 'section-header',
     span: '1/1',
   },
-  autocomplete: {
+  {
+    prop: 'autocomplete',
     label: '自动补全输入框',
     element: 'autocomplete',
-    value: '1',
     tooltip: '自动补全输入框',
     attrs: {
       placeholder: '请输入',
@@ -29,13 +56,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
   },
-  cascader: {
+  {
+    prop: 'cascader',
     label: '级联选择器',
     element: 'cascader',
-    value: [
-      ['FuJian', 'Fuzhou'],
-      ['FuJian', 'Xiamen'],
-    ],
     rules: [{ required: true, trigger: 'change' }],
     slot: {
       label: ({ item, label }) => `${item.element}-${label}`,
@@ -67,10 +91,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
   },
-  checkboxGroup: {
+  {
+    prop: 'checkboxGroup',
     label: '多选框组',
     element: 'checkbox-group',
-    value: ['sing', 'dance'],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       options: [
@@ -81,21 +105,21 @@ const formOptions = ref<FormOptions>({
       ],
     },
     formatter: (item) => {
-      return h('span', item.value.join(', '))
+      return h('span', formData.value.checkboxGroup.join(', '))
     },
     span: '1/3',
   },
-  colorPicker: {
+  {
+    prop: 'colorPicker',
     label: '取色器',
     element: 'color-picker',
-    value: '#9B86D6',
     rules: [{ required: true, trigger: 'change' }],
     span: '1/3',
   },
-  datePicker: {
+  {
+    prop: 'datePicker',
     label: '日期选择器',
     element: 'date-picker',
-    value: '2024-01-01',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '选择日期',
@@ -105,10 +129,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
   },
-  input: {
+  {
+    prop: 'input',
     label: '输入框',
     element: 'input',
-    value: '输入框',
     rules: [{ required: true, trigger: 'blur' }],
     attrs: {
       placeholder: '请输入',
@@ -120,10 +144,10 @@ const formOptions = ref<FormOptions>({
       error: ({ item, error }) => `${item.element}-${error}`,
     },
   },
-  inputNumber: {
+  {
+    prop: 'inputNumber',
     label: '数字输入框',
     element: 'input-number',
-    value: 0,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       min: 0,
@@ -132,10 +156,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
   },
-  radioGroup: {
+  {
+    prop: 'radioGroup',
     label: '单选框组',
     element: 'radio-group',
-    value: 'A',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       options: [
@@ -146,10 +170,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
   },
-  rate: {
+  {
+    prop: 'rate',
     label: '评分',
     element: 'rate',
-    value: 3,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       max: 5,
@@ -157,10 +181,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/3',
   },
-  select: {
+  {
+    prop: 'select',
     label: '选择器',
     element: 'select',
-    value: '1',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '请选择',
@@ -172,11 +196,12 @@ const formOptions = ref<FormOptions>({
       ],
     },
     span: '1/2',
+    if: computed(() => formData.value.rate > 3),
   },
-  slider: {
+  {
+    prop: 'slider',
     label: '滑块',
     element: 'slider',
-    value: 50,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       min: 0,
@@ -185,10 +210,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/2',
   },
-  switch: {
+  {
+    prop: 'switch',
     label: '开关',
     element: 'switch',
-    value: false,
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       activeText: '开',
@@ -196,10 +221,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/2',
   },
-  timePicker: {
+  {
+    prop: 'timePicker',
     label: '时间选择器',
     element: 'time-picker',
-    value: '20:05:01',
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       placeholder: '选择时间',
@@ -209,10 +234,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/2',
   },
-  transfer: {
+  {
+    prop: 'transfer',
     label: '穿梭框',
     element: 'transfer',
-    value: [1, 2],
     rules: [{ required: true, trigger: 'change' }],
     attrs: {
       data: [
@@ -224,19 +249,10 @@ const formOptions = ref<FormOptions>({
     },
     span: '2/1',
   },
-  upload: {
+  {
+    prop: 'upload',
     label: '上传',
     element: 'upload',
-    value: [
-      {
-        name: 'element-plus-logo.svg',
-        url: 'https://element-plus.org/images/element-plus-logo.svg',
-      },
-      {
-        name: 'element-plus-logo2.svg',
-        url: 'https://element-plus.org/images/element-plus-logo.svg',
-      },
-    ],
     rules: [{ required: false, trigger: 'change' }],
     view: false,
     attrs: {
@@ -252,20 +268,7 @@ const formOptions = ref<FormOptions>({
     },
     span: '1/1',
   },
-})
-
-const handleGetFormData = async () => {
-  console.log(formRef.value)
-  // formRef.value?.validateField(['cascader.value', 'checkboxGroup.value'])
-  // formRef.value?.validateField()
-  const res = await formRef.value?.getFormData(true)
-  console.log(res)
-}
-
-const handleChange = (key: string, item: any) => {
-  console.log('🚀 ~ handleChange ~ key:', key)
-  console.log('🚀 ~ handleChange ~ item:', item)
-}
+])
 
 const handleResetForm = () => {
   formRef.value?.resetFields()
@@ -277,21 +280,18 @@ const view = ref(false)
 <template>
   <div style="width: 100%; height: 100vh">
     <div class="p-4">
-      <UForm ref="formRef" v-model:options="formOptions" @change="handleChange" :view="view">
+      <UForm ref="formRef" v-model="formData" :view="view" :options="formOptions">
         <template #label-cascader="{ label }">
           <el-text type="primary">{{ `label-${label}` }}</el-text>
         </template>
         <template #error-cascader="{ item, error }">
           <el-text type="info">{{ `error-${error}` }}</el-text>
         </template>
-        <template #cascader="{ item }">
-          <el-text type="primary">{{ `default-${item.value}` }}</el-text>
-        </template>
+
         <template #error-input="{ item, error }">
           <el-text type="info">{{ `error-${error}` }}</el-text>
         </template>
       </UForm>
-      <el-button @click="handleGetFormData">获取表单数据</el-button>
       <el-button @click="view = !view">{{ view ? '编辑模式' : '查看模式' }}</el-button>
       <el-button @click="handleResetForm">重置表单</el-button>
     </div>

@@ -1,18 +1,28 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import UForm from '../../../src/components/form'
 import type { FormOptions } from '../../../src/components/form'
 
-const formOptions = ref<FormOptions>({
-  sec1: {
+const formData = ref({
+  q1: '',
+  q2: [] as string[],
+  q3: '',
+  q4: '',
+  q5: '',
+  q6: '',
+})
+
+const formOptions = ref<FormOptions>([
+  {
+    prop: 'sec1',
     label: '关于"旅游体验"的动态关联问卷',
     element: 'section-header',
     span: '1/1',
   },
-  q1: {
+  {
+    prop: 'q1',
     label: '您在过去一年内是否进行过旅游？',
     element: 'radio-group',
-    value: '',
     attrs: {
       options: [
         { label: '是', value: '1' },
@@ -22,10 +32,10 @@ const formOptions = ref<FormOptions>({
     rules: [{ required: true, trigger: 'change', message: '请选择您是否进行过旅游' }],
     span: '1/1',
   },
-  q2: {
+  {
+    prop: 'q2',
     label: '您去过哪些类型的旅游目的地',
     element: 'checkbox-group',
-    value: [],
     attrs: {
       options: [
         { value: 'beach', label: '海滩' },
@@ -37,23 +47,23 @@ const formOptions = ref<FormOptions>({
     },
     rules: [{ required: true, trigger: 'change', message: '请选择您去过的旅游目的地' }],
     span: '1/1',
-    if: false,
+    if: computed(() => formData.value.q1 === '1'),
   },
-  q3: {
+  {
+    prop: 'q3',
     label: '在这些目的地中，您最喜欢哪一个？',
     element: 'radio-group',
-    value: '',
     attrs: {
       options: [],
     },
     rules: [{ required: true, trigger: 'change', message: '请选择您最喜欢的一个旅游目的地' }],
     span: '1/1',
-    if: false,
+    if: computed(() => formData.value.q2.length > 1),
   },
-  q4: {
+  {
+    prop: 'q4',
     label: '您的旅行通常持续多长时间？',
     element: 'radio-group',
-    value: 0,
     attrs: {
       options: [
         { value: 'short', label: '1-3天' },
@@ -63,51 +73,48 @@ const formOptions = ref<FormOptions>({
     },
     rules: [{ required: true, trigger: 'change', message: '请选择您的旅行通常持续多长时间' }],
     span: '1/1',
-    if: false,
+    if: computed(() => formData.value.q1 === '1'),
   },
-  q5: {
+  {
+    prop: 'q5',
     label: '请简述您选择长期旅行的原因',
     element: 'input',
-    value: '',
     attrs: {
       type: 'textarea',
       rows: 3,
     },
     span: '1/1',
-    if: false,
+    if: computed(() => formData.value.q4 === 'long'),
   },
-  q6: {
+  {
+    prop: 'q6',
     label: '您对未来的旅行有什么期待或建议？',
     element: 'input',
-    value: '',
     attrs: {
       type: 'textarea',
       rows: 3,
     },
     span: '1/1',
-    show: false,
+    show: computed(() => formData.value.q1 === '1'),
   },
-})
+])
 
-const handleChange = (name: string, item: any) => {
-  if (name === 'q1') {
-    formOptions.value.q2.if = item.value === '1'
-    formOptions.value.q4.if = item.value === '1'
-    formOptions.value.q6.show = item.value === '1'
-  } else if (name === 'q2') {
-    formOptions.value.q3.if = item.value.length > 1
-    formOptions.value.q3.attrs.options = item.attrs.options.filter((d: any) =>
-      item.value.includes(d.value),
-    )
-  } else if (name === 'q4') {
-    formOptions.value.q5.if = item.value === 'long'
+const handleChange = (prop: string, item: any) => {
+  if (prop === 'q2') {
+    const q3 = formOptions.value[3]
+    q3.attrs!.options = item.attrs.options.filter((d: any) => formData.value.q2.includes(d.value))
   }
 }
 </script>
 
 <template>
   <div class="form-data">
-    <u-form v-model:options="formOptions" label-position="top" @change="handleChange"></u-form>
+    <u-form
+      v-model="formData"
+      :options="formOptions"
+      label-position="top"
+      @change="handleChange"
+    ></u-form>
   </div>
 </template>
 

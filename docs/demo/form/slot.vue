@@ -2,7 +2,7 @@
 import { h, ref } from 'vue'
 import UForm from '../../../src/components/form'
 import type { FormOptions, FormInstance } from '../../../src/components/form'
-import { ElButton, ElText } from 'element-plus'
+import { ElButton } from 'element-plus'
 import {
   CircleCheck,
   CircleClose,
@@ -16,11 +16,22 @@ import {
 
 const formRef = ref<FormInstance>()
 
-const formOptions = ref<FormOptions>({
-  name: {
+const formData = ref({
+  name: '张三',
+  email: '',
+  password: '',
+  age: undefined,
+  occupation: '',
+  interests: [],
+  description: '',
+  agreeTerms: false,
+})
+
+const formOptions = ref<FormOptions>([
+  {
+    prop: 'name',
     label: '姓名',
     element: 'input',
-    value: '张三',
     attrs: {
       placeholder: '请输入姓名',
       clearable: true,
@@ -41,9 +52,9 @@ const formOptions = ref<FormOptions>({
       },
     },
   },
-  email: {
+  {
+    prop: 'email',
     label: '邮箱',
-    value: '',
     span: '1/2',
     required: true,
     attrs: {
@@ -54,10 +65,10 @@ const formOptions = ref<FormOptions>({
         h(ElButton, { type: 'primary', text: true, icon: Message }, () => label),
     },
   },
-  password: {
+  {
+    prop: 'password',
     label: '密码',
     element: 'input',
-    value: '',
     span: '1/2',
     attrs: {
       type: 'password',
@@ -72,24 +83,24 @@ const formOptions = ref<FormOptions>({
       label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: Key }, () => label),
     },
   },
-  age: {
+  {
+    prop: 'age',
     label: '年龄',
     element: 'input-number',
     attrs: {
       placeholder: '请输入年龄',
       min: 1,
     },
-    value: undefined,
     span: '1/2',
     required: true,
     slot: {
       label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: User }, () => label),
     },
   },
-  occupation: {
+  {
+    prop: 'occupation',
     label: '职业',
     element: 'select',
-    value: '',
     span: '1/2',
     required: true,
     attrs: {
@@ -110,10 +121,10 @@ const formOptions = ref<FormOptions>({
         h(ElButton, { type: 'primary', text: true, icon: CreditCard }, () => label),
     },
   },
-  interests: {
+  {
+    prop: 'interests',
     label: '兴趣',
     element: 'checkbox-group',
-    value: [],
     span: '1/2',
     required: true,
     attrs: {
@@ -129,10 +140,10 @@ const formOptions = ref<FormOptions>({
       label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: Star }, () => label),
     },
   },
-  description: {
+  {
+    prop: 'description',
     label: '描述',
     element: 'input',
-    value: '',
     span: '1/1',
     required: true,
     attrs: {
@@ -147,38 +158,38 @@ const formOptions = ref<FormOptions>({
         h(ElButton, { type: 'primary', text: true, icon: Document }, () => label),
     },
   },
-  agreeTerms: {
+  {
+    prop: 'agreeTerms',
     label: '',
     element: 'checkbox',
-    value: false,
     span: '1/1',
     required: true,
     attrs: {
       label: '我已阅读并同意用户协议和隐私政策',
     },
     slot: {
-      label: ({ item }) =>
+      label: () =>
         h(ElButton, {
-          type: item.value ? 'success' : 'danger',
+          type: formData.value.agreeTerms ? 'success' : 'danger',
           text: true,
-          icon: item.value ? CircleCheck : CircleClose,
+          icon: formData.value.agreeTerms ? CircleCheck : CircleClose,
         }),
     },
   },
-})
+])
 const emailType = ref('')
 const emailOptions = ['qq.com', '163.com', 'gmail.com']
 </script>
 
 <template>
   <div class="form-data">
-    <u-form ref="formRef" v-model:options="formOptions">
+    <u-form ref="formRef" v-model="formData" :options="formOptions">
       <!-- -->
       <template #label-name="{ item, label }">
         <el-button type="danger" text :icon="User">{{ label }}</el-button>
       </template>
       <template #email="{ item }">
-        <el-input v-model="item.value" v-bind="item.attrs">
+        <el-input v-model="formData.email" v-bind="item.attrs">
           <template #append>
             <el-select v-model="emailType" placeholder="请选择" style="width: 115px">
               <el-option

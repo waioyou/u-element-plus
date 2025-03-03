@@ -22,16 +22,6 @@
 
 <preview path="../demo/form/span.vue"></preview>
 
-## 获取表单数据
-
-通过调用表单实例中的`getFormData`方法获取表单数据，并进行表单验证。
-
-:::warning
-如果表单项没有设置`value`属性，则在获取表单数据时会跳过该表单项。
-:::
-
-<preview path="../demo/form/form-data.vue"></preview>
-
 ## 自定义表单项
 
 支持通过作用域插槽和表单项的`slot`属性来设置表单项的label、error、default插槽内容。
@@ -45,6 +35,8 @@
 ## 查看模式
 
 通过设置表单属性 `view` 属性来控制表单是否为查看模式。同时也可以通过设置表单项的`view`属性来控制表单项是否为查看模式。
+
+`view`的类型为：`boolean` | `Ref<boolean>` | `ComputedRef<boolean>`
 
 可以通过表单项的`formatter`属性来自定义表单项查看模式的显示内容。
 
@@ -60,8 +52,11 @@
 
 `change`事件会在表单数据发生变化时触发，它有两个参数`name`为当前触发事件的表单项`prop`，`item`为表单项配置。
 
-`if`和`show`值均为`boolean`，用于控制表单项的隐藏和现实，分别对应`v-if`和`v-show`
+`if`和`show`值类型为：`boolean` | `Ref<boolean>` | `ComputedRef<boolean>`，用于控制表单项的隐藏和现实，分别对应`v-if`和`v-show`
 
+::: tip
+建议使用计算属性，如`if: computed(() => formData.value.q1 === '1')`
+:::
 <preview path="../demo/form/dynamic.vue"></preview>
 
 ## 标签提示信息
@@ -78,27 +73,26 @@
 
 ### Props
 
-| 名称      | 说明                                | 类型                             | 默认值       |
-| --------- | ----------------------------------- | -------------------------------- | ------------ |
-| options   | 表单配置项                          | `Record<string, FormItemOption>` | `{}`         |
-| view      | 是否为查看模式                      | `boolean`                        | `false`      |
-| gutter    | 栅格间隔                            | `number`                         | `20`         |
-| ~~model~~ | 已废弃，请使用`v-model:options`代替 |                                  | 表单数据对象 |
+| 名称      | 说明                        | 类型                             | 默认值       |
+| --------- | --------------------------- | -------------------------------- | ------------ |
+| options   | 表单配置项                  | `Record<string, FormItemOption>` | `{}`         |
+| view      | 是否为查看模式              | `boolean`                        | `false`      |
+| gutter    | 栅格间隔                    | `number`                         | `20`         |
+| ~~model~~ | 已废弃，请使用`v-model`代替 | `Record<string,any> `            | 表单数据对象 |
 
 ### Events
 
-| 事件名   | 说明                       | 参数类型                                                     |
-| -------- | -------------------------- | ------------------------------------------------------------ |
-| change   | 任一表单项值发生变化时触发 | `(field: string, item: FormItemOption) => void`              |
-| validate | 任一表单项被校验后触发     | `(field: string, isValid: boolean, message: string) => void` |
+| 事件名   | 说明                   | 参数类型                                                     |
+| -------- | ---------------------- | ------------------------------------------------------------ |
+| validate | 任一表单项被校验后触发 | `(field: string, isValid: boolean, message: string) => void` |
 
 ### Slots
 
-| 插槽名           | 说明             | 作用域参数                                |
-| ---------------- | ---------------- | ----------------------------------------- |
-| `label-${field}` | 自定义标签内容   | `{ item: FormItemOption, label: string }` |
-| `error-${field}` | 自定义错误提示   | `{ item: FormItemOption, error: string }` |
-| `${field}`       | 自定义表单项内容 | `{ item: FormItemOption}`                 |
+| 插槽名          | 说明             | 作用域参数                                |
+| --------------- | ---------------- | ----------------------------------------- |
+| `label-${prop}` | 自定义标签内容   | `{ item: FormItemOption, label: string }` |
+| `error-${prop}` | 自定义错误提示   | `{ item: FormItemOption, error: string }` |
+| `${prop}`       | 自定义表单项内容 | `{ item: FormItemOption}`                 |
 
 ### FormItemOption 配置项
 

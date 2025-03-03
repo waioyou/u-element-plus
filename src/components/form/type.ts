@@ -29,10 +29,10 @@ import type {
   FormInstance as ElFormInstance,
   FormItemRule,
 } from 'element-plus'
-import type { CSSProperties, VNode, Component } from 'vue'
+import type { CSSProperties, VNode, Component, ComputedRef, Ref } from 'vue'
 
 /** 表单属性 */
-export interface FormProps extends Omit<ElFormProps, 'model'> {
+export interface FormProps extends Partial<Omit<ElFormProps, 'model'>> {
   /** 是否查看模式 */
   view?: boolean
   /** 表单配置项 */
@@ -43,55 +43,102 @@ export interface FormProps extends Omit<ElFormProps, 'model'> {
 
 /** 表单事件 */
 export type FormEmits = {
-  /** @todo 任一表单项被校验后触发 */
-  validate: [field: string, isValid: boolean, message: string]
-  /** 任一表单项值发生变化时触发 */
-  change: [field: string, item: FormItemOption]
+  /** 任一表单项被校验后触发 */
+  validate: [prop: string, isValid: boolean, message: string]
+  /** 任一表单项被改变后触发 */
+  change: [prop: string, item: FormItemOption]
 }
 
 /** 表单实例 */
-export interface FormInstance extends ElFormInstance {
-  /** 获取表单数据 */
-  getFormData: <T = any>(validate?: boolean) => Promise<T | false>
-}
-
+export type FormInstance = ElFormInstance
 /** 表单配置 */
-export type FormOptions = Record<string, FormItemOption>
+export type FormOptions = FormItemOption[]
 
 /** 表单项配置 */
-export type FormItemOption =
-  | FormItemOptionWithAutoComplete
-  | FormItemOptionWithCascader
-  | FormItemOptionWithCheckboxGroup
-  | FormItemOptionWithCheckbox
-  | FormItemOptionWithColorPicker
-  | FormItemOptionWithDatePicker
-  | FormItemOptionWithInput
-  | FormItemOptionWithInputNumber
-  | FormItemOptionWithInputTag
-  | FormItemOptionWithMention
-  | FormItemOptionWithRadioGroup
-  | FormItemOptionWithRadio
-  | FormItemOptionWithRate
-  | FormItemOptionWithSelect
-  | FormItemOptionWithSelectV2
-  | FormItemOptionWithSlider
-  | FormItemOptionWithSwitch
-  | FormItemOptionWithTimePicker
-  | FormItemOptionWithTimeSelect
-  | FormItemOptionWithTransfer
-  | FormItemOptionWithTreeSelect
-  | FormItemOptionWithUpload
-  | FormItemOptionWithSectionHeader
-  | BaseFormItemOption
+// export type FormItemOption =
+//   | FormItemOptionWithAutoComplete
+//   | FormItemOptionWithCascader
+//   | FormItemOptionWithCheckboxGroup
+//   | FormItemOptionWithCheckbox
+//   | FormItemOptionWithColorPicker
+//   | FormItemOptionWithDatePicker
+//   | FormItemOptionWithInput
+//   | FormItemOptionWithInputNumber
+//   | FormItemOptionWithInputTag
+//   | FormItemOptionWithMention
+//   | FormItemOptionWithRadioGroup
+//   | FormItemOptionWithRadio
+//   | FormItemOptionWithRate
+//   | FormItemOptionWithSelect
+//   | FormItemOptionWithSelectV2
+//   | FormItemOptionWithSlider
+//   | FormItemOptionWithSwitch
+//   | FormItemOptionWithTimePicker
+//   | FormItemOptionWithTimeSelect
+//   | FormItemOptionWithTransfer
+//   | FormItemOptionWithTreeSelect
+//   | FormItemOptionWithUpload
+//   | FormItemOptionWithSectionHeader
+//   | BaseFormItemOption
 
-export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
-  /** 值 */
-  value?: any
+type FormItemElement =
+  | 'autocomplete'
+  | 'cascader'
+  | 'checkbox-group'
+  | 'checkbox'
+  | 'color-picker'
+  | 'date-picker'
+  | 'input'
+  | 'input-number'
+  | 'input-tag'
+  | 'mention'
+  | 'radio-group'
+  | 'radio'
+  | 'rate'
+  | 'select'
+  | 'select-v2'
+  | 'slider'
+  | 'switch'
+  | 'time-picker'
+  | 'time-select'
+  | 'transfer'
+  | 'tree-select'
+  | 'upload'
+  | 'section-header'
+
+/** 表单元素属性查找表 */
+export interface FormItemElementAttrsMap {
+  autocomplete: AutocompleteAttrs
+  cascader: CascaderAttrs
+  'checkbox-group': CheckboxGroupAttrs
+  checkbox: CheckboxAttrs
+  'color-picker': ColorPickerAttrs
+  'date-picker': DatePickerAttrs
+  input: InputAttrs
+  'input-number': InputNumberAttrs
+  'input-tag': InputTagAttrs
+  mention: MentionAttrs
+  'radio-group': RadioGroupAttrs
+  radio: RadioAttrs
+  rate: RateAttrs
+  select: SelectAttrs
+  'select-v2': SelectV2Attrs
+  slider: SliderAttrs
+  switch: SwitchAttrs
+  'time-picker': TimePickerAttrs
+  'time-select': TimeSelectAttrs
+  transfer: TransferAttrs
+  'tree-select': TreeSelectAttrs
+  upload: UploadAttrs
+  'section-header': never
+}
+
+export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
+  prop: string
   /** 标签 */
   label?: string
   /** 元素 */
-  element?: never
+  element?: FormItemElement
   /** 是否必填 */
   required?: boolean
   /** 校验规则 */
@@ -99,13 +146,13 @@ export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormIt
   /** 插槽 */
   slot?: FormItemSlot
   /** 是否查看模式 */
-  view?: boolean
+  view?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 查看模式下格式化显示内容 */
-  formatter?: (item: any) => VNode | string | number
+  formatter?: (item: FormItemOption) => VNode | string | number
   /** 是否渲染 */
-  if?: boolean | ((options: FormOptions) => boolean)
+  if?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 是否展示 */
-  show?: boolean | ((options: FormOptions) => boolean)
+  show?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 动态组件 */
   component?: Component
   /** 样式 */
@@ -116,7 +163,7 @@ export interface BaseFormItemOption extends Partial<TypeNoReadonly<Omit<ElFormIt
    * @example '1/2'
    */
   span?: string
-  attrs?: any
+  attrs?: Record<string, any>
   tooltip?: string
 }
 
@@ -126,96 +173,96 @@ export type FormItemSlot = {
   default?: ({ item, view }: { item: FormItemOption; view: boolean }) => VNode | string | number
 }
 
-export interface FormItemOptionWithAutoComplete extends Omit<BaseFormItemOption, 'element'> {
-  element: 'autocomplete'
-  attrs?: AutocompleteAttrs
-}
-export interface FormItemOptionWithCascader extends Omit<BaseFormItemOption, 'element'> {
-  element: 'cascader'
-  attrs?: CascaderAttrs
-}
-export interface FormItemOptionWithCheckboxGroup extends Omit<BaseFormItemOption, 'element'> {
-  element: 'checkbox-group'
-  attrs?: CheckboxGroupAttrs
-}
-export interface FormItemOptionWithCheckbox extends Omit<BaseFormItemOption, 'element'> {
-  element: 'checkbox'
-  attrs?: CheckboxAttrs
-}
-export interface FormItemOptionWithColorPicker extends Omit<BaseFormItemOption, 'element'> {
-  element: 'color-picker'
-  attrs?: ColorPickerAttrs
-}
-export interface FormItemOptionWithDatePicker extends Omit<BaseFormItemOption, 'element'> {
-  element: 'date-picker'
-  attrs?: DatePickerAttrs
-}
-export interface FormItemOptionWithInput extends Omit<BaseFormItemOption, 'element'> {
-  element: 'input'
-  attrs?: InputAttrs
-}
-export interface FormItemOptionWithInputNumber extends Omit<BaseFormItemOption, 'element'> {
-  element: 'input-number'
-  attrs?: InputNumberAttrs
-}
-export interface FormItemOptionWithInputTag extends Omit<BaseFormItemOption, 'element'> {
-  element: 'input-tag'
-  attrs?: InputTagAttrs
-}
-export interface FormItemOptionWithMention extends Omit<BaseFormItemOption, 'element'> {
-  element: 'mention'
-  attrs?: MentionAttrs
-}
-export interface FormItemOptionWithRadioGroup extends Omit<BaseFormItemOption, 'element'> {
-  element: 'radio-group'
-  attrs?: RadioGroupAttrs
-}
-export interface FormItemOptionWithRadio extends Omit<BaseFormItemOption, 'element'> {
-  element: 'radio'
-  attrs?: RadioAttrs
-}
-export interface FormItemOptionWithRate extends Omit<BaseFormItemOption, 'element'> {
-  element: 'rate'
-  attrs?: RateAttrs
-}
-export interface FormItemOptionWithSelect extends Omit<BaseFormItemOption, 'element'> {
-  element: 'select'
-  attrs?: SelectAttrs
-}
-export interface FormItemOptionWithSelectV2 extends Omit<BaseFormItemOption, 'element'> {
-  element: 'select-v2'
-  attrs?: SelectV2Attrs
-}
-export interface FormItemOptionWithSlider extends Omit<BaseFormItemOption, 'element'> {
-  element: 'slider'
-  attrs?: SliderAttrs
-}
-export interface FormItemOptionWithSwitch extends Omit<BaseFormItemOption, 'element'> {
-  element: 'switch'
-  attrs?: SwitchAttrs
-}
-export interface FormItemOptionWithTimePicker extends Omit<BaseFormItemOption, 'element'> {
-  element: 'time-picker'
-  attrs?: TimePickerAttrs
-}
-export interface FormItemOptionWithTimeSelect extends Omit<BaseFormItemOption, 'element'> {
-  element: 'time-select'
-  attrs?: TimeSelectAttrs
-}
-export interface FormItemOptionWithTransfer extends Omit<BaseFormItemOption, 'element'> {
-  element: 'transfer'
-  attrs?: TransferAttrs
-}
-export interface FormItemOptionWithTreeSelect extends Omit<BaseFormItemOption, 'element'> {
-  element: 'tree-select'
-  attrs?: TreeSelectAttrs
-}
+// export interface FormItemOptionWithAutoComplete extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'autocomplete'
+//   attrs?: AutocompleteAttrs
+// }
+// export interface FormItemOptionWithCascader extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'cascader'
+//   attrs?: CascaderAttrs
+// }
+// export interface FormItemOptionWithCheckboxGroup extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'checkbox-group'
+//   attrs?: CheckboxGroupAttrs
+// }
+// export interface FormItemOptionWithCheckbox extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'checkbox'
+//   attrs?: CheckboxAttrs
+// }
+// export interface FormItemOptionWithColorPicker extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'color-picker'
+//   attrs?: ColorPickerAttrs
+// }
+// export interface FormItemOptionWithDatePicker extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'date-picker'
+//   attrs?: DatePickerAttrs
+// }
+// export interface FormItemOptionWithInput extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'input'
+//   attrs?: InputAttrs
+// }
+// export interface FormItemOptionWithInputNumber extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'input-number'
+//   attrs?: InputNumberAttrs
+// }
+// export interface FormItemOptionWithInputTag extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'input-tag'
+//   attrs?: InputTagAttrs
+// }
+// export interface FormItemOptionWithMention extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'mention'
+//   attrs?: MentionAttrs
+// }
+// export interface FormItemOptionWithRadioGroup extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'radio-group'
+//   attrs?: RadioGroupAttrs
+// }
+// export interface FormItemOptionWithRadio extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'radio'
+//   attrs?: RadioAttrs
+// }
+// export interface FormItemOptionWithRate extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'rate'
+//   attrs?: RateAttrs
+// }
+// export interface FormItemOptionWithSelect extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'select'
+//   attrs?: SelectAttrs
+// }
+// export interface FormItemOptionWithSelectV2 extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'select-v2'
+//   attrs?: SelectV2Attrs
+// }
+// export interface FormItemOptionWithSlider extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'slider'
+//   attrs?: SliderAttrs
+// }
+// export interface FormItemOptionWithSwitch extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'switch'
+//   attrs?: SwitchAttrs
+// }
+// export interface FormItemOptionWithTimePicker extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'time-picker'
+//   attrs?: TimePickerAttrs
+// }
+// export interface FormItemOptionWithTimeSelect extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'time-select'
+//   attrs?: TimeSelectAttrs
+// }
+// export interface FormItemOptionWithTransfer extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'transfer'
+//   attrs?: TransferAttrs
+// }
+// export interface FormItemOptionWithTreeSelect extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'tree-select'
+//   attrs?: TreeSelectAttrs
+// }
 
-export interface FormItemOptionWithUpload extends Omit<BaseFormItemOption, 'element'> {
-  element: 'upload'
-  attrs?: UploadAttrs
-}
-export interface FormItemOptionWithSectionHeader extends Omit<BaseFormItemOption, 'element'> {
-  element: 'section-header'
-  attrs?: never
-}
+// export interface FormItemOptionWithUpload extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'upload'
+//   attrs?: UploadAttrs
+// }
+// export interface FormItemOptionWithSectionHeader extends Omit<BaseFormItemOption, 'element'> {
+//   element: 'section-header'
+//   attrs?: never
+// }
