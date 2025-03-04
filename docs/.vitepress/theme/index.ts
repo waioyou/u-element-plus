@@ -2,7 +2,7 @@
 import { h } from 'vue'
 import type { App } from 'vue'
 import DefaultTheme from 'vitepress/theme'
-import './style.css'
+import './style.scss'
 
 // 使用组件demo效果预览插件
 import { ElementPlusContainer } from '@vitepress-demo-preview/component'

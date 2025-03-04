@@ -54,6 +54,7 @@ export default defineConfig({
         text: '组件',
         items: [
           { text: 'Form 表单', link: '/components/form' },
+          { text: 'Table 表格', link: '/components/table' },
           { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' },
