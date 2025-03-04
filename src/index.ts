@@ -1,13 +1,12 @@
 import type { App } from 'vue'
 
 import UContextMenu from './components/context-menu'
-// import type { ContextMenuProps, ContextMenuInstance } from './components/context-menu'
 import UForm from './components/form'
-// import type { FormOptions, FormItemOption, FormInstance } from './components/form'
+import UTable from './components/table'
 
 import './styles/index.scss'
 
-const components = [UForm, UContextMenu]
+const components = [UForm, UTable, UContextMenu]
 
 const install = (app: App) => {
   components.forEach((components) => {
@@ -19,6 +18,7 @@ export { install, UContextMenu, UForm }
 
 export type * from './components/context-menu'
 export type * from './components/form'
+export type * from './components/table'
 export default {
   install,
 }
