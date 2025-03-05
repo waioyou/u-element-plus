@@ -6,7 +6,7 @@
 
 通过表格配置选项生成一个基础的表格，将对应的列属性设置在`columns`字段中。
 
-<!-- <preview  path="../demo/table/basic.vue"></preview> -->
+<preview  path="../demo/table/basic.vue"></preview>
 
 ## 自定义列模板
 
@@ -25,6 +25,36 @@ todo
 通过配置 `children` 属性可以实现多级表头。
 
 <preview  path="../demo/table/grouping.vue"></preview>
+
+## 序号
+
+::: warning
+对应的是el-table-column的type="index"。[请查看](https://element-plus.org/zh-CN/component/table.html#%E5%8D%95%E9%80%89)
+:::
+
+通过设置表格属性`showIndex`和`indexProps`；实现序号功能。
+
+<preview  path="../demo/table/index.vue"></preview>
+
+## 多选
+
+::: warning
+对应的是el-table-column的type="selection"。[请查看](https://plus-pro-components.com/components/table.html#%E5%A4%9A%E9%80%89)
+:::
+
+通过设置表格属性`showSelection`和`selectionProps`；实现多选功能。
+
+<preview  path="../demo/table/selection.vue"></preview>
+
+## 展开行
+
+::: warning
+对应的是el-table-column的type="expand"。[请查看](https://element-plus.org/zh-CN/component/table.html#%E5%B1%95%E5%BC%80%E8%A1%8C)
+:::
+
+通过设置表格属性`showExpand`和`expandProps`；以及结合表格插槽`expand`；实现展开行功能。
+
+<preview  path="../demo/table/expand.vue"></preview>
 
 ## 表格操作栏
 
