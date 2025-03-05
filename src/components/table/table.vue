@@ -1,9 +1,8 @@
 <script setup lang="ts" generic="T">
 import UTableColumn from './table-column.vue'
 import { computed, getCurrentInstance, ref } from 'vue'
-import type { TableProps } from './type'
+import type { TableProps, TableInstance } from './type'
 import { isNil, omit } from '@/utils'
-import { ElTable } from 'element-plus'
 defineOptions({ name: 'UTable' })
 
 const props = withDefaults(defineProps<TableProps<T>>(), {
@@ -30,22 +29,19 @@ const filerElTableProps = computed(() => {
   return omit(props, emptyKeys)
 })
 const instance = getCurrentInstance()!
-const tableRef = ref<InstanceType<typeof ElTable>>()
+const tableRef = ref<TableInstance>()
 
 /** 不使用tableRef，使用refs，避免组件多次渲染 */
-defineExpose(
-  new Proxy(
-    {},
-    {
-      get(_, key) {
-        const tableInstance: any = instance.refs?.tableRef ?? {}
-        return tableInstance[key]
-      },
-      has(_, key) {
-        return Reflect.has(tableRef.value!, key)
-      },
+defineExpose<TableInstance>(
+  new Proxy({} as TableInstance, {
+    get(_, key) {
+      const tableInstance: any = instance.refs?.tableRef ?? {}
+      return tableInstance[key]
     },
-  ),
+    has(_, key) {
+      return Reflect.has(tableRef.value!, key)
+    },
+  }),
 )
 </script>
 

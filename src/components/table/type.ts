@@ -3,15 +3,20 @@ import type {
   TableProps as ElTableProps,
   TableColumnCtx as ElTableColumnCtx,
   FormItemRule,
+  ElTable,
 } from 'element-plus'
 import type { Component, ComputedRef, Ref, VNode } from 'vue'
 
 export interface TableProps<T = any> extends ElTableProps<T> {
   /** 表格列配置列表 */
-  columns: TableColumn<T>[]
+  columns: TableColumns<T>
   /** 是否可编辑 */
   editable?: boolean
 }
+
+export type TableInstance = InstanceType<typeof ElTable>
+
+export type TableColumns<T = any> = TableColumn<T>[]
 
 type OmitElTableColumnKeys =
   | 'id'
