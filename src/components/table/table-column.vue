@@ -4,6 +4,8 @@ import { computed } from 'vue'
 import type { TableColumn } from './type'
 import { omit } from '@/utils'
 
+defineSlots<Record<string, any>>()
+
 const props = defineProps<{
   item: TableColumn
   editable: boolean
@@ -45,6 +47,20 @@ const getElTableColumnAttrs = computed<any>(() => {
       />
     </template>
     <template #default="slotProps">
+      <!-- 递归处理多级表头 -->
+      <template v-if="item.children">
+        <TableColumn
+          v-for="child in item.children"
+          :key="child.prop"
+          :item="child"
+          :editable="editable"
+        >
+          <template v-for="slot in Object.keys($slots)" #[slot]="slotScope">
+            <!-- 以之前的名字命名插槽，同时把数据原样绑定 -->
+            <slot :name="slot" v-bind="slotScope" />
+          </template>
+        </TableColumn>
+      </template>
       <!-- 自定义插槽 -->
       <slot v-if="$slots[item.prop]" :name="item.prop" v-bind="slotProps" :item="item" />
       <!-- 动态组件 -->

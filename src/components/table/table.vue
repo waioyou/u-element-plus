@@ -59,17 +59,9 @@ defineExpose(
         <slot name="append" />
       </template>
       <UTableColumn v-for="item in columns" :key="item.prop" :item="item" :editable="editable">
-        <template v-if="$slots[item.prop]" #[item.prop]="slotProps">
-          <slot :name="item.prop" v-bind="slotProps" :item="item" />
-        </template>
-        <template v-if="$slots[`header-${item.prop}`]" #[`header-${item.prop}`]="slotProps">
-          <slot :name="`header-${item.prop}`" v-bind="slotProps" :item="item" />
-        </template>
-        <template
-          v-if="$slots[`filter-icon-${item.prop}`]"
-          #[`filter-icon-${item.prop}`]="slotProps"
-        >
-          <slot :name="`filter-icon-${item.prop}`" v-bind="slotProps" />
+        <template v-for="slot in Object.keys($slots)" #[slot]="slotProps">
+          <!-- 以之前的名字命名插槽，同时把数据原样绑定 -->
+          <slot :name="slot" v-bind="slotProps"> </slot>
         </template>
       </UTableColumn>
     </el-table>

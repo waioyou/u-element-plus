@@ -6,7 +6,7 @@
 
 通过表格配置选项生成一个基础的表格，将对应的列属性设置在`columns`字段中。
 
-<preview  path="../demo/table/basic.vue"></preview>
+<!-- <preview  path="../demo/table/basic.vue"></preview> -->
 
 ## 自定义列模板
 
@@ -24,9 +24,7 @@ todo
 
 通过配置 `children` 属性可以实现多级表头。
 
-::: tip
-todo
-:::
+<preview  path="../demo/table/grouping.vue"></preview>
 
 ## 表格操作栏
 
