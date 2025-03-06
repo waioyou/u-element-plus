@@ -28,7 +28,14 @@ export interface TableProps<T = any> extends ElTableProps<T> {
     /** 如果设置了 type=index，可以通过传递 index 属性来自定义索引 */
     index?: number | ((index: number) => number)
     /** 自定义格式化 */
-    formatter?: (data: { row: T; column: any; cellValue: any; index: number }) => VNode | string
+    formatter?: (data: {
+      $index: number
+      cellIndex: number
+      column: any
+      expanded: boolean
+      row: T
+      store: any
+    }) => VNode | string
     /** 自定义表头 */
     renderHeader?: (data: { $index: number; column: any; store: any }) => VNode | string
     sortable?: TableColumn['sortable']
@@ -66,24 +73,13 @@ export interface TableColumn<T = any> {
   /** 对应的表单元素属性或者动态组件属性 */
   attrs?: Record<string, any>
   /** 自定义过滤图标 */
-  renderFilterIcon?: (data: { filterOpened: boolean }) => VNode | string
+  renderFilterIcon?: (data: { filterOpened: boolean; item: TableColumn<T> }) => VNode | string
 
   // 与element-plus的行为不一致的属性
   /** 自定义格式化 */
-  formatter?: (data: {
-    row: T
-    column: any
-    cellValue: any
-    index: number
-    item: TableColumn<T>
-  }) => VNode | string
+  formatter?: TableColumnFormatter<T>
   /** 自定义表头 */
-  renderHeader?: (data: {
-    $index: number
-    column: any
-    store: any
-    item: TableColumn<T>
-  }) => VNode | string
+  renderHeader?: TableColumnRenderHeader<T>
 
   /** 显示的标题 */
   label?: string
@@ -143,3 +139,20 @@ export interface TableColumn<T = any> {
   /** 选中的数据过滤项，如果需要自定义表头过滤的渲染方式，可能会需要此属性。 */
   filteredValue?: string[]
 }
+
+type TableColumnFormatter<T = any> = (data: {
+  $index: number
+  cellIndex: number
+  column: any
+  expanded: boolean
+  item: TableColumn<T>
+  row: T
+  store: any
+}) => VNode | string
+
+type TableColumnRenderHeader<T = any> = (data: {
+  $index: number
+  column: any
+  store: any
+  item: TableColumn<T>
+}) => VNode | string

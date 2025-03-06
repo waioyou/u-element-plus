@@ -10,19 +10,23 @@
 
 ## 自定义列模板
 
-通过插槽自定义列的内容，可以获取到 row, column, $index 和 store 的数据。
+方式一：通过插槽形式自定义列内容。`UTable`组件会根据表格配置项中的`prop`字段，生成3种插槽，分别是`${prop}`、`header-${prop}`、`filter-icon-${prop}`。
 
-## 表格编辑
+方式二：通过表格配置项种的`formatter`属性自定义列内容；`renderHeader`属性自定义表头内容；`renderFilterIcon`属性自定义筛选图标。
 
-通过设置 `editable` 属性开启表格编辑功能，可以直接在表格中编辑数据。
-
-::: tip
-todo
+::: warning
+插槽优先级高于配置项（formatter、renderHeader、renderFilterIcon）。
 :::
+
+<preview  path="../demo/table/slot.vue"></preview>
 
 ## 多级表头
 
-通过配置 `children` 属性可以实现多级表头。
+通过表格配置项 `children` 属性实现多级表头。
+
+::: warning
+表格配置项中的 prop支持 x.y.z形式的多级数据形式。
+:::
 
 <preview  path="../demo/table/grouping.vue"></preview>
 
@@ -57,6 +61,14 @@ todo
 <preview  path="../demo/table/expand.vue"></preview>
 
 ## 表格操作栏
+
+::: tip
+todo
+:::
+
+## 表格编辑
+
+通过设置 `editable` 属性开启表格编辑功能，可以直接在表格中编辑数据。
 
 ::: tip
 todo

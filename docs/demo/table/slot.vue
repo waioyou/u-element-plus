@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { h, ref } from 'vue'
 import type { TableColumns } from 'u-element-plus'
+import { ElTag } from 'element-plus'
+import { ElIcon } from 'element-plus'
+import { Search } from '@element-plus/icons-vue'
+import { ElText } from 'element-plus'
 
 interface TableDataItem {
   date: string
   name: string
   age: number
-  gender: string
+  gender: 1 | 2
   department: string
   position: string
-  status: '在职' | '离职' | '请假'
+  status: string
   salary: number
   performance: 'A' | 'B' | 'C'
   attendance: number
@@ -20,15 +24,21 @@ interface TableDataItem {
   phone: string
 }
 
+const statusOptions = [
+  { label: '在职', value: '1', type: 'success' },
+  { label: '离职', value: '2', type: 'info' },
+  { label: '请假', value: '3', type: 'warning' },
+]
+
 const tableData = ref<TableDataItem[]>([
   {
     date: '2024-03-05',
     name: '张三',
     age: 25,
-    gender: '男',
+    gender: 1,
     department: '研发部',
     position: '前端工程师',
-    status: '在职',
+    status: '1',
     salary: 15000,
     performance: 'A',
     attendance: 22,
@@ -42,10 +52,10 @@ const tableData = ref<TableDataItem[]>([
     date: '2024-03-06',
     name: '李四',
     age: 28,
-    gender: '女',
+    gender: 2,
     department: '产品部',
     position: '产品经理',
-    status: '在职',
+    status: '1',
     salary: 18000,
     performance: 'B',
     attendance: 21,
@@ -59,10 +69,10 @@ const tableData = ref<TableDataItem[]>([
     date: '2024-03-07',
     name: '王五',
     age: 32,
-    gender: '男',
+    gender: 1,
     department: '设计部',
     position: 'UI设计师',
-    status: '离职',
+    status: '2',
     salary: 16000,
     performance: 'B',
     attendance: 18,
@@ -76,10 +86,10 @@ const tableData = ref<TableDataItem[]>([
     date: '2024-03-08',
     name: '赵六',
     age: 22,
-    gender: '女',
+    gender: 2,
     department: '测试部',
     position: '测试工程师',
-    status: '请假',
+    status: '3',
     salary: 12000,
     performance: 'C',
     attendance: 20,
@@ -91,7 +101,7 @@ const tableData = ref<TableDataItem[]>([
   },
 ])
 
-const columns = ref<TableColumns>([
+const columns = ref<TableColumns<TableDataItem>>([
   {
     prop: 'date',
     label: '入职日期',
@@ -116,6 +126,9 @@ const columns = ref<TableColumns>([
     label: '性别',
     width: 60,
     align: 'center',
+    formatter: ({ row }) => {
+      return row.gender === 1 ? '男' : '女'
+    },
   },
   {
     prop: 'department',
@@ -134,22 +147,38 @@ const columns = ref<TableColumns>([
     label: '状态',
     width: 80,
     align: 'center',
-    filters: [
-      { text: '在职', value: '在职' },
-      { text: '离职', value: '离职' },
-      { text: '请假', value: '请假' },
-    ],
+    filters: statusOptions.map((d) => ({
+      text: d.label,
+      value: d.value,
+    })),
     filterMethod: (value: any, row: any, column: any) => {
       const property = column['property']
       return row[property] === value
+    },
+    renderFilterIcon: () => {
+      return h(ElIcon, { style: { marginLeft: '8px' } }, () => h(Search))
+    },
+    renderHeader: (data) => {
+      return data.item.label!
+    },
+    formatter: (data) => {
+      const status = statusOptions.find((d) => d.value === data.row.status)
+      if (status) {
+        return h(ElTag, { type: status.type as any }, () => status.label)
+      }
+      return ''
     },
   },
   {
     prop: 'salary',
     label: '薪资',
-    width: 80,
+    width: 100,
     align: 'left',
     sortable: true,
+    formatter: ({ row }) => {
+      // 因为formatter的优先级低于插槽，所以这里没有生效
+      return row.salary.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+    },
   },
   {
     prop: 'performance',
@@ -176,6 +205,13 @@ const columns = ref<TableColumns>([
     width: 80,
     align: 'center',
     sortable: true,
+    formatter: ({ row }) => {
+      if (row.score < 60) {
+        return h(ElText, { type: 'danger' }, () => row.score)
+      } else {
+        return `${row.score}`
+      }
+    },
   },
   {
     prop: 'address',
@@ -187,5 +223,9 @@ const columns = ref<TableColumns>([
 </script>
 
 <template>
-  <u-table class="vp-raw" :data="tableData" :columns="columns" stripe></u-table>
+  <u-table class="vp-raw" :data="tableData" :columns="columns" stripe>
+    <template #salary="{ row }">
+      {{ row.salary.toLocaleString('zh-CN', { style: 'currency', currency: 'CNY' }) }}
+    </template>
+  </u-table>
 </template>
