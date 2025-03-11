@@ -1,11 +1,12 @@
 <script setup lang="ts" generic="T">
+import { computed, getCurrentInstance, ref } from 'vue'
 import RenderVNode from '../render-v-node/render-v-node'
 import UTableColumn from './table-column.vue'
-import { computed, getCurrentInstance, ref } from 'vue'
-import type { TableProps, TableInstance } from './type'
 import { isNil, omit } from '@/utils'
-defineOptions({ name: 'UTable' })
+import type { TableProps, TableInstance } from './type'
+import type { FormInstance } from 'element-plus'
 
+defineOptions({ name: 'UTable' })
 const props = withDefaults(defineProps<TableProps<T>>(), {
   showSelection: false,
   selectionProps: () => ({}),
@@ -47,16 +48,32 @@ const filerElTableProps = computed(() => {
 })
 const instance = getCurrentInstance()!
 const tableRef = ref<TableInstance>()
+const formRef = ref<FormInstance>()
 
 /** 不使用tableRef，使用refs，避免组件多次渲染 */
 defineExpose<TableInstance>(
   new Proxy({} as TableInstance, {
     get(_, key) {
+      if (key === 'validate') {
+        return formRef.value!.validate
+      }
+      if (key === 'validateField') {
+        return formRef.value!.validateField
+      }
+      if (key === 'scrollToField') {
+        return formRef.value!.scrollToField
+      }
+      if (key === 'resetFields') {
+        return formRef.value!.resetFields
+      }
+      if (key === 'clearValidate') {
+        return formRef.value!.clearValidate
+      }
       const tableInstance: any = instance.refs?.tableRef ?? {}
       return tableInstance[key]
     },
     has(_, key) {
-      return Reflect.has(tableRef.value!, key)
+      return Reflect.has(tableRef.value!, key) || Reflect.has(formRef.value!, key)
     },
   }),
 )
@@ -64,35 +81,37 @@ defineExpose<TableInstance>(
 
 <template>
   <div class="u-table">
-    <el-table ref="tableRef" v-bind="filerElTableProps">
-      <template v-if="$slots.empty" #empty>
-        <slot name="empty" />
-      </template>
-      <template v-if="$slots.append" #append="slotProps">
-        <slot name="append" v-bind="slotProps" />
-      </template>
-      <el-table-column v-if="showExpand" type="expand" v-bind="expandProps">
-        <template #default="slotProps">
-          <slot name="expand" v-bind="slotProps" />
+    <el-form ref="formRef" :model="data" :show-message="false">
+      <el-table ref="tableRef" v-bind="filerElTableProps">
+        <template v-if="$slots.empty" #empty>
+          <slot name="empty" />
         </template>
-      </el-table-column>
-      <el-table-column v-if="showIndex" type="index" v-bind="filerIndexProps">
-        <template v-if="indexProps.renderHeader" #header="slotProps">
-          <render-v-node :v-node="indexProps.renderHeader(slotProps)" />
+        <template v-if="$slots.append" #append="slotProps">
+          <slot name="append" v-bind="slotProps" />
         </template>
-        <template v-if="indexProps.formatter" #default="slotProps">
-          <render-v-node :v-node="indexProps.formatter(slotProps)" />
-        </template>
-      </el-table-column>
-      <el-table-column v-if="showSelection" type="selection" v-bind="filerSelectionProps">
-      </el-table-column>
+        <el-table-column v-if="showExpand" type="expand" v-bind="expandProps">
+          <template #default="slotProps">
+            <slot name="expand" v-bind="slotProps" />
+          </template>
+        </el-table-column>
+        <el-table-column v-if="showIndex" type="index" v-bind="filerIndexProps">
+          <template v-if="indexProps.renderHeader" #header="slotProps">
+            <render-v-node :v-node="indexProps.renderHeader(slotProps)" />
+          </template>
+          <template v-if="indexProps.formatter" #default="slotProps">
+            <render-v-node :v-node="indexProps.formatter(slotProps)" />
+          </template>
+        </el-table-column>
+        <el-table-column v-if="showSelection" type="selection" v-bind="filerSelectionProps">
+        </el-table-column>
 
-      <UTableColumn v-for="item in columns" :key="item.prop" :item="item" :editable="editable">
-        <template v-for="slot in Object.keys($slots)" #[slot]="slotProps">
-          <!-- 以之前的名字命名插槽，同时把数据原样绑定 -->
-          <slot :name="slot" v-bind="slotProps"> </slot>
-        </template>
-      </UTableColumn>
-    </el-table>
+        <UTableColumn v-for="item in columns" :key="item.prop" :item="item" :editable="editable">
+          <template v-for="slot in Object.keys($slots)" #[slot]="slotProps">
+            <!-- 以之前的名字命名插槽，同时把数据原样绑定 -->
+            <slot :name="slot" v-bind="slotProps"> </slot>
+          </template>
+        </UTableColumn>
+      </el-table>
+    </el-form>
   </div>
 </template>

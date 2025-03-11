@@ -1,5 +1,5 @@
 import type { FormItemElement } from '@/types'
-import type { TableProps as ElTableProps, FormItemRule, ElTable } from 'element-plus'
+import type { TableProps as ElTableProps, FormItemRule, ElTable, ElForm } from 'element-plus'
 import type { Component, ComputedRef, Ref, VNode } from 'vue'
 
 export interface TableProps<T = any> extends ElTableProps<T> {
@@ -52,7 +52,16 @@ export interface TableProps<T = any> extends ElTableProps<T> {
   }
 }
 
-export type TableInstance = InstanceType<typeof ElTable>
+type ElFormInstance = InstanceType<typeof ElForm>
+
+export type TableInstance = InstanceType<typeof ElTable> & {
+  validate: ElFormInstance['validate']
+  validateField: ElFormInstance['validateField']
+  scrollToField: ElFormInstance['scrollToField']
+  resetFields: ElFormInstance['resetFields']
+  clearValidate: ElFormInstance['clearValidate']
+  fields: ElFormInstance['fields']
+}
 
 export type TableColumns<T = any> = TableColumn<T>[]
 
@@ -64,12 +73,12 @@ export interface TableColumn<T = any> {
   children?: TableColumn<T>[]
   /** 动态组件 */
   component?: Component
-  /** 是否可编辑 */
-  editable?: boolean
   /** 表单元素 */
   element?: Exclude<FormItemElement, 'transfer'>
   /** 表单校验规则 */
   rules?: FormItemRule[]
+  /** 是否必填 */
+  required?: boolean
   /** 对应的表单元素属性或者动态组件属性 */
   attrs?: Record<string, any>
   /** 自定义过滤图标 */

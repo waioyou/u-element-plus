@@ -24,6 +24,19 @@ const getElTableColumnAttrs = computed<any>(() => {
     'renderHeader',
   ])
 })
+
+const getFormItemRules = (item: TableColumn) => {
+  if (item.required) {
+    return [{ required: true, message: '请输入' }]
+  }
+
+  if (!item.rules) return []
+
+  return item.rules.map((rule) => ({
+    message: '请输入',
+    ...rule,
+  }))
+}
 </script>
 
 <template>
@@ -62,9 +75,57 @@ const getElTableColumnAttrs = computed<any>(() => {
         </TableColumn>
       </template>
       <!-- 自定义插槽 -->
-      <slot v-if="$slots[item.prop]" :name="item.prop" v-bind="slotProps" :item="item" />
+      <slot v-else-if="$slots[item.prop]" :name="item.prop" v-bind="slotProps" :item="item" />
       <!-- 动态组件 -->
       <component :is="item.component" v-else-if="item.component" v-bind="slotProps" :item="item" />
+      <!-- 编辑 -->
+      <template v-else-if="slotProps.$index > -1 && editable && item.element">
+        <el-form-item :prop="`${slotProps.$index}.${item.prop}`" :rules="getFormItemRules(item)">
+          <el-cascader
+            v-if="item.element === 'cascader'"
+            v-model="slotProps.row[item.prop]"
+            v-bind="item.attrs"
+          />
+          <!-- 多选框-->
+          <template v-else-if="item.element === 'checkbox'">
+            <el-checkbox v-model="slotProps.row[item.prop]" v-bind="item.attrs" />
+          </template>
+          <template v-else-if="item.element === 'radio'">
+            <el-radio v-model="slotProps.row[item.prop]" v-bind="item.attrs" />
+          </template>
+          <component
+            v-else
+            v-model="slotProps.row[item.prop]"
+            :is="`el-${item.element}`"
+            v-bind="item.attrs"
+          >
+            <!-- 选择器 选项 -->
+            <template v-if="item.element === 'select'">
+              <el-option
+                v-for="option in item.attrs?.options ?? []"
+                :key="option.value"
+                v-bind="option"
+              />
+            </template>
+            <!-- 多选框组 选项-->
+            <template v-else-if="item.element === 'checkbox-group'">
+              <el-checkbox
+                v-for="option in item.attrs?.options ?? []"
+                :key="option.value"
+                v-bind="option"
+              />
+            </template>
+            <!-- 单选框组 选项-->
+            <template v-else-if="item.element === 'radio-group'">
+              <el-radio
+                v-for="option in item.attrs?.options ?? []"
+                :key="option.value"
+                v-bind="option"
+              />
+            </template>
+          </component>
+        </el-form-item>
+      </template>
       <!-- formatter -->
       <template v-else-if="item.formatter">
         <RenderVNode :v-node="item.formatter({ ...slotProps, item })" />
