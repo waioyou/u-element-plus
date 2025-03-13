@@ -3,10 +3,10 @@ import type { App } from 'vue'
 import UContextMenu from './components/context-menu'
 import UForm from './components/form'
 import UTable from './components/table'
-
+import UOperation from './components/operation'
 import './styles/index.scss'
 
-const components = [UForm, UTable, UContextMenu]
+const components = [UForm, UTable, UContextMenu, UOperation]
 
 const install = (app: App) => {
   components.forEach((components) => {
@@ -14,11 +14,12 @@ const install = (app: App) => {
   })
 }
 
-export { install, UContextMenu, UForm }
+export { install, UContextMenu, UForm, UOperation }
 
 export type * from './components/context-menu'
 export type * from './components/form'
 export type * from './components/table'
+export type * from './components/operation'
 export default {
   install,
 }

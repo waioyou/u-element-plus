@@ -1,0 +1,11 @@
+.u-operation {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  .el-button.is-text {
+    padding: 8px 10px;
+  }
+  .el-button.is-text + .el-button.is-text {
+    margin-left: 0px;
+  }
+}
