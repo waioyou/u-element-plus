@@ -3,7 +3,7 @@ import { computed, getCurrentInstance, ref } from 'vue'
 import RenderVNode from '../render-v-node/render-v-node'
 import UTableColumn from './table-column.vue'
 import { isNil, omit } from '@/utils'
-import type { TableProps, TableInstance } from './type'
+import type { TableProps, TableInstance, TableEmits } from './type'
 import type { FormInstance } from 'element-plus'
 
 defineOptions({ name: 'UTable' })
@@ -30,6 +30,8 @@ const props = withDefaults(defineProps<TableProps<T>>(), {
   allowDragLastColumn: true,
 })
 
+const emit = defineEmits<TableEmits<T>>()
+
 // 过滤indexProps
 const filerIndexProps = computed(() => {
   return omit(props.indexProps, ['formatter', 'renderHeader'])
@@ -49,6 +51,10 @@ const filerElTableProps = computed(() => {
 const instance = getCurrentInstance()!
 const tableRef = ref<TableInstance>()
 const formRef = ref<FormInstance>()
+
+const handleClickOperation = (name: string, row: T, index: number) => {
+  emit('click-operation', name, row, index)
+}
 
 /** 不使用tableRef，使用refs，避免组件多次渲染 */
 defineExpose<TableInstance>(
@@ -105,7 +111,13 @@ defineExpose<TableInstance>(
         <el-table-column v-if="showSelection" type="selection" v-bind="filerSelectionProps">
         </el-table-column>
 
-        <UTableColumn v-for="item in columns" :key="item.prop" :item="item" :editable="editable">
+        <UTableColumn
+          v-for="item in columns"
+          :key="item.prop"
+          :item="item"
+          :editable="editable"
+          @click-operation="handleClickOperation"
+        >
           <template v-for="slot in Object.keys($slots)" #[slot]="slotProps">
             <!-- 以之前的名字命名插槽，同时把数据原样绑定 -->
             <slot :name="slot" v-bind="slotProps"> </slot>

@@ -52,6 +52,10 @@ export interface TableProps<T = any> extends ElTableProps<T> {
   }
 }
 
+export interface TableEmits<T = any> {
+  (e: 'click-operation', name: string, row: T, index: number): void
+}
+
 type ElFormInstance = InstanceType<typeof ElForm>
 
 export type TableInstance = InstanceType<typeof ElTable> & {
@@ -72,7 +76,7 @@ export interface TableColumn<T = any> {
   /** 多级表头 */
   children?: TableColumn<T>[]
   /** 动态组件 */
-  component?: Component
+  component?: 'operation' | Component
   /** 表单元素 */
   element?: Exclude<FormItemElement, 'transfer'>
   /** 表单校验规则 */
@@ -165,3 +169,8 @@ type TableColumnRenderHeader<T = any> = (data: {
   store: any
   item: TableColumn<T>
 }) => VNode | string
+
+export interface TableColumnProps {
+  item: TableColumn
+  editable: boolean
+}

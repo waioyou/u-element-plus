@@ -62,6 +62,8 @@
 
 ## 表格操作栏
 
+<preview  path="../demo/table/operation.vue"></preview>
+
 ::: tip
 todo
 :::
@@ -74,6 +76,8 @@ todo
 可以通过配置项中的`attrs`属性设置表单元素的属性和事件。
 :::
 
+<preview  path="../demo/table/edit.vue"></preview>
+
 ## API
 
 支持`el-table`组件的属性、事件、插槽、对外暴露的方法；具体请查看[Element Plus Table 文档](https://element-plus.org/zh-CN/component/table.html)
@@ -82,160 +86,98 @@ todo
 
 ### Props
 
-| 名称     | 说明           | 类型                  | 默认值  |
-| -------- | -------------- | --------------------- | ------- |
-| columns  | 表格列配置项   | `TableColumnOption[]` | `[]`    |
-| editable | 是否可编辑     | `boolean`             | `false` |
-| toolbar  | 表格操作栏配置 | `TableToolbarOption`  | -       |
+| 名称           | 说明           | 类型            | 默认值  |
+| -------------- | -------------- | --------------- | ------- |
+| columns        | 表格列配置列表 | `TableColumn[]` | `[]`    |
+| editable       | 是否可编辑     | `boolean`       | `false` |
+| showSelection  | 是否显示多选列 | `boolean`       | `false` |
+| selectionProps | 选择列的属性   | `object`        | -       |
+| showIndex      | 是否显示序号列 | `boolean`       | `false` |
+| indexProps     | 序号列的属性   | `object`        | -       |
+| showExpand     | 是否显示展开列 | `boolean`       | `false` |
+| expandProps    | 展开列的属性   | `object`        | -       |
+
+#### selectionProps
+
+| 名称             | 说明                                     | 类型                            | 默认值 |
+| ---------------- | ---------------------------------------- | ------------------------------- | ------ |
+| width            | 列宽度                                   | `string \| number`              | -      |
+| align            | 对齐方式                                 | `'left' \| 'center' \| 'right'` | -      |
+| selectable       | 决定这一行的 CheckBox 是否可以勾选的函数 | `(row, index) => boolean`       | -      |
+| reserveSelection | 是否保留选项的选中状态                   | `boolean`                       | -      |
+
+#### indexProps
+
+| 名称         | 说明             | 类型                                    | 默认值 |
+| ------------ | ---------------- | --------------------------------------- | ------ |
+| label        | 显示的标题       | `string`                                | -      |
+| width        | 列宽度           | `string \| number`                      | -      |
+| align        | 对齐方式         | `'left' \| 'center' \| 'right'`         | -      |
+| index        | 自定义索引方法   | `number \| ((index: number) => number)` | -      |
+| formatter    | 自定义格式化方法 | `Function`                              | -      |
+| renderHeader | 自定义表头方法   | `Function`                              | -      |
+| sortable     | 是否可排序       | `boolean \| 'custom'`                   | -      |
+| sortMethod   | 排序方法         | `Function`                              | -      |
+| sortOrders   | 排序顺序         | `Array`                                 | -      |
+
+#### expandProps
+
+| 名称  | 说明       | 类型                            | 默认值 |
+| ----- | ---------- | ------------------------------- | ------ |
+| label | 显示的标题 | `string`                        | -      |
+| width | 列宽度     | `string \| number`              | -      |
+| align | 对齐方式   | `'left' \| 'center' \| 'right'` | -      |
 
 ### Events
 
-| 事件名        | 说明               | 参数类型                                                      |
-| ------------- | ------------------ | ------------------------------------------------------------- |
-| edit-change   | 编辑数据变化时触发 | `(row: any, prop: string, value: any, index: number) => void` |
-| column-change | 列设置变化时触发   | `(columns: TableColumnOption[]) => void`                      |
+| 事件名         | 说明           | 参数                                                      |
+| -------------- | -------------- | --------------------------------------------------------- |
+| validate       | 表单验证事件   | `(valid: boolean, invalidFields?: any) => void`           |
+| validate-field | 表单项验证事件 | `(prop: string, valid: boolean, message: string) => void` |
 
 ### Slots
 
-| 插槽名                | 说明             | 作用域参数                |
-| --------------------- | ---------------- | ------------------------- |
-| `${prop}`             | 自定义列内容     | `{ row, column, $index }` |
-| `header-${prop}`      | 自定义表头内容   | `{ column, $index }`      |
-| `filter-icon-${prop}` | 自定义筛选图标   | `{ column, $index }`      |
-| `toolbar`             | 自定义工具栏     | -                         |
-| `toolbar-prefix`      | 自定义工具栏前缀 | -                         |
-| `toolbar-suffix`      | 自定义工具栏后缀 | -                         |
+| 插槽名                | 说明                         | 作用域参数                |
+| --------------------- | ---------------------------- | ------------------------- |
+| `${prop}`             | 自定义列内容                 | `{ row, column, $index }` |
+| `header-${prop}`      | 自定义表头内容               | `{ column, $index }`      |
+| `filter-icon-${prop}` | 自定义筛选图标               | `{ column, $index }`      |
+| `expand`              | 展开行内容                   | `{ row, column, $index }` |
+| `empty`               | 空数据时的内容               | -                         |
+| `append`              | 插入至表格最后一行之后的内容 | -                         |
 
 ### TableColumnOption 配置项
 
-<table style="width: 100%;">
-   <tbody>
-    <tr>
-        <th style="width: 30%;">名称</th>
-        <th style="width: 30%;">说明</th>
-        <th style="width: 40%;">类型</th>
-    </tr>
-    <tr>
-        <td>prop</td>
-        <td>对应列内容的字段名</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>label</td>
-        <td>显示的标题</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>width</td>
-        <td>对应列的宽度</td>
-        <td><code>string | number</code></td>
-    </tr>
-    <tr>
-        <td>minWidth</td>
-        <td>对应列的最小宽度</td>
-        <td><code>string | number</code></td>
-    </tr>
-    <tr>
-        <td>fixed</td>
-        <td>列是否固定</td>
-        <td><code>true | 'left' | 'right'</code></td>
-    </tr>
-    <tr>
-        <td>sortable</td>
-        <td>对应列是否可以排序</td>
-        <td><code>boolean | 'custom'</code></td>
-    </tr>
-    <tr>
-        <td>filters</td>
-        <td>数据过滤的选项</td>
-        <td><code>{ text: string, value: string }[]</code></td>
-    </tr>
-    <tr>
-        <td>filterMethod</td>
-        <td>数据过滤使用的方法</td>
-        <td><code>(value, row, column) => boolean</code></td>
-    </tr>
-    <tr>
-        <td>formatter</td>
-        <td>用来格式化内容</td>
-        <td><code>(row, column, cellValue, index) => VNode | string</code></td>
-    </tr>
-    <tr>
-        <td>showOverflowTooltip</td>
-        <td>当内容过长被隐藏时显示 tooltip</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>align</td>
-        <td>对齐方式</td>
-        <td><code>'left' | 'center' | 'right'</code></td>
-    </tr>
-    <tr>
-        <td>headerAlign</td>
-        <td>表头对齐方式</td>
-        <td><code>'left' | 'center' | 'right'</code></td>
-    </tr>
-    <tr>
-        <td>children</td>
-        <td>多级表头的子列</td>
-        <td><code>TableColumnOption[]</code></td>
-    </tr>
-    <tr>
-        <td>editable</td>
-        <td>是否可编辑</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>editComponent</td>
-        <td>编辑时使用的组件</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>editAttrs</td>
-        <td>编辑组件的属性</td>
-        <td><code>object</code></td>
-    </tr>
-    <tr>
-        <td>hidden</td>
-        <td>是否隐藏列</td>
-        <td><code>boolean</code></td>
-    </tr>
-   </tbody>
-</table>
-
-### TableToolbarOption 配置项
-
-<table style="width: 100%;">
-   <tbody>
-    <tr>
-        <th style="width: 30%;">名称</th>
-        <th style="width: 30%;">说明</th>
-        <th style="width: 40%;">类型</th>
-    </tr>
-    <tr>
-        <td>refresh</td>
-        <td>是否显示刷新按钮</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>export</td>
-        <td>是否显示导出按钮</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>setting</td>
-        <td>列设置配置</td>
-        <td><code>boolean | { checkable: boolean, draggable: boolean }</code></td>
-    </tr>
-    <tr>
-        <td>fullscreen</td>
-        <td>是否显示全屏按钮</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>buttons</td>
-        <td>自定义按钮</td>
-        <td><code>{ text: string, icon?: string, onClick: () => void }[]</code></td>
-    </tr>
-   </tbody>
-</table>
+| 名称                | 说明                                 | 类型                                              | 默认值 |
+| ------------------- | ------------------------------------ | ------------------------------------------------- | ------ |
+| prop                | 字段名称                             | `string`                                          | -      |
+| label               | 显示的标题                           | `string`                                          | -      |
+| width               | 对应列的宽度                         | `string \| number`                                | -      |
+| minWidth            | 对应列的最小宽度                     | `string \| number`                                | -      |
+| fixed               | 列是否固定                           | `'left' \| 'right' \| boolean`                    | -      |
+| if                  | 是否渲染该列                         | `boolean \| ComputedRef<boolean> \| Ref<boolean>` | -      |
+| children            | 多级表头的子列                       | `TableColumn[]`                                   | -      |
+| component           | 动态组件                             | `Component`                                       | -      |
+| element             | 表单元素类型                         | `FormItemElement`                                 | -      |
+| rules               | 表单校验规则                         | `FormItemRule[]`                                  | -      |
+| required            | 是否必填                             | `boolean`                                         | -      |
+| attrs               | 对应的表单元素属性或者动态组件属性   | `Record<string, any>`                             | -      |
+| formatter           | 自定义格式化                         | `Function`                                        | -      |
+| renderHeader        | 自定义表头                           | `Function`                                        | -      |
+| renderFilterIcon    | 自定义过滤图标                       | `Function`                                        | -      |
+| sortable            | 对应列是否可以排序                   | `boolean \| 'custom'`                             | -      |
+| sortBy              | 指定数据按照哪个属性进行排序         | `string \| string[] \| Function`                  | -      |
+| sortOrders          | 数据在排序时所使用排序策略的轮转顺序 | `Array`                                           | -      |
+| sortMethod          | 对数据进行排序的时候使用的方法       | `Function`                                        | -      |
+| resizable           | 对应列是否可以通过拖动改变宽度       | `boolean`                                         | -      |
+| showOverflowTooltip | 当内容过长被隐藏时显示 tooltip       | `boolean \| object`                               | -      |
+| align               | 对齐方式                             | `'left' \| 'center' \| 'right'`                   | -      |
+| headerAlign         | 表头对齐方式                         | `'left' \| 'center' \| 'right'`                   | -      |
+| className           | 列的 className                       | `string`                                          | -      |
+| labelClassName      | 当前列标题的自定义类名               | `string`                                          | -      |
+| filters             | 数据过滤的选项                       | `Array<{ text: string, value: string }>`          | -      |
+| filterPlacement     | 过滤弹出框的定位                     | `string`                                          | -      |
+| filterClassName     | 过滤弹出框的 className               | `string`                                          | -      |
+| filterMultiple      | 数据过滤的选项是否多选               | `boolean`                                         | -      |
+| filterMethod        | 数据过滤使用的方法                   | `Function`                                        | -      |
+| filteredValue       | 选中的数据过滤项                     | `string[]`                                        | -      |

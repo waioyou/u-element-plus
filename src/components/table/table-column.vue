@@ -1,42 +1,15 @@
 <script lang="ts" setup>
 import RenderVNode from '../render-v-node/render-v-node'
-import { computed } from 'vue'
-import type { TableColumn } from './type'
-import { omit } from '@/utils'
-
+import UOperation from '../operation/operation.vue'
+import type { TableColumn, TableColumnProps } from './type'
+import { useTableColumn } from './use-table-column'
 defineSlots<Record<string, any>>()
 
-const props = defineProps<{
-  item: TableColumn
-  editable: boolean
-}>()
+const props = defineProps<TableColumnProps>()
 
-const getElTableColumnAttrs = computed<any>(() => {
-  return omit(props.item, [
-    'children',
-    'formatter',
-    'render',
-    'component',
-    'if',
-    'element',
-    'rules',
-    'attrs',
-    'renderHeader',
-  ])
-})
+const emit = defineEmits(['click-operation'])
 
-const getFormItemRules = (item: TableColumn) => {
-  if (item.required) {
-    return [{ required: true, message: '请输入' }]
-  }
-
-  if (!item.rules) return []
-
-  return item.rules.map((rule) => ({
-    message: '请输入',
-    ...rule,
-  }))
-}
+const { getElTableColumnAttrs, getFormItemRules } = useTableColumn(props)
 </script>
 
 <template>
@@ -76,8 +49,23 @@ const getFormItemRules = (item: TableColumn) => {
       </template>
       <!-- 自定义插槽 -->
       <slot v-else-if="$slots[item.prop]" :name="item.prop" v-bind="slotProps" :item="item" />
-      <!-- 动态组件 -->
-      <component :is="item.component" v-else-if="item.component" v-bind="slotProps" :item="item" />
+      <!-- 渲染动态组件 -->
+      <template v-else-if="item.component">
+        <UOperation
+          v-if="item.component === 'operation'"
+          :slotProps="slotProps"
+          :item="item"
+          v-bind="item.attrs"
+          @click-operation="(...args) => emit('click-operation', ...args)"
+        />
+        <component
+          v-else
+          :is="item.component"
+          :slotProps="slotProps"
+          :item="item"
+          v-bind="item.attrs"
+        />
+      </template>
       <!-- 编辑 -->
       <template v-else-if="slotProps.$index > -1 && editable && item.element">
         <el-form-item :prop="`${slotProps.$index}.${item.prop}`" :rules="getFormItemRules(item)">
