@@ -4,12 +4,21 @@ import { useTableData } from './useTableData'
 import type { TableDataItem } from './useTableData'
 import type { TableColumns } from 'u-element-plus'
 
-const { tableData } = useTableData(8)
+const { tableData, genderOptions, statusOptions, getOptionText, getOptionType } = useTableData(
+  8,
+  true,
+)
 
 const tableColumns = ref<TableColumns<TableDataItem>>([
   { prop: 'id', label: '编号', width: 100, align: 'center' },
   { prop: 'name', label: '姓名', minWidth: 90, align: 'center' },
-  { prop: 'gender', label: '性别', width: 60, align: 'center' },
+  {
+    prop: 'gender',
+    label: '性别',
+    width: 60,
+    align: 'center',
+    formatter: ({ row }) => getOptionText(genderOptions, row.gender),
+  },
   { prop: 'birthday', label: '出生日期', width: 110, align: 'center' },
   { prop: 'degree', label: '学历', width: 60, align: 'center' },
   { prop: 'school', label: '毕业学校', minWidth: 110, align: 'center' },
@@ -33,6 +42,11 @@ const tableColumns = ref<TableColumns<TableDataItem>>([
   >
     <template #expand>
       <div>展开行</div>
+    </template>
+    <template #status="{ row }">
+      <el-tag :type="getOptionType(statusOptions, row.status)">
+        {{ getOptionText(statusOptions, row.status) }}
+      </el-tag>
     </template>
   </u-table>
 </template>

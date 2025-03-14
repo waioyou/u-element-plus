@@ -2,17 +2,21 @@
 import { ref } from 'vue'
 import { useTableData } from './useTableData'
 import { ElMessage } from 'element-plus'
-import { getOptionText } from '@/utils'
 import type { TableColumns, TableInstance } from 'u-element-plus'
 import type { TableDataItem } from './useTableData'
 
 const tableRef = ref<TableInstance>()
 const editable = ref(false)
 
-const { tableData, genderOptions, schoolOptions, scoreOptions, statusOptions } = useTableData(
-  6,
-  true,
-)
+const {
+  tableData,
+  genderOptions,
+  schoolOptions,
+  scoreOptions,
+  statusOptions,
+  getOptionText,
+  getOptionType,
+} = useTableData(6, true)
 
 const columns = ref<TableColumns<TableDataItem>>([
   { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
@@ -116,9 +120,6 @@ const columns = ref<TableColumns<TableDataItem>>([
       activeText: '正常',
       inactiveText: '停用',
     },
-    formatter: ({ row }) => {
-      return getOptionText(statusOptions, row.status)
-    },
   },
 ])
 
@@ -143,6 +144,11 @@ const handleExitEditable = () => {
       stripe
       :editable="editable"
     >
+      <template #status="{ row }">
+        <el-tag :type="getOptionType(statusOptions, row.status)">
+          {{ getOptionText(statusOptions, row.status) }}
+        </el-tag>
+      </template>
     </u-table>
     <div class="footer">
       <el-button v-if="!editable" type="primary" @click="editable = true">进入编辑模式</el-button>

@@ -6,9 +6,9 @@ import { Search, User } from '@element-plus/icons-vue'
 import { ElTag } from 'element-plus'
 import type { TableColumns } from 'u-element-plus'
 import type { TableDataItem } from './useTableData'
-import { getOptionText } from '@/utils'
 
-const { tableData, genderOptions, statusOptions } = useTableData(4, true)
+const { tableData, genderOptions, statusOptions, scoreOptions, getOptionText, getOptionType } =
+  useTableData(10, true)
 
 const tableColumns = ref<TableColumns<TableDataItem>>([
   { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
@@ -37,7 +37,11 @@ const tableColumns = ref<TableColumns<TableDataItem>>([
     width: 120,
     align: 'center',
     sortable: true,
-    formatter: ({ row }) => '🌟'.repeat(row.score),
+    formatter: ({ row }) => {
+      return h(ElText, { type: getOptionType(scoreOptions, row.score) }, () =>
+        getOptionText(scoreOptions, row.score),
+      )
+    },
   },
   {
     prop: 'status',
@@ -56,7 +60,7 @@ const tableColumns = ref<TableColumns<TableDataItem>>([
       return data.item.label!
     },
     formatter: ({ row }) => {
-      return h(ElTag, { type: row.status === '1' ? 'success' : 'danger' }, () =>
+      return h(ElTag, { type: getOptionType(statusOptions, row.status) }, () =>
         getOptionText(statusOptions, row.status),
       )
     },
@@ -84,7 +88,7 @@ const tableColumns = ref<TableColumns<TableDataItem>>([
     <template #id="{ row }">
       <el-tag size="small" effect="dark">{{ row.id }}</el-tag>
     </template>
-    <!-- 性别列自定义: 由于插槽的优先级高于formatter，所以插槽的值会覆盖formatter的值 -->
+    <!-- 性别列自定义: 插槽的优先级高于formatter -->
     <template #gender="{ row }">
       {{ getOptionText(genderOptions, row.gender) }}
     </template>

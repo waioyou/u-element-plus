@@ -83,7 +83,7 @@ export interface TableDataGroupItem {
 type OptionItem = {
   label: string
   value: any
-  type?: string
+  type?: 'primary' | 'warning' | 'success' | 'danger' | 'info'
 }
 
 export const useTableData = (limit = 10, useValue = false) => {
@@ -126,11 +126,11 @@ export const useTableData = (limit = 10, useValue = false) => {
     { label: '停用', value: '0', type: 'danger' },
   ]
   const scoreOptions: OptionItem[] = [
-    { label: '非常满意', value: 5 },
-    { label: '满意', value: 4 },
-    { label: '一般', value: 3 },
-    { label: '不满意', value: 2 },
-    { label: '非常不满意', value: 1 },
+    { label: '非常满意', value: 5, type: 'success' },
+    { label: '满意', value: 4, type: 'success' },
+    { label: '一般', value: 3, type: 'warning' },
+    { label: '不满意', value: 2, type: 'danger' },
+    { label: '非常不满意', value: 1, type: 'danger' },
   ]
 
   const getArrayElement = (options: OptionItem[]) => {
@@ -197,6 +197,14 @@ export const useTableData = (limit = 10, useValue = false) => {
     tableData.value = Array.from({ length: limit }, (): TableDataItem => addFakerData())
   }
 
+  const getOptionText = (options: OptionItem[], value: any) => {
+    return options.find((d) => d.value === value)?.label ?? ''
+  }
+
+  const getOptionType = (options: OptionItem[], value: any) => {
+    return options.find((d) => d.value === value)?.type ?? 'primary'
+  }
+
   onMounted(() => {
     generateTableData()
     tableDataGroup.value = tableData.value.map((item) => {
@@ -244,5 +252,7 @@ export const useTableData = (limit = 10, useValue = false) => {
     degreeOptions,
     statusOptions,
     scoreOptions,
+    getOptionText,
+    getOptionType,
   }
 }

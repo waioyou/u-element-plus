@@ -4,9 +4,11 @@ import { useTableData } from './useTableData'
 import type { TableDataGroupItem } from './useTableData'
 import type { TableColumns } from 'u-element-plus'
 import { dayjs } from 'element-plus'
-import { getOptionText } from '@/utils'
 
-const { tableDataGroup,genderOptions } = useTableData(5, true)
+const { tableDataGroup, genderOptions, statusOptions, getOptionText, getOptionType } = useTableData(
+  5,
+  true,
+)
 
 const tableColumns = ref<TableColumns<TableDataGroupItem>>([
   { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
@@ -111,13 +113,9 @@ const tableColumns = ref<TableColumns<TableDataGroupItem>>([
     </template>
     <!-- 状态列自定义，多级时不建议通过插槽自定义 -->
     <template #['other.status']="{ row }">
-      <el-tag v-if="row.other.status === '1'" type="success" >
-        正常
-      </el-tag>
-      <el-tag v-else type="info" >
-          停用
+      <el-tag :type="getOptionType(statusOptions, row.other.status)">
+        {{ getOptionText(statusOptions, row.other.status) }}
       </el-tag>
     </template>
   </u-table>
 </template>
-

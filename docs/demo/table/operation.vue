@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 import type { TableColumns, OperationItem } from 'u-element-plus'
 import type { TableDataItem } from './useTableData'
 
-const { tableData } = useTableData(6, true)
+const { tableData, statusOptions, getOptionText, getOptionType } = useTableData(6, true)
 
 // 操作按钮列表
 const operations = ref<OperationItem<TableDataItem>[]>([
@@ -55,10 +55,7 @@ const tableColumns = ref<TableColumns<TableDataItem>>([
     label: '状态',
     width: 80,
     align: 'center',
-    filters: [
-      { text: '正常', value: '1' },
-      { text: '停用', value: '0' },
-    ],
+    filters: statusOptions.map((d) => ({ text: d.label, value: d.value })),
     filterMethod: (value: any, row: any, column: any) => {
       const property = column['property']
       return row[property] === value
@@ -96,8 +93,8 @@ const tableColumns = ref<TableColumns<TableDataItem>>([
     @click-operation="handleClickOperation"
   >
     <template #status="{ row }">
-      <el-tag :type="row.status === '0' ? 'danger' : 'success'">
-        {{ row.status === '0' ? '禁用' : '正常' }}
+      <el-tag :type="getOptionType(statusOptions, row.status)">
+        {{ getOptionText(statusOptions, row.status) }}
       </el-tag>
     </template>
   </u-table>
