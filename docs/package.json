@@ -19,7 +19,9 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@faker-js/faker": "^9.6.0",
-    "element-plus": "^2.9.4"
+    "@unocss/preset-rem-to-px": "^0.61.5",
+    "element-plus": "^2.9.4",
+    "unocss": "^0.61.5"
   },
   "devDependencies": {
     "@vitepress-demo-preview/component": "^2.3.2",

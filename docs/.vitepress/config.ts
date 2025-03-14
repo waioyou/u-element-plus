@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { fileURLToPath, URL } from 'node:url'
 import { containerPreview, componentPreview } from '@vitepress-demo-preview/plugin'
+import UnoCSS from 'unocss/vite'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -8,6 +9,7 @@ export default defineConfig({
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   description: '基于Element Plus的二次封装,实现如表格组件,表单组件等功能.',
   vite: {
+    plugins: [UnoCSS()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('../../src', import.meta.url)),
@@ -55,6 +57,7 @@ export default defineConfig({
         items: [
           { text: 'Form 表单', link: '/components/form' },
           { text: 'Table 表格', link: '/components/table' },
+          { text: 'Operation 操作栏', link: '/components/operation' },
           { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' },
