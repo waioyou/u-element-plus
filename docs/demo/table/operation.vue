@@ -1,78 +1,17 @@
 <script setup lang="ts">
-import { markRaw, ref } from 'vue'
-import { type TableColumns, type OperationItem, UOperation } from 'u-element-plus'
+import { ref } from 'vue'
+import { useTableData } from './useTableData'
 import { ElMessage } from 'element-plus'
-defineOptions({ name: '', inheritAttrs: false })
+import type { TableColumns, OperationItem } from 'u-element-plus'
+import type { TableDataItem } from './useTableData'
 
-interface TableDataItem {
-  date: string
-  name: string
-  age: number
-  gender: string
-  department: string
-  position: string
-  address: string
-  email: string
-  phone: string
-  status: 0 | 1
-}
-
-const tableData = ref<TableDataItem[]>([
-  {
-    date: '2024-03-05',
-    name: '张三',
-    age: 25,
-    gender: '男',
-    department: '研发部',
-    position: '前端工程师',
-    address: '浙江省杭州市西湖区',
-    email: 'zhangsan@example.com',
-    phone: '13800138000',
-    status: 0,
-  },
-  {
-    date: '2024-03-06',
-    name: '李四',
-    age: 28,
-    gender: '女',
-    department: '产品部',
-    position: '产品经理',
-    address: '浙江省杭州市滨江区',
-    email: 'lisi@example.com',
-    phone: '13800138001',
-    status: 1,
-  },
-  {
-    date: '2024-03-07',
-    name: '王五',
-    age: 32,
-    gender: '男',
-    department: '设计部',
-    position: 'UI设计师',
-    address: '浙江省杭州市上城区',
-    email: 'wangwu@example.com',
-    phone: '13800138002',
-    status: 0,
-  },
-  {
-    date: '2024-03-08',
-    name: '赵六',
-    age: 22,
-    gender: '女',
-    department: '测试部',
-    position: '测试工程师',
-    address: '浙江省杭州市拱墅区',
-    email: 'zhaoliu@example.com',
-    phone: '13800138003',
-    status: 1,
-  },
-])
+const { tableData } = useTableData(6, true)
 
 // 操作按钮列表
 const operations = ref<OperationItem<TableDataItem>[]>([
   { label: '添加', name: 'add' },
   // 根据状态判断是否显示编辑按钮
-  { label: '编辑', name: 'edit', if: (row) => row.status === 1 },
+  { label: '编辑', name: 'edit', if: (row) => row.status === '1' },
   {
     label: '删除',
     name: 'delete',
@@ -89,20 +28,52 @@ const operations = ref<OperationItem<TableDataItem>[]>([
 
 // 点击操作按钮
 const handleClickOperation = (name: string, row: TableDataItem, index: number) => {
-  ElMessage.success(`点击了第【${index + 1}】条数据【${row.name}】的【${name}】操作`)
+  if (name === 'delete') {
+    ElMessage.error(`点击了第${index + 1}条数据【${row.name}】的【${name}】操作`)
+  } else {
+    ElMessage.success(`点击了第${index + 1}条数据【${row.name}】的【${name}】操作`)
+  }
 }
 
-const columns = ref<TableColumns>([
-  { prop: 'date', label: '入职日期', width: 120, sortable: true },
-  { prop: 'name', label: '姓名', minWidth: 80, align: 'left' },
-  { prop: 'age', label: '年龄', width: 80, align: 'center', sortable: true },
-  { prop: 'gender', label: '性别', width: 80, align: 'center' },
-  { prop: 'department', label: '部门', minWidth: 100, align: 'center' },
-  { prop: 'position', label: '职位', minWidth: 120, align: 'left' },
-  { prop: 'address', label: '地址', minWidth: 140, showOverflowTooltip: true },
-  { prop: 'email', label: '邮箱', minWidth: 160, showOverflowTooltip: true },
-  { prop: 'phone', label: '电话', minWidth: 120, showOverflowTooltip: true },
-  { prop: 'status', label: '状态', width: 80, align: 'center' },
+const tableColumns = ref<TableColumns<TableDataItem>>([
+  { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
+  { prop: 'name', label: '姓名', minWidth: 90, align: 'center' },
+  {
+    prop: 'gender',
+    label: '性别',
+    width: 60,
+    align: 'center',
+    formatter: ({ row }) => (row.gender === '1' ? '男' : '女'),
+  },
+  { prop: 'birthday', label: '出生日期', width: 110, align: 'center', sortable: true },
+  { prop: 'degree', label: '学历', width: 60, align: 'center' },
+  { prop: 'school', label: '毕业学校', minWidth: 110, align: 'center' },
+  { prop: 'major', label: '专业', minWidth: 138, align: 'left' },
+  { prop: 'graduationYear', label: '毕业年份', width: 100, align: 'center' },
+  {
+    prop: 'status',
+    label: '状态',
+    width: 80,
+    align: 'center',
+    filters: [
+      { text: '正常', value: '1' },
+      { text: '停用', value: '0' },
+    ],
+    filterMethod: (value: any, row: any, column: any) => {
+      const property = column['property']
+      return row[property] === value
+    },
+  },
+  {
+    prop: 'address',
+    label: '地址',
+    minWidth: 200,
+    align: 'left',
+    showOverflowTooltip: true,
+    formatter: ({ row }) => {
+      return `${row.province}${row.city}${row.district}${row.address}`
+    },
+  },
   {
     prop: 'operation',
     label: '操作',
@@ -110,10 +81,7 @@ const columns = ref<TableColumns>([
     align: 'center',
     fixed: 'right',
     component: 'operation',
-    attrs: {
-      type: 'text',
-      operations,
-    },
+    attrs: { operations },
   },
 ])
 </script>
@@ -122,14 +90,14 @@ const columns = ref<TableColumns>([
   <u-table
     class="vp-raw"
     :data="tableData"
-    :columns="columns"
+    :columns="tableColumns"
     stripe
     border
     @click-operation="handleClickOperation"
   >
     <template #status="{ row }">
-      <el-tag :type="row.status === 0 ? 'danger' : 'success'">
-        {{ row.status === 0 ? '禁用' : '正常' }}
+      <el-tag :type="row.status === '0' ? 'danger' : 'success'">
+        {{ row.status === '0' ? '禁用' : '正常' }}
       </el-tag>
     </template>
   </u-table>

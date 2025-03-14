@@ -1,73 +1,21 @@
 <script setup lang="ts">
-import { h, ref } from 'vue'
-import type { TableColumns, TableInstance } from 'u-element-plus'
-import { ElTag } from 'element-plus'
+import { ref } from 'vue'
+import { useTableData } from './useTableData'
 import { ElMessage } from 'element-plus'
+import { getOptionText } from '@/utils'
+import type { TableColumns, TableInstance } from 'u-element-plus'
+import type { TableDataItem } from './useTableData'
 
-interface TableDataItem {
-  date: string
-  name: string
-  age: number
-  gender: string
-  position: string
-  status: 0 | 1
-  score: number
-}
+const tableRef = ref<TableInstance>()
+const editable = ref(false)
 
-const tableData = ref<TableDataItem[]>([
-  {
-    date: '2024-03-05',
-    name: '张三',
-    age: 25,
-    gender: '男',
-    position: '前端工程师',
-    status: 1,
-    score: 5,
-  },
-  {
-    date: '2024-03-06',
-    name: '李四',
-    age: 28,
-    gender: '女',
-    position: '产品经理',
-    status: 1,
-    score: 4,
-  },
-  {
-    date: '2024-03-07',
-    name: '王五',
-    age: 32,
-    gender: '男',
-    position: 'UI设计师',
-    status: 0,
-    score: 3,
-  },
-  {
-    date: '2024-03-08',
-    name: '赵六',
-    age: 22,
-    gender: '女',
-    position: '测试工程师',
-    status: 1,
-    score: 5,
-  },
-])
+const { tableData, genderOptions, schoolOptions, scoreOptions, statusOptions } = useTableData(
+  6,
+  true,
+)
 
-const columns = ref<TableColumns>([
-  {
-    prop: 'date',
-    label: '入职日期',
-    width: 180,
-    element: 'date-picker',
-    required: true,
-    attrs: {
-      placeholder: '请选择入职日期',
-      clearable: true,
-      'value-format': 'YYYY-MM-DD',
-      type: 'date',
-      format: 'YYYY-MM-DD',
-    },
-  },
+const columns = ref<TableColumns<TableDataItem>>([
+  { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
   {
     prop: 'name',
     label: '姓名',
@@ -76,56 +24,83 @@ const columns = ref<TableColumns>([
     element: 'input',
     rules: [{ required: true, message: '请输入姓名' }],
     attrs: {
-      placeholder: '请输入姓名',
+      placeholder: '请输入',
       clearable: true,
-    },
-  },
-  {
-    prop: 'age',
-    label: '年龄',
-    width: 180,
-    align: 'center',
-    element: 'input-number',
-    rules: [{ required: true, message: '请输入年龄' }],
-    attrs: {
-      placeholder: '请输入年龄',
-      clearable: true,
-      min: 0,
-      max: 120,
     },
   },
   {
     prop: 'gender',
     label: '性别',
-    width: 140,
+    minWidth: 100,
     align: 'center',
     element: 'select',
     rules: [{ required: true, message: '请选择性别' }],
     attrs: {
-      placeholder: '请选择性别',
+      placeholder: '请选择',
       clearable: true,
-      options: [
-        { label: '男', value: '男' },
-        { label: '女', value: '女' },
-      ],
+      options: genderOptions,
+    },
+    formatter: ({ row }) => {
+      return getOptionText(genderOptions, row.gender)
     },
   },
   {
-    prop: 'position',
-    label: '职位',
-    width: 140,
+    prop: 'birthday',
+    label: '出生日期',
+    minWidth: 160,
     align: 'center',
-    element: 'select',
-    rules: [{ required: true, message: '请输入职位' }],
+    element: 'date-picker',
+    rules: [{ required: true, message: '请选择出生日期' }],
     attrs: {
-      placeholder: '请输入职位',
+      placeholder: '请选择',
       clearable: true,
-      options: [
-        { label: '前端工程师', value: '前端工程师' },
-        { label: '产品经理', value: '产品经理' },
-        { label: 'UI设计师', value: 'UI设计师' },
-        { label: '测试工程师', value: '测试工程师' },
-      ],
+      type: 'date',
+      format: 'YYYY-MM-DD',
+      valueFormat: 'YYYY-MM-DD',
+    },
+  },
+  {
+    prop: 'age',
+    label: '年龄',
+    minWidth: 140,
+    align: 'center',
+    element: 'input-number',
+    rules: [{ required: true, message: '请输入年龄' }],
+    attrs: {
+      placeholder: '请输入',
+      clearable: true,
+    },
+  },
+  {
+    prop: 'school',
+    label: '毕业学校',
+    minWidth: 150,
+    align: 'center',
+    element: 'autocomplete',
+    rules: [{ required: true, message: '请输入毕业学校' }],
+    attrs: {
+      placeholder: '请输入',
+      clearable: true,
+      fetchSuggestions: (queryString: string, cb: (results: any[]) => void) => {
+        const results = queryString
+          ? schoolOptions.filter((item) => item.label.includes(queryString))
+          : schoolOptions
+        cb(results)
+      },
+    },
+  },
+  {
+    prop: 'score',
+    label: '评分',
+    minWidth: 140,
+    align: 'center',
+    element: 'rate',
+    rules: [{ required: true, message: '请选择评分' }],
+    attrs: {
+      max: 5,
+    },
+    formatter: ({ row }) => {
+      return getOptionText(scoreOptions, row.score)
     },
   },
   {
@@ -136,36 +111,16 @@ const columns = ref<TableColumns>([
     element: 'switch',
     rules: [{ required: true, message: '请选择状态' }],
     attrs: {
-      activeValue: 1,
-      activeText: '启用',
-      inactiveValue: 0,
-      inactiveText: '禁用',
+      activeValue: '1',
+      inactiveValue: '0',
+      activeText: '正常',
+      inactiveText: '停用',
     },
     formatter: ({ row }) => {
-      return h(ElTag, { type: row.status === 1 ? 'success' : 'danger' }, () =>
-        row.status === 1 ? '启用' : '禁用',
-      )
-    },
-  },
-  {
-    prop: 'score',
-    label: '评分',
-    width: 140,
-    align: 'center',
-    element: 'rate',
-    rules: [{ required: true, message: '请选择评分' }],
-    attrs: {
-      clearable: true,
-      max: 5,
-    },
-    formatter: ({ row }) => {
-      return '🌟'.repeat(row.score)
+      return getOptionText(statusOptions, row.status)
     },
   },
 ])
-
-const editable = ref(false)
-const tableRef = ref<TableInstance>()
 
 const handleExitEditable = () => {
   tableRef.value?.validate((valid) => {
