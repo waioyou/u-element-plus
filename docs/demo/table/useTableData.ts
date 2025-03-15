@@ -100,13 +100,11 @@ export const useTableData = (limit = 10, useValue = false) => {
     { label: '浙江大学', value: '浙江大学' },
     { label: '武汉大学', value: '武汉大学' },
     { label: '厦门大学', value: '厦门大学' },
-    { label: '杭州电子科技大学', value: '杭州电子科技大学' },
     { label: '浙江工业大学', value: '浙江工业大学' },
     { label: '浙江师范大学', value: '浙江师范大学' },
     { label: '浙江工商大学', value: '浙江工商大学' },
     { label: '浙江理工大学', value: '浙江理工大学' },
     { label: '浙江农林大学', value: '浙江农林大学' },
-    { label: '浙江中医药大学', value: '浙江中医药大学' },
   ]
   const majorOptions: OptionItem[] = [
     { label: '计算机科学与技术', value: '计算机科学与技术' },

@@ -62,11 +62,23 @@
 
 ## 表格操作栏
 
-<preview  path="../demo/table/operation.vue"></preview>
+通过指定表格配置项中的`component`属性为`operation`，可以渲染表格操作栏。详细配置请查看[UOperation组件文档](../components/operation.md)。
 
-::: tip
-todo
+<preview  path="../demo/operation/basic.vue"></preview>
+
+## 渲染动态组件
+
+通过设置表格配置项中的`component`属性，可以渲染动态组件。需要传入组件对象或者`operation`。
+
+默认会传入表格列的配置项（`item`），以及表格列的插槽参数（`slotProps`）。
+
+对于组件的`props`和`events`，可以通过表格配置项的`attrs`属性传入。
+
+::: warning
+在使用表格组件过程中，发现有很多重复的逻辑，可以考虑封装成一个组件，然后通过`component`属性渲染动态组件。如表格操作栏、时间日期格式化等
 :::
+
+<preview  path="../demo/table/component.vue"></preview>
 
 ## 表格编辑
 
