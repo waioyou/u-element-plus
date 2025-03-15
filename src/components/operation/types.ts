@@ -6,28 +6,33 @@ export interface OperationProps<T = any> {
     row: T
     $index: number
   }
-  operations: OperationItem[]
+  operations: Operations<T>
   type?: 'button' | 'text' | 'link'
+  onlyIcon?: boolean
 }
 
 export interface OperationEmits<T = any> {
   (e: 'click-operation', name: string, row: T, index: number): void
 }
 
+export type Operations<T = any> = OperationItem<T>[]
+
 export interface OperationItem<T = any> {
   name: string
-  label?: string
+  label: string
   if?: boolean | ((row: T) => boolean)
   buttonAttrs?: (row: T, index: number) => OperationItemButtonAttrs
   confirmAttrs?: (row: T, index: number) => OperationItemConfirmAttrs
 }
 
-export type OperationItemButtonAttrs<T = any> = Partial<TypeNoReadonly<ButtonProps>> & {
+export type OperationItemButtonAttrs = Partial<
+  TypeNoReadonly<Omit<ButtonProps, 'text' | 'link'>>
+> & {
   iconClass?: string
-  onClick?: (row: T, index: number) => void
+  onClick?: () => void
 }
-export type OperationItemConfirmAttrs<T = any> = Partial<TypeNoReadonly<PopconfirmProps>> & {
+export type OperationItemConfirmAttrs = Partial<TypeNoReadonly<PopconfirmProps>> & {
   title?: string
-  onConfirm?: (row: T, index: number) => void
-  onCancel?: (row: T, index: number) => void
+  onConfirm?: () => void
+  onCancel?: () => void
 }
