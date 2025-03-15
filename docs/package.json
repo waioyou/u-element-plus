@@ -24,6 +24,7 @@
     "unocss": "^0.61.5"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
     "@vitepress-demo-preview/component": "^2.3.2",
     "@vitepress-demo-preview/plugin": "^1.2.3",
     "postcss": "^8.5.3",

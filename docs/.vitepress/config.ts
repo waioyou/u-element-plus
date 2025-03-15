@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { fileURLToPath, URL } from 'node:url'
 import { containerPreview, componentPreview } from '@vitepress-demo-preview/plugin'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import UnoCSS from 'unocss/vite'
 
 // https://vitepress.dev/reference/site-config
@@ -9,7 +10,7 @@ export default defineConfig({
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   description: '基于Element Plus的二次封装,实现如表格组件,表单组件等功能.',
   vite: {
-    plugins: [UnoCSS()],
+    plugins: [vueJsx(), UnoCSS()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('../../src', import.meta.url)),
