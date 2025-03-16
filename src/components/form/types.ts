@@ -118,8 +118,12 @@ export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemPr
   required?: boolean
   /** 校验规则 */
   rules?: FormItemRule[]
-  /** 插槽 */
-  slot?: FormItemSlot
+  /** 渲染默认插槽 */
+  render?: (slotProps: { item: FormItemOption; view: boolean }) => VNode | string
+  /** 渲染错误插槽 */
+  renderError?: (slotProps: { item: FormItemOption; error: string }) => VNode | string
+  /** 渲染标签插槽 */
+  renderLabel?: (slotProps: { item: FormItemOption; label: string }) => VNode | string
   /** 是否查看模式 */
   view?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 查看模式下格式化显示内容 */
@@ -140,12 +144,6 @@ export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemPr
   span?: string
   attrs?: Record<string, any>
   tooltip?: string
-}
-
-export type FormItemSlot = {
-  label?: ({ item, label }: { item: FormItemOption; label: string }) => VNode | string | number
-  error?: ({ item, error }: { item: FormItemOption; error: string }) => VNode | string | number
-  default?: ({ item, view }: { item: FormItemOption; view: boolean }) => VNode | string | number
 }
 
 // export interface FormItemOptionWithAutoComplete extends Omit<BaseFormItemOption, 'element'> {

@@ -1,7 +1,7 @@
 <script lang="ts" setup generic="T extends Record<string, any>">
 import { computed, getCurrentInstance, ref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
-import type { FormProps, FormEmits, FormItemOption } from './type'
+import type { FormProps, FormEmits, FormItemOption } from './types'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 import { InfoFilled } from '@element-plus/icons-vue'
@@ -215,8 +215,8 @@ defineExpose(
             v-bind="slotProps"
           ></slot>
           <RenderVNode
-            v-else-if="item.slot?.label"
-            :v-node="item.slot.label({ item, label: slotProps.label })"
+            v-else-if="item.renderLabel"
+            :v-node="item.renderLabel({ item, label: slotProps.label })"
           />
           <template v-else>
             {{ item.label }}
@@ -236,8 +236,8 @@ defineExpose(
             v-bind="slotProps"
           />
           <RenderVNode
-            v-else-if="item.slot?.error"
-            :v-node="item.slot.error({ item, error: slotProps.error })"
+            v-else-if="item.renderError"
+            :v-node="item.renderError({ item, error: slotProps.error })"
           />
         </template>
         <template #default>
@@ -259,20 +259,18 @@ defineExpose(
             />
             <RenderVNode v-else :v-node="getViewVNode(item)" />
           </template>
+
           <!-- 默认插槽处理 -->
-          <template v-else-if="item.slot?.default || $slots[item.prop]">
-            <slot v-if="$slots[item.prop]" :name="item.prop" :item="item"></slot>
-            <RenderVNode
-              v-else-if="item.slot?.default"
-              :v-node="item.slot.default({ item, view })"
-            />
-          </template>
+          <slot v-else-if="$slots[item.prop]" :name="item.prop" :item="item"></slot>
+          <RenderVNode v-else-if="item.render" :v-node="item.render({ item, view: view })" />
+
           <!-- 动态组件 -->
           <template v-else-if="item.component">
             <component
               :is="item.component"
               v-model="modelValue[item.prop]"
               v-bind="item.attrs"
+              :view="view"
               @change="handleChange(item.prop, item)"
             />
           </template>
