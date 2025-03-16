@@ -1,3 +1,7 @@
+<!-- <script setup>
+import TypePopover from '../.vitepress/plugins/TypePopover.vue'
+</script> -->
+
 # Table 表格
 
 通过配置项（columns）动态生成表格内容；包含了Element Plus表格组件中的所有功能，并支持对应组件所有的属性和事件。
@@ -98,98 +102,47 @@
 
 ### Props
 
-| 名称           | 说明           | 类型            | 默认值  |
-| -------------- | -------------- | --------------- | ------- |
-| columns        | 表格列配置列表 | `TableColumn[]` | `[]`    |
-| editable       | 是否可编辑     | `boolean`       | `false` |
-| showSelection  | 是否显示多选列 | `boolean`       | `false` |
-| selectionProps | 选择列的属性   | `object`        | -       |
-| showIndex      | 是否显示序号列 | `boolean`       | `false` |
-| indexProps     | 序号列的属性   | `object`        | -       |
-| showExpand     | 是否显示展开列 | `boolean`       | `false` |
-| expandProps    | 展开列的属性   | `object`        | -       |
-
-#### selectionProps
-
-| 名称             | 说明                                     | 类型                            | 默认值 |
-| ---------------- | ---------------------------------------- | ------------------------------- | ------ |
-| width            | 列宽度                                   | `string \| number`              | -      |
-| align            | 对齐方式                                 | `'left' \| 'center' \| 'right'` | -      |
-| selectable       | 决定这一行的 CheckBox 是否可以勾选的函数 | `(row, index) => boolean`       | -      |
-| reserveSelection | 是否保留选项的选中状态                   | `boolean`                       | -      |
-
-#### indexProps
-
-| 名称         | 说明             | 类型                                    | 默认值 |
-| ------------ | ---------------- | --------------------------------------- | ------ |
-| label        | 显示的标题       | `string`                                | -      |
-| width        | 列宽度           | `string \| number`                      | -      |
-| align        | 对齐方式         | `'left' \| 'center' \| 'right'`         | -      |
-| index        | 自定义索引方法   | `number \| ((index: number) => number)` | -      |
-| formatter    | 自定义格式化方法 | `Function`                              | -      |
-| renderHeader | 自定义表头方法   | `Function`                              | -      |
-| sortable     | 是否可排序       | `boolean \| 'custom'`                   | -      |
-| sortMethod   | 排序方法         | `Function`                              | -      |
-| sortOrders   | 排序顺序         | `Array`                                 | -      |
-
-#### expandProps
-
-| 名称  | 说明       | 类型                            | 默认值 |
-| ----- | ---------- | ------------------------------- | ------ |
-| label | 显示的标题 | `string`                        | -      |
-| width | 列宽度     | `string \| number`              | -      |
-| align | 对齐方式   | `'left' \| 'center' \| 'right'` | -      |
+| 名称           | 说明           | 类型                                                       | 默认值  |
+| -------------- | -------------- | ---------------------------------------------------------- | ------- |
+| columns        | 表格列配置列表 | `TableColumn[]`                                            | `[]`    |
+| editable       | 是否可编辑     | `boolean`                                                  | `false` |
+| showSelection  | 是否显示多选列 | `boolean`                                                  | `false` |
+| selectionProps | 选择列的属性   | `SelectionProps` <TypePopover typeName="SelectionProps" /> | -       |
+| showIndex      | 是否显示序号列 | `boolean`                                                  | `false` |
+| indexProps     | 序号列的属性   | `IndexProps` <TypePopover typeName="IndexProps" />         | -       |
+| showExpand     | 是否显示展开列 | `boolean`                                                  | `false` |
+| expandProps    | 展开列的属性   | `ExpandProps` <TypePopover typeName="ExpandProps" />       | -       |
 
 ### Events
 
-| 事件名         | 说明           | 参数                                                      |
-| -------------- | -------------- | --------------------------------------------------------- |
-| validate       | 表单验证事件   | `(valid: boolean, invalidFields?: any) => void`           |
-| validate-field | 表单项验证事件 | `(prop: string, valid: boolean, message: string) => void` |
+| 事件名          | 说明                                     | 参数                                            |
+| --------------- | ---------------------------------------- | ----------------------------------------------- |
+| click-operation | 表格操作列操作按钮触发，需要配置操作列。 | `(name: string, row: T, index: number) => void` |
 
 ### Slots
 
-| 插槽名                | 说明                         | 作用域参数                |
-| --------------------- | ---------------------------- | ------------------------- |
-| `${prop}`             | 自定义列内容                 | `{ row, column, $index }` |
-| `header-${prop}`      | 自定义表头内容               | `{ column, $index }`      |
-| `filter-icon-${prop}` | 自定义筛选图标               | `{ column, $index }`      |
-| `expand`              | 展开行内容                   | `{ row, column, $index }` |
-| `empty`               | 空数据时的内容               | -                         |
-| `append`              | 插入至表格最后一行之后的内容 | -                         |
+| 插槽名                 | 说明           | 作用域参数                |
+| ---------------------- | -------------- | ------------------------- |
+| `${prop} `             | 自定义列内容   | `{ row, column, $index }` |
+| `header-${prop}`       | 自定义表头内容 | `{ column, $index }`      |
+| `filter-icon-${prop} ` | 自定义筛选图标 | `{ column, $index }`      |
 
-### TableColumnOption 配置项
+### 表格列配置项(TableColumn\<T\>)
 
-| 名称                | 说明                                 | 类型                                              | 默认值 |
-| ------------------- | ------------------------------------ | ------------------------------------------------- | ------ |
-| prop                | 字段名称                             | `string`                                          | -      |
-| label               | 显示的标题                           | `string`                                          | -      |
-| width               | 对应列的宽度                         | `string \| number`                                | -      |
-| minWidth            | 对应列的最小宽度                     | `string \| number`                                | -      |
-| fixed               | 列是否固定                           | `'left' \| 'right' \| boolean`                    | -      |
-| if                  | 是否渲染该列                         | `boolean \| ComputedRef<boolean> \| Ref<boolean>` | -      |
-| children            | 多级表头的子列                       | `TableColumn[]`                                   | -      |
-| component           | 动态组件                             | `Component`                                       | -      |
-| element             | 表单元素类型                         | `FormItemElement`                                 | -      |
-| rules               | 表单校验规则                         | `FormItemRule[]`                                  | -      |
-| required            | 是否必填                             | `boolean`                                         | -      |
-| attrs               | 对应的表单元素属性或者动态组件属性   | `Record<string, any>`                             | -      |
-| formatter           | 自定义格式化                         | `Function`                                        | -      |
-| renderHeader        | 自定义表头                           | `Function`                                        | -      |
-| renderFilterIcon    | 自定义过滤图标                       | `Function`                                        | -      |
-| sortable            | 对应列是否可以排序                   | `boolean \| 'custom'`                             | -      |
-| sortBy              | 指定数据按照哪个属性进行排序         | `string \| string[] \| Function`                  | -      |
-| sortOrders          | 数据在排序时所使用排序策略的轮转顺序 | `Array`                                           | -      |
-| sortMethod          | 对数据进行排序的时候使用的方法       | `Function`                                        | -      |
-| resizable           | 对应列是否可以通过拖动改变宽度       | `boolean`                                         | -      |
-| showOverflowTooltip | 当内容过长被隐藏时显示 tooltip       | `boolean \| object`                               | -      |
-| align               | 对齐方式                             | `'left' \| 'center' \| 'right'`                   | -      |
-| headerAlign         | 表头对齐方式                         | `'left' \| 'center' \| 'right'`                   | -      |
-| className           | 列的 className                       | `string`                                          | -      |
-| labelClassName      | 当前列标题的自定义类名               | `string`                                          | -      |
-| filters             | 数据过滤的选项                       | `Array<{ text: string, value: string }>`          | -      |
-| filterPlacement     | 过滤弹出框的定位                     | `string`                                          | -      |
-| filterClassName     | 过滤弹出框的 className               | `string`                                          | -      |
-| filterMultiple      | 数据过滤的选项是否多选               | `boolean`                                         | -      |
-| filterMethod        | 数据过滤使用的方法                   | `Function`                                        | -      |
-| filteredValue       | 选中的数据过滤项                     | `string[]`                                        | -      |
+支持`el-table-column`组件的大部分属性、插槽；具体请查看[Element Plus Table-column API](https://element-plus.org/zh-CN/component/table.html#table-column-api)
+
+以下只列举与`el-table-column`组件不同的属性。
+
+| 名称             | 说明                               | 类型                                                                                   | 默认值   |
+| ---------------- | ---------------------------------- | -------------------------------------------------------------------------------------- | -------- |
+| prop             | 字段名称                           | `string`                                                                               | `必填项` |
+| if               | 条件渲染                           | `boolean \| ComputedRef<boolean> \| Ref<boolean>`                                      | `true`   |
+| children         | 多级表头的子列                     | `TableColumn[]`                                                                        | -        |
+| component        | 动态组件                           | `Component \| 'operation'`                                                             | -        |
+| element          | 表单元素类型                       | `enum` <TypePopover typeName="TableColumnElement" />                                   | -        |
+| rules            | 表单校验规则                       | `FormItemRule[]`                                                                       | -        |
+| required         | 是否必填                           | `boolean`                                                                              | -        |
+| attrs            | 对应的表单元素属性或者动态组件属性 | `Record<string, any>`                                                                  | -        |
+| formatter        | 自定义列格式化                     | `TableColumnFormatter<T>`<TypePopover typeName="TableColumnFormatter" />               | -        |
+| renderHeader     | 自定义列表头                       | `TableColumnRenderHeader<T>`<TypePopover typeName="TableColumnRenderHeader" />         | -        |
+| renderFilterIcon | 自定义列过滤图标                   | `TableColumnRenderFilterIcon<T>`<TypePopover typeName="TableColumnRenderFilterIcon" /> | -        |

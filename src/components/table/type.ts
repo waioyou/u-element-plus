@@ -1,5 +1,11 @@
 import type { FormItemElement } from '@/types'
-import type { TableProps as ElTableProps, FormItemRule, ElTable, ElForm } from 'element-plus'
+import type {
+  TableProps as ElTableProps,
+  FormItemRule,
+  ElTable,
+  ElForm,
+  TableColumnCtx,
+} from 'element-plus'
 import type { Component, ComputedRef, Ref, VNode } from 'vue'
 
 export interface TableProps<T = any> extends ElTableProps<T> {
@@ -28,16 +34,20 @@ export interface TableProps<T = any> extends ElTableProps<T> {
     /** 如果设置了 type=index，可以通过传递 index 属性来自定义索引 */
     index?: number | ((index: number) => number)
     /** 自定义格式化 */
-    formatter?: (data: {
+    formatter?: (slotProps: {
       $index: number
       cellIndex: number
-      column: any
+      column: TableColumnCtx<T>
       expanded: boolean
       row: T
       store: any
     }) => VNode | string
     /** 自定义表头 */
-    renderHeader?: (data: { $index: number; column: any; store: any }) => VNode | string
+    renderHeader?: (slotProps: {
+      $index: number
+      column: TableColumnCtx<T>
+      store: any
+    }) => VNode | string
     sortable?: TableColumn['sortable']
     sortMethod?: TableColumn['sortMethod']
     sortOrders?: TableColumn['sortOrders']
@@ -86,7 +96,7 @@ export interface TableColumn<T = any> {
   /** 对应的表单元素属性或者动态组件属性 */
   attrs?: Record<string, any>
   /** 自定义过滤图标 */
-  renderFilterIcon?: (data: { filterOpened: boolean; item: TableColumn<T> }) => VNode | string
+  renderFilterIcon?: (slotProps: { filterOpened: boolean; item: TableColumn<T> }) => VNode | string
 
   // 与element-plus的行为不一致的属性
   /** 自定义格式化 */
@@ -153,19 +163,19 @@ export interface TableColumn<T = any> {
   filteredValue?: string[]
 }
 
-type TableColumnFormatter<T = any> = (data: {
+type TableColumnFormatter<T = any> = (slotProps: {
   $index: number
   cellIndex: number
-  column: any
+  column: TableColumnCtx<T>
   expanded: boolean
-  item: TableColumn<T>
   row: T
   store: any
+  item: TableColumn<T>
 }) => VNode | string
 
-type TableColumnRenderHeader<T = any> = (data: {
+type TableColumnRenderHeader<T = any> = (slotProps: {
   $index: number
-  column: any
+  column: TableColumnCtx<T>
   store: any
   item: TableColumn<T>
 }) => VNode | string

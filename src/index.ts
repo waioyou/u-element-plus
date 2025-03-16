@@ -14,7 +14,7 @@ const install = (app: App) => {
   })
 }
 
-export { install, UContextMenu, UForm, UOperation }
+export { install, UContextMenu, UForm, UOperation, UTable }
 
 export type * from './components/context-menu'
 export type * from './components/form'
