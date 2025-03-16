@@ -38,18 +38,16 @@ const formOptions = ref<FormOptions>([
     },
     span: '1/2',
     required: true,
-    slot: {
-      label: ({ item, label }) => {
-        return h(
-          ElButton,
-          {
-            type: 'primary',
-            text: true,
-            icon: User,
-          },
-          () => label,
-        )
-      },
+    renderLabel: ({ item, label }) => {
+      return h(
+        ElButton,
+        {
+          type: 'primary',
+          text: true,
+          icon: User,
+        },
+        () => label,
+      )
     },
   },
   {
@@ -60,10 +58,8 @@ const formOptions = ref<FormOptions>([
     attrs: {
       placeholder: '请输入邮箱',
     },
-    slot: {
-      label: ({ label }) =>
-        h(ElButton, { type: 'primary', text: true, icon: Message }, () => label),
-    },
+    renderLabel: ({ label }) =>
+      h(ElButton, { type: 'primary', text: true, icon: Message }, () => label),
   },
   {
     prop: 'password',
@@ -79,9 +75,8 @@ const formOptions = ref<FormOptions>([
       { required: true, message: '请输入' },
       { min: 6, max: 16, message: '密码长度为6-16位' },
     ],
-    slot: {
-      label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: Key }, () => label),
-    },
+    renderLabel: ({ label }) =>
+      h(ElButton, { type: 'primary', text: true, icon: Key }, () => label),
   },
   {
     prop: 'age',
@@ -93,9 +88,8 @@ const formOptions = ref<FormOptions>([
     },
     span: '1/2',
     required: true,
-    slot: {
-      label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: User }, () => label),
-    },
+    renderLabel: ({ label }) =>
+      h(ElButton, { type: 'primary', text: true, icon: User }, () => label),
   },
   {
     prop: 'occupation',
@@ -116,10 +110,8 @@ const formOptions = ref<FormOptions>([
         { label: '其他', value: '7' },
       ],
     },
-    slot: {
-      label: ({ label }) =>
-        h(ElButton, { type: 'primary', text: true, icon: CreditCard }, () => label),
-    },
+    renderLabel: ({ label }) =>
+      h(ElButton, { type: 'primary', text: true, icon: CreditCard }, () => label),
   },
   {
     prop: 'interests',
@@ -136,9 +128,8 @@ const formOptions = ref<FormOptions>([
         { value: 'coding', label: '编程' },
       ],
     },
-    slot: {
-      label: ({ label }) => h(ElButton, { type: 'primary', text: true, icon: Star }, () => label),
-    },
+    renderLabel: ({ label }) =>
+      h(ElButton, { type: 'primary', text: true, icon: Star }, () => label),
   },
   {
     prop: 'description',
@@ -153,10 +144,8 @@ const formOptions = ref<FormOptions>([
       maxlength: 200,
       showWordLimit: true,
     },
-    slot: {
-      label: ({ label }) =>
-        h(ElButton, { type: 'primary', text: true, icon: Document }, () => label),
-    },
+    renderLabel: ({ label }) =>
+      h(ElButton, { type: 'primary', text: true, icon: Document }, () => label),
   },
   {
     prop: 'agreeTerms',
@@ -167,14 +156,16 @@ const formOptions = ref<FormOptions>([
     attrs: {
       label: '我已阅读并同意用户协议和隐私政策',
     },
-    slot: {
-      label: () =>
-        h(ElButton, {
+    renderLabel: ({ label }) =>
+      h(
+        ElButton,
+        {
           type: formData.value.agreeTerms ? 'success' : 'danger',
           text: true,
           icon: formData.value.agreeTerms ? CircleCheck : CircleClose,
-        }),
-    },
+        },
+        () => label,
+      ),
   },
 ])
 const emailType = ref('')

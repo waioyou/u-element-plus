@@ -61,4 +61,9 @@ export const typeDefinitions: Record<string, string> = {
     $index: number
     item: TableColumn<T>
   }`,
+  FormItemElement: `'autocomplete' | 'cascader' | 'checkbox-group' | 'checkbox'
+  | 'color-picker' | 'date-picker' | 'input' | 'input-number'
+  | 'input-tag' | 'mention' | 'radio-group' | 'radio' | 'rate'
+  | 'select' | 'select-v2' | 'slider' | 'switch' | 'time-picker'
+  | 'time-select' | 'transfer' | 'tree-select' | 'upload' | 'title-bar'`,
 }
