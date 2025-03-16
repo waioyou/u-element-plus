@@ -55,4 +55,10 @@ export const typeDefinitions: Record<string, string> = {
     width?: string|number
     align?: 'left'|'center'|'right'
   }`,
+  TableDefaultSlotProps: `{
+    row: T
+    column: TableColumnCtx<T>
+    $index: number
+    item: TableColumn<T>
+  }`,
 }

@@ -60,13 +60,12 @@
 
 ### Props
 
-| 名称       | 说明                       | 类型                           | 默认值     |
-| ---------- | -------------------------- | ------------------------------ | ---------- |
-| slotProps  | el-table的列默认插槽属性   | -                              | -          |
-| item       | 操作列表格配置项           | -                              | -          |
-| operations | 操作按钮配置数组           | `Operations<T>`                | `[]`       |
-| type       | 按钮类型                   | `'button' \| 'text' \| 'link'` | `'button'` |
-| onlyIcon   | 是否只显示图标，不显示文字 | `boolean`                      | `false`    |
+| 名称       | 说明                       | 类型                                                      | 默认值     |
+| ---------- | -------------------------- | --------------------------------------------------------- | ---------- |
+| slotProps  | 表格操作列默认插槽属性     | `object` <TypePopover typeName="TableDefaultSlotProps" /> | -          |
+| operations | 操作按钮配置数组           | `Operations<T>`                                           | `[]`       |
+| type       | 按钮类型                   | `'button' \| 'text' \| 'link'`                            | `'button'` |
+| onlyIcon   | 是否只显示图标，不显示文字 | `boolean`                                                 | `false`    |
 
 ### Events
 
