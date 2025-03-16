@@ -2,6 +2,7 @@
 import { h } from 'vue'
 import type { App } from 'vue'
 import DefaultTheme from 'vitepress/theme'
+import TypePopover from '../components/type-popover/type-popover.vue'
 import './style.scss'
 
 // 使用组件demo效果预览插件
@@ -28,5 +29,6 @@ export default {
       locale: zhCn,
     })
     app.use(UElementPlus as unknown as any)
+    app.component('TypePopover', TypePopover)
   },
 }

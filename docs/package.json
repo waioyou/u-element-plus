@@ -21,15 +21,20 @@
     "@faker-js/faker": "^9.6.0",
     "@unocss/preset-rem-to-px": "^0.61.5",
     "element-plus": "^2.9.4",
+    "markdown-it-container": "^3.0.0",
     "unocss": "^0.61.5"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/markdown-it-container": "^2.0.10",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
     "@vitepress-demo-preview/component": "^2.3.2",
     "@vitepress-demo-preview/plugin": "^1.2.3",
+    "markdown-it": "^14.1.0",
     "postcss": "^8.5.3",
     "postcss-prefix-selector": "^2.1.0",
     "sass": "^1.83.4",
+    "shiki": "^3.2.1",
     "vitepress": "^1.6.3",
     "vue": "3.4.21"
   }

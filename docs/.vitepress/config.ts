@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { containerPreview, componentPreview } from '@vitepress-demo-preview/plugin'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import UnoCSS from 'unocss/vite'
+import typePopoverPlugin from './plugins/typePopoverPlugin'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -29,6 +30,7 @@ export default defineConfig({
     config: (md) => {
       md.use(containerPreview)
       md.use(componentPreview)
+      md.use(typePopoverPlugin)
     },
     //显示行数
     lineNumbers: false,
