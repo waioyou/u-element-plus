@@ -6,6 +6,7 @@ import type {
   ContextMenuInstance,
   ContextMenuProps,
   ContextMenuSlots,
+  ContextMenuItem,
 } from './types'
 
 defineOptions({ name: 'UContextMenu' })
@@ -14,6 +15,7 @@ const props = withDefaults(defineProps<ContextMenuProps>(), {
   offsetX: 0,
   offsetY: 0,
   manual: false,
+  items: () => [],
 })
 
 const emits = defineEmits<ContextMenuEmits>()
@@ -85,6 +87,10 @@ const hideMenu = (event: MouseEvent) => {
   document.removeEventListener('click', hideMenu)
 }
 
+const handleClick = (item: ContextMenuItem) => {
+  emits('select', item)
+}
+
 onMounted(() => {
   if (!props.manual) {
     nextTick(() => {
@@ -105,8 +111,26 @@ defineExpose<ContextMenuInstance>({
 
 <template>
   <teleport to="body">
-    <div ref="contextMenuRef" class="u-context-menu" :style="contextMenuStyle">
-      <slot> </slot>
-    </div>
+    <transition name="u-context-menu">
+      <div ref="contextMenuRef" v-show="visible" class="u-context-menu" :style="contextMenuStyle">
+        <slot>
+          <ul class="u-context-menu__list">
+            <li
+              v-for="item in items"
+              :key="item.name"
+              class="u-context-menu-item"
+              @click="handleClick(item)"
+            >
+              <el-icon v-if="item.icon" class="u-context-menu-item__icon">
+                <component :is="item.icon" />
+              </el-icon>
+              <i v-if="item.iconClass" class="u-context-menu-item__icon" :class="item.iconClass">
+              </i>
+              <span class="u-context-menu-item__label">{{ item.label }}</span>
+            </li>
+          </ul>
+        </slot>
+      </div>
+    </transition>
   </teleport>
 </template>

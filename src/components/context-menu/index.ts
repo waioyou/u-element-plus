@@ -1,5 +1,4 @@
 import type { App } from 'vue'
-import type { ContextMenuProps, ContextMenuInstance } from './types'
 import type { SFCWithInstall } from '@/types'
 import ContextMenu from './context-menu.vue'
 const _ContextMenu = ContextMenu as SFCWithInstall<typeof ContextMenu>
@@ -9,4 +8,4 @@ _ContextMenu.install = (app: App) => {
 }
 
 export default _ContextMenu
-export type { ContextMenuProps, ContextMenuInstance }
+export * from './types'

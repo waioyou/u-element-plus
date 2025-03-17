@@ -3,14 +3,58 @@
   --u-context-menu-border-radius: var(--el-border-radius-base, 4px);
   --u-context-menu-box-shadow: var(--el-box-shadow-light, 0 2px 12px 0 rgba(0, 0, 0, 0.1));
   --u-context-menu-z-index: 999;
-  --u-context-menu-padding: 12px;
   & {
     position: absolute;
     text-align: center;
-    padding: var(--u-context-menu-padding);
     background-color: var(--u-context-menu-bg-color);
     border-radius: var(--u-context-menu-border-radius);
     box-shadow: var(--u-context-menu-box-shadow);
     z-index: var(--u-context-menu-z-index);
+    padding: 4px 0;
+  }
+  &__list {
+    padding: 5px;
+    margin: 0;
+    list-style: none;
+  }
+  &-item {
+    height: 32px;
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--el-text-color-regular);
+    border-radius: var(--u-context-menu-border-radius);
+    .el-icon {
+      font-size: 16px;
+    }
+    &__icon {
+      font-size: 16px;
+      margin-right: 8px;
+    }
+    &__label {
+      font-size: var(--el-font-size-base);
+    }
+    &:hover {
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+    }
+  }
+  // 添加动画相关样式
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.1s ease-out;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  &-enter-to,
+  &-leave-from {
+    opacity: 1;
+    transform: scale(1);
   }
 }
