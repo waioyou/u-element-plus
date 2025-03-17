@@ -1,12 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Delete } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { ContextMenuItem } from 'u-element-plus'
+
+const items: ContextMenuItem[] = [
+  { name: 'add', label: '添加数据', iconClass: 'iconfont icon-add' },
+  { name: 'export-excel', label: '导出Excel', iconClass: 'iconfont icon-export-excel' },
+  { name: 'export-pdf', label: '导出PDF', iconClass: 'iconfont icon-export-pdf' },
+  { name: 'delete', label: '删除数据', icon: Delete },
+]
+
+const handleSelectMenu = (item: ContextMenuItem) => {
+  ElMessage.success(`点击了${item.label}`)
+}
+</script>
 <template>
   <!-- 在此区域内右键点击将显示菜单 -->
   <div class="basic">右键点击此区域</div>
-  <UContextMenu trigger-selectors=".basic">
-    <div class="menu-item">菜单项 1</div>
-    <div class="menu-item">菜单项 2</div>
-    <div class="menu-item">菜单项 3</div>
-  </UContextMenu>
+  <UContextMenu trigger-selectors=".basic" :items="items" @select="handleSelectMenu" />
 </template>
 <style scoped lang="scss">
 .basic {

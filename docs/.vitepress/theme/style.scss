@@ -153,9 +153,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 4857569 */
   src:
-    url('//at.alicdn.com/t/c/font_4857569_ar51f0kefm.woff2?t=1742064725706') format('woff2'),
-    url('//at.alicdn.com/t/c/font_4857569_ar51f0kefm.woff?t=1742064725706') format('woff'),
-    url('//at.alicdn.com/t/c/font_4857569_ar51f0kefm.ttf?t=1742064725706') format('truetype');
+    url('//at.alicdn.com/t/c/font_4857569_cvjlc33ftj.woff2?t=1742174557668') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4857569_cvjlc33ftj.woff?t=1742174557668') format('woff'),
+    url('//at.alicdn.com/t/c/font_4857569_cvjlc33ftj.ttf?t=1742174557668') format('truetype');
 }
 
 .iconfont {
@@ -166,7 +166,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-tishi:before {
+.icon-export-pdf:before {
+  content: '\e6bd';
+}
+
+.icon-export-excel:before {
+  content: '\e751';
+}
+
+.icon-info:before {
   content: '\e636';
 }
 

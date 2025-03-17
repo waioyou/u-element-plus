@@ -36,7 +36,7 @@ onMounted(async () => {
   <el-popover placement="top" trigger="click" popper-class="type-popover-popper">
     <template #reference>
       <span class="type-popover-reference">
-        <i class="type-popover-icon iconfont icon-tishi"></i>
+        <i class="type-popover-icon iconfont icon-info"></i>
       </span>
     </template>
     <div class="popover-content" v-html="typeDefinition"></div>
