@@ -149,3 +149,47 @@
     white-space: pre-wrap;
   }
 }
+
+@font-face {
+  font-family: 'iconfont'; /* Project id 4857569 */
+  src:
+    url('//at.alicdn.com/t/c/font_4857569_ar51f0kefm.woff2?t=1742064725706') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4857569_ar51f0kefm.woff?t=1742064725706') format('woff'),
+    url('//at.alicdn.com/t/c/font_4857569_ar51f0kefm.ttf?t=1742064725706') format('truetype');
+}
+
+.iconfont {
+  font-family: 'iconfont' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tishi:before {
+  content: '\e636';
+}
+
+.icon-detail:before {
+  content: '\e607';
+}
+
+.icon-user:before {
+  content: '\e608';
+}
+
+.icon-setting:before {
+  content: '\e7b9';
+}
+
+.icon-add:before {
+  content: '\e602';
+}
+
+.icon-edit:before {
+  content: '\e65f';
+}
+
+.icon-delete:before {
+  content: '\e6d4';
+}

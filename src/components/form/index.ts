@@ -8,4 +8,4 @@ _Form.install = (app: App) => {
 }
 
 export default _Form
-export * from './type'
+export * from './types'

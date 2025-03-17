@@ -1,0 +1,37 @@
+.u-operation {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  .el-button + .el-button {
+    margin-left: 6px;
+  }
+  .el-button:has(i + span) {
+    span {
+      margin-left: 6px;
+    }
+  }
+  .el-button.is-text {
+    padding: 0px 6px;
+  }
+  .el-button.is-text + .el-button.is-text {
+    margin-left: 0px;
+  }
+}
+
+.el-table__cell.is-center {
+  .u-operation {
+    justify-content: center;
+  }
+}
+
+.el-table__cell.is-right {
+  .u-operation {
+    justify-content: flex-end;
+  }
+}
+
+.el-table__cell.is-left {
+  .u-operation {
+    justify-content: flex-start;
+  }
+}

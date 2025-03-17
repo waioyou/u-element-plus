@@ -96,106 +96,21 @@
 
 ### FormItemOption 配置项
 
-<table style="width: 100%;">
-   <tbody>
- <tr>
-        <th style="width: 30%;">名称</th>
-        <th style="width: 30%;">说明</th>
-        <th style="width: 40%;">类型</th>
-    </tr>
-    <tr>
-        <td>element</td>
-        <td>表单项类型，支持所有 Element Plus 表单组件及扩展组件</td>
-        <td>
-            <code>
-                autocomplete、cascader、checkbox-group、checkbox、color-picker、date-picker、datetime-picker、input、input-number、radio、radio-group、rate、select、select-v2、slider、switch、time-picker、time-select、transfer、tree-select、upload、section-header
-            </code>
-        </td>
-    </tr>
-    <tr>
-        <td>value</td>
-        <td>表单项的值</td>
-        <td><code>any</code></td>
-    </tr>
-    <tr>
-        <td>label</td>
-        <td>标签文本</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>required</td>
-        <td>是否必填</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>rules</td>
-        <td>表单验证规则</td>
-        <td><code>FormItemRule[]</code></td>
-    </tr>
-    <tr>
-        <td>attrs</td>
-        <td>传递给表单项组件的属性</td>
-        <td><code>object</code></td>
-    </tr>
-    <tr>
-        <td>span</td>
-        <td>表单项宽度占比，如 '1/2'</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>view</td>
-        <td>是否为查看模式</td>
-        <td><code>boolean</code></td>
-    </tr>
-    <tr>
-        <td>if</td>
-        <td>条件渲染（v-if）</td>
-        <td><code>boolean | ((options: FormOptions) => boolean)</code></td>
-    </tr>
-    <tr>
-        <td>show</td>
-        <td>条件显示（v-show）</td>
-        <td><code>boolean | ((options: FormOptions) => boolean)</code></td>
-    </tr>
-    <tr>
-        <td>formatter</td>
-        <td>查看模式下的格式化函数</td>
-        <td><code>(value: any) => VNode | string | number</code></td>
-    </tr>
-    <tr>
-        <td>component</td>
-        <td>自定义动态组件</td>
-        <td><code>Component</code></td>
-    </tr>
-    <tr>
-        <td>style</td>
-        <td>自定义样式</td>
-        <td><code>CSSProperties</code></td>
-    </tr>
-    <tr>
-        <td>class</td>
-        <td>自定义类名</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>tooltip</td>
-        <td>标签提示信息</td>
-        <td><code>string</code></td>
-    </tr>
-    <tr>
-        <td>slot</td>
-        <td>插槽配置</td>
-        <td><code>FormItemSlot</code></td>
-    </tr>
-   </tbody>
-</table>
-
-:::details 查看 FormItemSlot 类型
-
-```ts
-type FormItemSlot = {
-  label?: ({ item, label }: { item: FormItemOption; label: string }) => VNode | string | number
-  error?: ({ item, error }: { item: FormItemOption; error: string }) => VNode | string | number
-  default?: ({ item, view }: { item: FormItemOption; view: boolean }) => VNode | string | number
-}
-```
+| 名称      | 说明                                                 | 类型                                             |
+| --------- | ---------------------------------------------------- | ------------------------------------------------ |
+| element   | 表单项类型，支持所有 Element Plus 表单组件及扩展组件 | `enum` <TypePopover typeName="FormItemElement"/> |
+| value     | 表单项的值                                           | `any`                                            |
+| label     | 标签文本                                             | `string`                                         |
+| required  | 是否必填                                             | `boolean`                                        |
+| rules     | 表单验证规则                                         | `FormItemRule[]`                                 |
+| attrs     | 传递给表单项组件的属性                               | `Record<string, any>`                            |
+| span      | 表单项宽度占比，如 '1/2'                             | `string`                                         |
+| view      | 是否为查看模式                                       | `boolean`                                        |
+| if        | 条件渲染（v-if）                                     | `boolean \| ((options: FormOptions) => boolean)` |
+| show      | 条件显示（v-show）                                   | `boolean \| ((options: FormOptions) => boolean)` |
+| formatter | 查看模式下的格式化函数                               | `(value: any) => VNode \| string \| number`      |
+| component | 自定义动态组件                                       | `Component`                                      |
+| style     | 自定义样式                                           | `CSSProperties`                                  |
+| class     | 自定义类名                                           | `string`                                         |
+| tooltip   | 标签提示信息                                         | `string`                                         |
+| slot      | 插槽配置                                             | `FormItemSlot`                                   |

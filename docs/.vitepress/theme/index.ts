@@ -2,7 +2,8 @@
 import { h } from 'vue'
 import type { App } from 'vue'
 import DefaultTheme from 'vitepress/theme'
-import './style.css'
+import TypePopover from '../components/type-popover/type-popover.vue'
+import './style.scss'
 
 // 使用组件demo效果预览插件
 import { ElementPlusContainer } from '@vitepress-demo-preview/component'
@@ -14,7 +15,7 @@ import UElementPlus from 'u-element-plus'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-
+import 'uno.css'
 export default {
   extends: DefaultTheme,
   Layout: () => {
@@ -28,5 +29,6 @@ export default {
       locale: zhCn,
     })
     app.use(UElementPlus as unknown as any)
+    app.component('TypePopover', TypePopover)
   },
 }

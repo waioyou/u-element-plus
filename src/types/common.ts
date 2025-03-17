@@ -10,3 +10,27 @@ export type TypeNoReadonly<T> = {
 export type InstancePropsType<T extends abstract new (...args: any) => any> = Partial<
   TypeNoReadonly<InstanceType<T>['$props']>
 >
+
+export type FormItemElement =
+  | 'autocomplete'
+  | 'cascader'
+  | 'checkbox-group'
+  | 'checkbox'
+  | 'color-picker'
+  | 'date-picker'
+  | 'input'
+  | 'input-number'
+  | 'input-tag'
+  | 'mention'
+  | 'radio-group'
+  | 'radio'
+  | 'rate'
+  | 'select'
+  | 'select-v2'
+  | 'slider'
+  | 'switch'
+  | 'time-picker'
+  | 'time-select'
+  | 'transfer'
+  | 'tree-select'
+  | 'upload'

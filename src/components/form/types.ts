@@ -22,7 +22,7 @@ import type {
   TreeSelectAttrs,
   UploadAttrs,
 } from '@/types/form'
-import type { TypeNoReadonly } from '@/types'
+import type { FormItemElement, TypeNoReadonly } from '@/types'
 import type {
   FormProps as ElFormProps,
   FormItemProps as ElFormItemProps,
@@ -81,31 +81,6 @@ export type FormOptions = FormItemOption[]
 //   | FormItemOptionWithSectionHeader
 //   | BaseFormItemOption
 
-type FormItemElement =
-  | 'autocomplete'
-  | 'cascader'
-  | 'checkbox-group'
-  | 'checkbox'
-  | 'color-picker'
-  | 'date-picker'
-  | 'input'
-  | 'input-number'
-  | 'input-tag'
-  | 'mention'
-  | 'radio-group'
-  | 'radio'
-  | 'rate'
-  | 'select'
-  | 'select-v2'
-  | 'slider'
-  | 'switch'
-  | 'time-picker'
-  | 'time-select'
-  | 'transfer'
-  | 'tree-select'
-  | 'upload'
-  | 'title-bar'
-
 /** 表单元素属性查找表 */
 export interface FormItemElementAttrsMap {
   autocomplete: AutocompleteAttrs
@@ -138,13 +113,17 @@ export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemPr
   /** 标签 */
   label?: string
   /** 元素 */
-  element?: FormItemElement
+  element?: FormItemElement | 'title-bar'
   /** 是否必填 */
   required?: boolean
   /** 校验规则 */
   rules?: FormItemRule[]
-  /** 插槽 */
-  slot?: FormItemSlot
+  /** 渲染默认插槽 */
+  render?: (slotProps: { item: FormItemOption; view: boolean }) => VNode | string
+  /** 渲染错误插槽 */
+  renderError?: (slotProps: { item: FormItemOption; error: string }) => VNode | string
+  /** 渲染标签插槽 */
+  renderLabel?: (slotProps: { item: FormItemOption; label: string }) => VNode | string
   /** 是否查看模式 */
   view?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 查看模式下格式化显示内容 */
@@ -165,12 +144,6 @@ export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemPr
   span?: string
   attrs?: Record<string, any>
   tooltip?: string
-}
-
-export type FormItemSlot = {
-  label?: ({ item, label }: { item: FormItemOption; label: string }) => VNode | string | number
-  error?: ({ item, error }: { item: FormItemOption; error: string }) => VNode | string | number
-  default?: ({ item, view }: { item: FormItemOption; view: boolean }) => VNode | string | number
 }
 
 // export interface FormItemOptionWithAutoComplete extends Omit<BaseFormItemOption, 'element'> {
