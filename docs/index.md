@@ -5,7 +5,7 @@ layout: home
 hero:
   name: 'U Element Plus'
   text: '基于Element Plus的高效组件库'
-  tagline: 简化开发流程，提升开发效率
+  tagline: vue^3.4.0 + element-plus^2.6.0
   actions:
     - theme: brand
       text: 开始使用

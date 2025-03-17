@@ -37,7 +37,8 @@
     "test:coverage": "vitest --coverage",
     "docs:dev": "./docs/node_modules/.bin/vitepress dev docs",
     "docs:build": "./docs/node_modules/.bin/vitepress build docs",
-    "docs:preview": "./docs/node_modules/.bin/vitepress preview docs"
+    "docs:preview": "./docs/node_modules/.bin/vitepress preview docs",
+    "docs:deploy": "pnpm run docs:build && gh-pages -d docs/.vitepress/dist -r https://github.com/waioyou/u-element-plus-docs.git -b gh-pages"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,vue}": [
