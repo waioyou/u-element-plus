@@ -2,7 +2,24 @@
   "name": "u-element-plus",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": [
+    "dist/index.css"
+  ],
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/u-element-plus.js",
+      "require": "./dist/u-element-plus.umd.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/index.css": "./dist/index.css"
+  },
+  "main": "./dist/u-element-plus.umd.cjs",
+  "module": "./dist/u-element-plus.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -39,9 +56,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
-    "element-plus": "^2.9.4",
-    "lodash-es": "^4.17.21",
-    "vue": "3.4.21"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
@@ -70,8 +85,13 @@
     "sort-package-json": "^2.14.0",
     "typescript": "~5.6.3",
     "vite": "^6.0.5",
+    "vite-plugin-dts": "^4.5.3",
     "vite-plugin-vue-devtools": "^7.6.8",
     "vitest": "^3.0.3",
     "vue-tsc": "^2.1.10"
+  },
+  "peerDependencies": {
+    "element-plus": "^2.6.0",
+    "vue": "^3.4.0"
   }
 }

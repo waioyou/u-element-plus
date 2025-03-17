@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<FormProps>(), {
   /** 是否滚动到错误字段 */
   scrollToError: false,
   /** 滚动到视图选项 */
-  scrollIntoViewOptions: false,
+  scrollIntoViewOptions: () => ({}),
 })
 
 const instance = getCurrentInstance()!
