@@ -22,4 +22,4 @@ export type * from './components/table'
 export type * from './components/operation'
 export default {
   install,
-}
+} as any

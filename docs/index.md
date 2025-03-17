@@ -4,19 +4,54 @@ layout: home
 
 hero:
   name: 'U Element Plus'
-  text: '基于Element Plus的二次封装,实现如通用表格组件,通用表单组件等功能.'
-  tagline: My great project tagline
+  text: '基于Element Plus的高效组件库'
+  tagline: 简化开发流程，提升开发效率
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 开始使用
+      link: /components/form
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 组件列表
+      link: /components/table
 
 features:
-  - title: 表格组件
-    details: 通过简单的ts配置，实现表格的展示、编辑等功能。
   - title: 表单组件
-    details: 通过简单的ts配置，实现表单的展示，以及实现动态表单功能。
+    details: 通过简单的配置项动态生成表单，支持所有Element Plus表单组件，实现混合布局、动态表单、查看模式等功能。
+    icon: 📝
+  - title: 表格组件
+    details: 通过配置项动态生成表格，支持自定义列模板、多级表头、表格编辑、动态组件渲染等高级功能。
+    icon: 📊
+  - title: 右键菜单
+    details: 提供自定义右键菜单功能，支持指定触发区域、手动控制显示隐藏，增强用户交互体验。
+    icon: 🖱️
+  - title: 高度可定制
+    details: 所有组件均支持原Element Plus组件的属性、事件和插槽，同时提供更多扩展功能和简化配置。
+    icon: ⚙️
+  - title: TypeScript支持
+    details: 完整的TypeScript类型定义，提供智能提示和类型检查，提高开发效率和代码质量。
+    icon: 📘
+  - title: 易于使用
+    details: 提供丰富的示例和文档，帮助开发者快速上手。
+    icon: 💡
+
+footer: MIT Licensed | Copyright © 2023-present
 ---
+
+<!-- ## 快速开始
+
+```bash
+# 安装依赖
+npm install u-element-plus
+```
+
+```js
+// main.ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import UElementPlus from 'u-element-plus'
+import 'u-element-plus/dist/style.css'
+
+const app = createApp(App)
+app.use(UElementPlus)
+app.mount('#app')
+``` -->

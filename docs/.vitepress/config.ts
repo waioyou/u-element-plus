@@ -63,8 +63,8 @@ export default defineConfig({
           { text: 'Table 表格', link: '/components/table' },
           { text: 'Operation 操作栏', link: '/components/operation' },
           { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' },
+          // { text: 'Markdown Examples', link: '/markdown-examples' },
+          // { text: 'Runtime API Examples', link: '/api-examples' },
         ],
       },
     ],
@@ -88,7 +88,7 @@ export default defineConfig({
     // 返回顶部按钮文字
     returnToTopLabel: '返回顶部',
     // 社交链接
-    socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/waioyou/u-element-plus.git' }],
     // 搜索
     search: {
       provider: 'local',
