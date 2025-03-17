@@ -8,8 +8,9 @@ import typePopoverPlugin from './plugins/typePopoverPlugin'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'U Element Plus',
-  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: '/u-element-plus-docs/favicon.ico' }]],
   description: '基于Element Plus的二次封装,实现如表格组件,表单组件等功能.',
+  base: '/u-element-plus-docs/',
   vite: {
     plugins: [vueJsx(), UnoCSS()],
     resolve: {
