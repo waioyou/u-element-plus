@@ -1,6 +1,5 @@
 // https://vitepress.dev/guide/custom-theme
 import { h } from 'vue'
-import type { App } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import TypePopover from '../components/type-popover/type-popover.vue'
 import './style.scss'
@@ -15,6 +14,8 @@ import UElementPlus from 'u-element-plus'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import 'element-plus/theme-chalk/dark/css-vars.css'
+
 import 'uno.css'
 import { Theme, EnhanceAppContext } from 'vitepress'
 export default {
