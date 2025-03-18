@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T">
-import { computed, getCurrentInstance, ref } from 'vue'
+import { computed, getCurrentInstance, ref, useAttrs } from 'vue'
 import RenderVNode from '../render-v-node/render-v-node'
 import UTableColumn from './table-column.vue'
 import { isNil, omit } from '@/utils'
@@ -42,11 +42,13 @@ const filerSelectionProps = computed(() => {
   return omit(props.selectionProps, ['formatter', 'renderHeader'])
 })
 
+const attrs = useAttrs()
+
 // 过滤空值，避免覆盖el-table的默认属性
 const filerElTableProps = computed(() => {
   const emptyKeys = Object.keys(props).filter((key) => isNil((props as any)[key]))
   emptyKeys.push('columns', 'editable')
-  return omit(props, emptyKeys)
+  return omit({ ...props, ...attrs }, emptyKeys)
 })
 const instance = getCurrentInstance()!
 const tableRef = ref<TableInstance>()

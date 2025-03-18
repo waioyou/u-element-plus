@@ -47,25 +47,6 @@ const { getElTableColumnAttrs, getFormItemRules } = useTableColumn(props)
           </template>
         </TableColumn>
       </template>
-      <!-- 自定义插槽 -->
-      <slot v-else-if="$slots[item.prop]" :name="item.prop" v-bind="slotProps" :item="item" />
-      <!-- 渲染动态组件 -->
-      <template v-else-if="item.component">
-        <UOperation
-          v-if="item.component === 'operation'"
-          :slotProps="slotProps"
-          :item="item"
-          v-bind="item.attrs"
-          @click-operation="(...args) => emit('click-operation', ...args)"
-        />
-        <component
-          v-else
-          :is="item.component"
-          :slotProps="slotProps"
-          :item="item"
-          v-bind="item.attrs"
-        />
-      </template>
       <!-- 编辑 -->
       <template v-else-if="slotProps.$index > -1 && editable && item.element">
         <el-form-item :prop="`${slotProps.$index}.${item.prop}`" :rules="getFormItemRules(item)">
@@ -113,6 +94,25 @@ const { getElTableColumnAttrs, getFormItemRules } = useTableColumn(props)
             </template>
           </component>
         </el-form-item>
+      </template>
+      <!-- 自定义插槽 -->
+      <slot v-else-if="$slots[item.prop]" :name="item.prop" v-bind="slotProps" :item="item" />
+      <!-- 渲染动态组件 -->
+      <template v-else-if="item.component">
+        <UOperation
+          v-if="item.component === 'operation'"
+          :slotProps="slotProps"
+          :item="item"
+          v-bind="item.attrs"
+          @click-operation="(...args) => emit('click-operation', ...args)"
+        />
+        <component
+          v-else
+          :is="item.component"
+          :slotProps="slotProps"
+          :item="item"
+          v-bind="item.attrs"
+        />
       </template>
       <!-- formatter -->
       <template v-else-if="item.formatter">
