@@ -1,11 +1,9 @@
 import type { TypeNoReadonly } from '@/types'
 import type { ButtonProps, PopconfirmProps } from 'element-plus'
+import type { TableColumnDefaultProps } from '../table/type'
 
 export interface OperationProps<T = any> {
-  slotProps?: {
-    row: T
-    $index: number
-  }
+  slotProps?: TableColumnDefaultProps<T>
   operations: Operations<T>
   type?: 'button' | 'text' | 'link'
   onlyIcon?: boolean

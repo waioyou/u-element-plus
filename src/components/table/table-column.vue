@@ -1,7 +1,7 @@
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends Record<string, any>">
 import RenderVNode from '../render-v-node/render-v-node'
 import UOperation from '../operation/operation.vue'
-import type { TableColumn, TableColumnProps } from './type'
+import type { TableColumnDefaultProps, TableColumnProps } from './type'
 import { useTableColumn } from './use-table-column'
 defineSlots<Record<string, any>>()
 
@@ -32,7 +32,7 @@ const { getElTableColumnAttrs, getFormItemRules } = useTableColumn(props)
         :v-node="item.renderFilterIcon({ ...slotProps, item })"
       />
     </template>
-    <template #default="slotProps">
+    <template #default="slotProps: TableColumnDefaultProps<T>">
       <!-- 递归处理多级表头 -->
       <template v-if="item.children">
         <TableColumn

@@ -34,14 +34,7 @@ export interface TableProps<T = any> extends ElTableProps<T> {
     /** 如果设置了 type=index，可以通过传递 index 属性来自定义索引 */
     index?: number | ((index: number) => number)
     /** 自定义格式化 */
-    formatter?: (slotProps: {
-      $index: number
-      cellIndex: number
-      column: TableColumnCtx<T>
-      expanded: boolean
-      row: T
-      store: any
-    }) => VNode | string
+    formatter?: (slotProps: Omit<TableColumnDefaultProps<T>, 'item'>) => VNode | string
     /** 自定义表头 */
     renderHeader?: (slotProps: {
       $index: number
@@ -96,13 +89,13 @@ export interface TableColumn<T = any> {
   /** 对应的表单元素属性或者动态组件属性 */
   attrs?: Record<string, any>
   /** 自定义过滤图标 */
-  renderFilterIcon?: (slotProps: { filterOpened: boolean; item: TableColumn<T> }) => VNode | string
+  renderFilterIcon?: (slotProps: TableColumnFilterIconProps<T>) => VNode | string
 
   // 与element-plus的行为不一致的属性
   /** 自定义格式化 */
-  formatter?: TableColumnFormatter<T>
+  formatter?: (slotProps: TableColumnDefaultProps<T>) => VNode | string
   /** 自定义表头 */
-  renderHeader?: TableColumnRenderHeader<T>
+  renderHeader?: (slotProps: TableColumnHeaderProps<T>) => VNode | string
 
   /** 显示的标题 */
   label?: string
@@ -163,7 +156,12 @@ export interface TableColumn<T = any> {
   filteredValue?: string[]
 }
 
-type TableColumnFormatter<T = any> = (slotProps: {
+export interface TableColumnProps {
+  item: TableColumn
+  editable: boolean
+}
+
+export interface TableColumnDefaultProps<T = any> {
   $index: number
   cellIndex: number
   column: TableColumnCtx<T>
@@ -171,16 +169,16 @@ type TableColumnFormatter<T = any> = (slotProps: {
   row: T
   store: any
   item: TableColumn<T>
-}) => VNode | string
+}
 
-type TableColumnRenderHeader<T = any> = (slotProps: {
+export interface TableColumnHeaderProps<T = any> {
   $index: number
   column: TableColumnCtx<T>
-  store: any
   item: TableColumn<T>
-}) => VNode | string
+  store: any
+}
 
-export interface TableColumnProps {
-  item: TableColumn
-  editable: boolean
+export interface TableColumnFilterIconProps<T = any> {
+  filterOpened: boolean
+  item: TableColumn<T>
 }
