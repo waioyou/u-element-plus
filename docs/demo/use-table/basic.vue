@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted } from 'vue'
+import { computed, h, onBeforeMount, onMounted } from 'vue'
 import { ElTag } from 'element-plus'
 import { useTable } from 'u-element-plus'
 import { dicts, getDictType, getDictText, getUserList } from '@docs/mock/user'
 import { ElMessage } from 'element-plus'
 import { User } from '@docs/mock/types'
+import { ElText } from 'element-plus'
 
 const sleep = (wait: number = 2000) => {
   return new Promise((resolve) => setTimeout(resolve, wait))
@@ -16,6 +17,7 @@ const {
   tableData,
   indexProps,
   selectionProps,
+  expandProps,
   tableColumns,
   tableOperations,
   multipleSelection,
@@ -33,6 +35,25 @@ const {
 onBeforeMount(() => {
   selectionProps.value.selectable = (row: User, index: number) => {
     return index % 2 === 0
+  }
+  indexProps.value = {
+    ...indexProps.value,
+    width: 60,
+    formatter: (data: { $index: number }) => {
+      const index = data.$index + 1
+      if (index === 1) {
+        return h(ElText, { type: 'danger' }, () => index)
+      } else if (index === 2) {
+        return h(ElText, { type: 'warning' }, () => index)
+      } else if (index === 3) {
+        return h(ElText, { type: 'success' }, () => index)
+      } else {
+        return h(ElText, {}, () => index)
+      }
+    },
+    renderHeader: () => {
+      return h(ElText, { type: 'primary' }, () => '序号')
+    },
   }
 })
 
@@ -134,8 +155,13 @@ const handleSelectNone = () => {
     show-selection
     :selection-props="selectionProps"
     @selection-change="handleSelectionChange"
+    show-expand
+    :expand-props="expandProps"
     @click-operation="handleClickOperation"
   >
+    <template #expand>
+      <el-text> 展开行 </el-text>
+    </template>
     <template #status="{ row }">
       <el-tag :type="getDictType(dicts.status, row.status)">
         {{ getDictText(dicts.status, row.status) }}

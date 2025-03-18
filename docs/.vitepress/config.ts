@@ -68,6 +68,10 @@ export default defineConfig({
           // { text: 'Runtime API Examples', link: '/api-examples' },
         ],
       },
+      {
+        text: 'Hooks',
+        items: [{ text: 'useTable 表格Hook', link: '/hooks/use-table' }],
+      },
     ],
 
     // 添加最后更新时间的中文设置
