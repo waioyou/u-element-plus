@@ -74,8 +74,8 @@ export type TableColumns<T = any> = TableColumn<T>[]
 
 export interface TableColumn<T = any> {
   // 扩展属性
-  /** 是否渲染 */
-  if?: boolean | ComputedRef<boolean> | Ref<boolean>
+  /** 是否渲染 对应v-if */
+  rendered?: boolean | ComputedRef<boolean> | Ref<boolean>
   /** 多级表头 */
   children?: TableColumn<T>[]
   /** 动态组件 */

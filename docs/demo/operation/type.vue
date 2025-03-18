@@ -26,7 +26,7 @@ const operationType = ref<'button' | 'link' | 'text'>('text')
 onMounted(() => {
   setTableOperations([
     // 根据状态判断是否显示编辑按钮
-    { label: '编辑', name: 'edit', if: (row) => row.status === '1' },
+    { label: '编辑', name: 'edit', rendered: (row) => row.status === '1' },
     {
       label: '删除',
       name: 'delete',

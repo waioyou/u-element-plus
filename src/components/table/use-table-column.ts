@@ -9,7 +9,7 @@ export const useTableColumn = (props: TableColumnProps) => {
       'formatter',
       'render',
       'component',
-      'if',
+      'rendered',
       'element',
       'rules',
       'attrs',

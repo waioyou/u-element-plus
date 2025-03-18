@@ -136,7 +136,7 @@ import TypePopover from '../.vitepress/plugins/TypePopover.vue'
 | 名称             | 说明                               | 类型                                                                                   | 默认值   |
 | ---------------- | ---------------------------------- | -------------------------------------------------------------------------------------- | -------- |
 | prop             | 字段名称                           | `string`                                                                               | `必填项` |
-| if               | 条件渲染                           | `boolean \| ComputedRef<boolean> \| Ref<boolean>`                                      | `true`   |
+| rendered         | 条件渲染                           | `boolean \| ComputedRef<boolean> \| Ref<boolean>`                                      | `true`   |
 | children         | 多级表头的子列                     | `TableColumn[]`                                                                        | -        |
 | component        | 动态组件                           | `Component \| 'operation'`                                                             | -        |
 | element          | 表单元素类型                       | `enum` <TypePopover typeName="TableColumnElement" />                                   | -        |

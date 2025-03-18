@@ -3,13 +3,11 @@ import { onMounted, ref } from 'vue'
 import { ElTag, ElMessage } from 'element-plus'
 import { useTable } from 'u-element-plus'
 import { dicts, getDictType, getDictText, getUserList } from '@docs/mock/user'
-import type { User } from '@docs/mock/types'
 
-const { tableRef, tableData, tableColumns, tableOperations, setTableColumns, setTableOperations } =
-  useTable(async () => {
-    const res = await getUserList(10)
-    return res.data
-  })
+const { tableRef, tableData, tableColumns, setTableColumns } = useTable(async () => {
+  const res = await getUserList(10)
+  return res.data
+})
 
 const editable = ref(false)
 

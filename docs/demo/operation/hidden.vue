@@ -42,17 +42,17 @@ onMounted(() => {
     {
       label: '详情',
       name: 'detail',
-      if: () => buttonPermission.value.includes('mock:detail'),
+      rendered: () => buttonPermission.value.includes('mock:detail'),
     },
     {
       label: '启用',
       name: 'enable',
-      if: (row) => row.status === '0' && buttonPermission.value.includes('mock:enable'),
+      rendered: (row) => row.status === '0' && buttonPermission.value.includes('mock:enable'),
     },
     {
       label: '禁用',
       name: 'disable',
-      if: (row) => row.status === '1' && buttonPermission.value.includes('mock:disable'),
+      rendered: (row) => row.status === '1' && buttonPermission.value.includes('mock:disable'),
     },
     {
       label: '删除',
@@ -64,12 +64,12 @@ onMounted(() => {
         title: `确定删除第【${index + 1}】条数据【${row.name}】吗？`,
         width: 170,
       }),
-      if: () => buttonPermission.value.includes('mock:delete'),
+      rendered: () => buttonPermission.value.includes('mock:delete'),
     },
     {
       label: '编辑',
       name: 'edit',
-      if: (row) => row.status === '1' && buttonPermission.value.includes('mock:edit'),
+      rendered: (row) => row.status === '1' && buttonPermission.value.includes('mock:edit'),
     },
   ])
   setTableColumns([

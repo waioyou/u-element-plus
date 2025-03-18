@@ -46,12 +46,12 @@ const handleCancel = (item: OperationItem) => {
 }
 
 /** 处理按钮是否显示 */
-const handleIf = (item: OperationItem) => {
-  if (!Reflect.has(item, 'if')) return true
-  if (typeof item.if === 'function') {
-    return item.if(props.slotProps!.row)
+const handleRendered = (item: OperationItem) => {
+  if (!Reflect.has(item, 'rendered')) return true
+  if (typeof item.rendered === 'function') {
+    return item.rendered(props.slotProps!.row)
   } else {
-    return item.if
+    return item.rendered
   }
 }
 </script>
@@ -59,7 +59,7 @@ const handleIf = (item: OperationItem) => {
 <template>
   <div class="u-operation">
     <template v-for="item in operations" :key="item.name">
-      <template v-if="handleIf(item)">
+      <template v-if="handleRendered(item)">
         <el-popconfirm
           v-if="item.confirmAttrs"
           v-bind="getElConfirmAttrs(item)"

@@ -18,7 +18,7 @@ export type Operations<T = any> = OperationItem<T>[]
 export interface OperationItem<T = any> {
   name: string
   label: string
-  if?: boolean | ((row: T) => boolean)
+  rendered?: boolean | ((row: T) => boolean)
   buttonAttrs?: (row: T, index: number) => OperationItemButtonAttrs
   confirmAttrs?: (row: T, index: number) => OperationItemConfirmAttrs
 }

@@ -13,7 +13,7 @@ const { getElTableColumnAttrs, getFormItemRules } = useTableColumn(props)
 </script>
 
 <template>
-  <el-table-column v-if="item.prop && item.if !== false" v-bind="getElTableColumnAttrs">
+  <el-table-column v-if="item.prop && item.rendered !== false" v-bind="getElTableColumnAttrs">
     <template #header="slotProps">
       <template v-if="$slots[`header-${item.prop}`]">
         <slot :name="`header-${item.prop}`" v-bind="slotProps" :item="item" />

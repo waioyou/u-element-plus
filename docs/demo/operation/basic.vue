@@ -23,7 +23,7 @@ const handleClickOperation = (name: string, row: User, index: number) => {
 
 onMounted(() => {
   setTableOperations([
-    { label: '编辑', name: 'edit', if: (row) => row.status === '1' },
+    { label: '编辑', name: 'edit', rendered: (row) => row.status === '1' },
     {
       label: '详情',
       name: 'detail',

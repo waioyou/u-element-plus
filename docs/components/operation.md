@@ -40,7 +40,7 @@
 
 ## 隐藏按钮
 
-通过按钮配置项`if`属性设置按钮是否隐藏。它接受`boolean`或者`(row) => boolean`类型的值。
+通过按钮配置项`rendered`属性设置按钮是否隐藏。它接受`boolean`或者`(row) => boolean`类型的值。
 
 <preview path="../demo/operation/hidden.vue"></preview>
 
@@ -81,7 +81,7 @@ export type Operations<T = any> = OperationItem<T>[]
 export interface OperationItem<T = any> {
   name: string
   label: string
-  if?: boolean | ((row: T) => boolean)
+  rendered?: boolean | ((row: T) => boolean)
   buttonAttrs?: (row: T, index: number) => OperationItemButtonAttrs
   confirmAttrs?: (row: T, index: number) => OperationItemConfirmAttrs
 }
