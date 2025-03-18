@@ -18,6 +18,8 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import 'uno.css'
 import { Theme, EnhanceAppContext } from 'vitepress'
+import { generateUserList } from '@docs/mock/user'
+generateUserList()
 export default {
   extends: DefaultTheme,
   Layout: () => {
