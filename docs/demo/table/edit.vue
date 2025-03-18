@@ -1,127 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useTableData } from './useTableData'
-import { ElMessage } from 'element-plus'
-import type { TableColumns, TableInstance } from 'u-element-plus'
-import type { TableDataItem } from './useTableData'
+import { onMounted, ref } from 'vue'
+import { ElTag, ElMessage } from 'element-plus'
+import { useTable } from 'u-element-plus'
+import { dicts, getDictType, getDictText, getUserList } from '@docs/mock/user'
+import type { User } from '@docs/mock/types'
 
-const tableRef = ref<TableInstance>()
+const { tableRef, tableData, tableColumns, tableOperations, setTableColumns, setTableOperations } =
+  useTable(async () => {
+    const res = await getUserList(10)
+    return res.data
+  })
+
 const editable = ref(false)
-
-const {
-  tableData,
-  genderOptions,
-  schoolOptions,
-  scoreOptions,
-  statusOptions,
-  getOptionText,
-  getOptionType,
-} = useTableData(6, true)
-
-const columns = ref<TableColumns<TableDataItem>>([
-  { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
-  {
-    prop: 'name',
-    label: '姓名',
-    minWidth: 120,
-    align: 'left',
-    element: 'input',
-    rules: [{ required: true, message: '请输入姓名' }],
-    attrs: {
-      placeholder: '请输入',
-      clearable: true,
-    },
-  },
-  {
-    prop: 'gender',
-    label: '性别',
-    minWidth: 100,
-    align: 'center',
-    element: 'select',
-    rules: [{ required: true, message: '请选择性别' }],
-    attrs: {
-      placeholder: '请选择',
-      clearable: true,
-      options: genderOptions,
-    },
-    formatter: ({ row }) => {
-      return getOptionText(genderOptions, row.gender)
-    },
-  },
-  {
-    prop: 'birthday',
-    label: '出生日期',
-    minWidth: 160,
-    align: 'center',
-    element: 'date-picker',
-    rules: [{ required: true, message: '请选择出生日期' }],
-    attrs: {
-      placeholder: '请选择',
-      clearable: true,
-      type: 'date',
-      format: 'YYYY-MM-DD',
-      valueFormat: 'YYYY-MM-DD',
-    },
-  },
-  {
-    prop: 'age',
-    label: '年龄',
-    minWidth: 140,
-    align: 'center',
-    element: 'input-number',
-    rules: [{ required: true, message: '请输入年龄' }],
-    attrs: {
-      placeholder: '请输入',
-      clearable: true,
-    },
-  },
-  {
-    prop: 'school',
-    label: '毕业学校',
-    minWidth: 150,
-    align: 'center',
-    element: 'autocomplete',
-    rules: [{ required: true, message: '请输入毕业学校' }],
-    attrs: {
-      placeholder: '请输入',
-      clearable: true,
-      fetchSuggestions: (queryString: string, cb: (results: any[]) => void) => {
-        const results = queryString
-          ? schoolOptions.filter((item) => item.label.includes(queryString))
-          : schoolOptions
-        cb(results)
-      },
-    },
-  },
-  {
-    prop: 'score',
-    label: '评分',
-    minWidth: 140,
-    align: 'center',
-    element: 'rate',
-    rules: [{ required: true, message: '请选择评分' }],
-    attrs: {
-      max: 5,
-    },
-    formatter: ({ row }) => {
-      return getOptionText(scoreOptions, row.score)
-    },
-  },
-  {
-    prop: 'status',
-    label: '状态',
-    width: 140,
-    align: 'center',
-    element: 'switch',
-    rules: [{ required: true, message: '请选择状态' }],
-    attrs: {
-      activeValue: '1',
-      inactiveValue: '0',
-      activeText: '正常',
-      inactiveText: '停用',
-    },
-  },
-])
 
 const handleExitEditable = () => {
   tableRef.value?.validate((valid) => {
@@ -132,6 +22,113 @@ const handleExitEditable = () => {
     }
   })
 }
+
+onMounted(() => {
+  setTableColumns([
+    { prop: 'id', label: '编号', width: 110, align: 'left', sortable: true },
+    {
+      prop: 'name',
+      label: '姓名',
+      minWidth: 120,
+      align: 'left',
+      element: 'input',
+      rules: [{ required: true, message: '请输入姓名' }],
+      attrs: {
+        placeholder: '请输入',
+        clearable: true,
+      },
+    },
+    {
+      prop: 'gender',
+      label: '性别',
+      minWidth: 100,
+      align: 'center',
+      element: 'select',
+      rules: [{ required: true, message: '请选择性别' }],
+      attrs: {
+        placeholder: '请选择',
+        clearable: true,
+        options: dicts.gender,
+      },
+      formatter: ({ row }) => {
+        return getDictText(dicts.gender, row.gender)
+      },
+    },
+    {
+      prop: 'birthday',
+      label: '出生日期',
+      minWidth: 160,
+      align: 'center',
+      element: 'date-picker',
+      rules: [{ required: true, message: '请选择出生日期' }],
+      attrs: {
+        placeholder: '请选择',
+        clearable: true,
+        type: 'date',
+        format: 'YYYY-MM-DD',
+        valueFormat: 'YYYY-MM-DD',
+      },
+    },
+    {
+      prop: 'age',
+      label: '年龄',
+      minWidth: 140,
+      align: 'center',
+      element: 'input-number',
+      rules: [{ required: true, message: '请输入年龄' }],
+      attrs: {
+        placeholder: '请输入',
+        clearable: true,
+      },
+    },
+    {
+      prop: 'school',
+      label: '毕业学校',
+      minWidth: 150,
+      align: 'center',
+      element: 'autocomplete',
+      rules: [{ required: true, message: '请输入毕业学校' }],
+      attrs: {
+        placeholder: '请输入',
+        clearable: true,
+        fetchSuggestions: (queryString: string, cb: (results: any[]) => void) => {
+          const results = queryString
+            ? dicts.school.filter((item) => item.label.includes(queryString))
+            : dicts.school
+          cb(results)
+        },
+      },
+    },
+    {
+      prop: 'score',
+      label: '评分',
+      minWidth: 140,
+      align: 'center',
+      element: 'rate',
+      rules: [{ required: true, message: '请选择评分' }],
+      attrs: {
+        max: 5,
+      },
+      formatter: ({ row }) => {
+        return getDictText(dicts.score, row.score)
+      },
+    },
+    {
+      prop: 'status',
+      label: '状态',
+      width: 140,
+      align: 'center',
+      element: 'switch',
+      rules: [{ required: true, message: '请选择状态' }],
+      attrs: {
+        activeValue: '1',
+        inactiveValue: '0',
+        activeText: '正常',
+        inactiveText: '停用',
+      },
+    },
+  ])
+})
 </script>
 
 <template>
@@ -140,13 +137,13 @@ const handleExitEditable = () => {
       ref="tableRef"
       class="vp-raw"
       :data="tableData"
-      :columns="columns"
-      stripe
+      :columns="tableColumns"
       :editable="editable"
+      :row-key="'id'"
     >
       <template #status="{ row }">
-        <el-tag :type="getOptionType(statusOptions, row.status)">
-          {{ getOptionText(statusOptions, row.status) }}
+        <el-tag :type="getDictType(dicts.status, row.status)">
+          {{ getDictText(dicts.status, row.status) }}
         </el-tag>
       </template>
     </u-table>

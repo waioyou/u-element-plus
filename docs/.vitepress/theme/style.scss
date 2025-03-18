@@ -153,9 +153,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 4857569 */
   src:
-    url('//at.alicdn.com/t/c/font_4857569_cvjlc33ftj.woff2?t=1742174557668') format('woff2'),
-    url('//at.alicdn.com/t/c/font_4857569_cvjlc33ftj.woff?t=1742174557668') format('woff'),
-    url('//at.alicdn.com/t/c/font_4857569_cvjlc33ftj.ttf?t=1742174557668') format('truetype');
+    url('//at.alicdn.com/t/c/font_4857569_v2gwv1nqiuf.woff2?t=1742263763117') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4857569_v2gwv1nqiuf.woff?t=1742263763117') format('woff'),
+    url('//at.alicdn.com/t/c/font_4857569_v2gwv1nqiuf.ttf?t=1742263763117') format('truetype');
 }
 
 .iconfont {
@@ -164,6 +164,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search:before {
+  content: '\e7ea';
 }
 
 .icon-export-pdf:before {
