@@ -20,6 +20,9 @@ export type * from './components/context-menu'
 export type * from './components/form'
 export type * from './components/table'
 export type * from './components/operation'
+
+export * from '@/hooks'
+
 export default {
   install,
 } as any
