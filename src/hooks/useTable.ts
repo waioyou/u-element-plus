@@ -1,7 +1,14 @@
 import { onMounted, ref, shallowRef } from 'vue'
 import type { Ref } from 'vue'
 import type { Operations } from '@/components/operation'
-import type { TableColumn, TableInstance } from '@/components/table'
+import type {
+  TableColumn,
+  TableInstance,
+  IndexProps,
+  SelectionProps,
+  ExpandProps,
+} from '@/components/table'
+import { isNil } from '@/utils'
 
 // 定义选项接口
 interface UseTableOptions {
@@ -15,7 +22,7 @@ export const useTable = <T = any>(
   callback?: () => Promise<T[]> | T[],
   options: UseTableOptions = {},
 ) => {
-  const { auto = true, isShallow = true } = options
+  const { auto = true, isShallow = false } = options
 
   const loading = ref(false)
   const tableRef = ref<TableInstance>()
@@ -29,20 +36,45 @@ export const useTable = <T = any>(
     multipleSelection.value = rows
   }
 
+  /** 表格操作列按钮列表 */
   const tableOperations = ref<Operations>([])
 
+  /** 表格序号列配置 */
+  const indexProps = ref<IndexProps<T>>({
+    label: '',
+    width: 40,
+    align: 'center',
+  })
+
+  /** 表格多选列配置 */
+  const selectionProps = ref<SelectionProps<T>>({
+    width: 40,
+    align: 'center',
+  })
+
+  /** 表格展开列配置 */
+  const expandProps = ref<ExpandProps>({
+    width: 40,
+    align: 'center',
+  })
+
   /**
-   * 隐藏表格列
+   * 切换表格列的渲染状态
    * @param prop prop或prop数组
+   * @param rendered 不传则切换隐藏或显示，传则修改为传入的值
    */
-  const hideTableColumn = (prop: string | string[]) => {
+  const toggleTableColumnRendered = (prop: string | string[], rendered?: boolean) => {
     tableColumns.value.forEach((column) => {
       if (prop.includes(column.prop)) {
-        column.if = false
+        if (isNil(rendered)) {
+          column.rendered = column.rendered === false ? true : false
+        } else {
+          column.rendered = rendered
+        }
       }
       if (column.children) {
         column.children.forEach((item) => {
-          hideTableColumn(item.prop)
+          toggleTableColumnRendered(item.prop, rendered)
         })
       }
     })
@@ -90,11 +122,14 @@ export const useTable = <T = any>(
     loading,
     tableRef,
     tableData,
+    indexProps,
+    selectionProps,
+    expandProps,
     tableColumns,
     tableOperations,
     multipleSelection,
     handleSelectionChange,
-    hideTableColumn,
+    toggleTableColumnRendered,
     setTableColumns,
     setTableOperations,
     getTableData,

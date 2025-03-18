@@ -16,43 +16,15 @@ export interface TableProps<T = any> extends ElTableProps<T> {
   /** 是否多选 */
   showSelection?: boolean
   /** 选择列的属性 */
-  selectionProps?: {
-    width?: TableColumn['width']
-    align?: TableColumn['align']
-    /** 仅对 type=selection 的列有效，类型为 Function，Function 的返回值用来决定这一行的 CheckBox 是否可以勾选 */
-    selectable?: (row: T, index: number) => boolean
-    /** 仅对 type=selection 的列有效，请注意，需指定 row-key 来让这个功能生效。 */
-    reserveSelection?: boolean
-  }
+  selectionProps?: SelectionProps<T>
   /** 是否显示序号 */
   showIndex?: boolean
   /** 序号列的属性 */
-  indexProps?: {
-    label?: TableColumn['label']
-    width?: TableColumn['width']
-    align?: TableColumn['align']
-    /** 如果设置了 type=index，可以通过传递 index 属性来自定义索引 */
-    index?: number | ((index: number) => number)
-    /** 自定义格式化 */
-    formatter?: (slotProps: Omit<TableColumnDefaultProps<T>, 'item'>) => VNode | string
-    /** 自定义表头 */
-    renderHeader?: (slotProps: {
-      $index: number
-      column: TableColumnCtx<T>
-      store: any
-    }) => VNode | string
-    sortable?: TableColumn['sortable']
-    sortMethod?: TableColumn['sortMethod']
-    sortOrders?: TableColumn['sortOrders']
-  }
+  indexProps?: IndexProps
   /** 是否显示展开 */
   showExpand?: boolean
   /** 展开列的属性 */
-  expandProps?: {
-    label?: TableColumn['label']
-    width?: TableColumn['width']
-    align?: TableColumn['align']
-  }
+  expandProps?: ExpandProps
 }
 
 export interface TableEmits<T = any> {
@@ -181,4 +153,40 @@ export interface TableColumnHeaderProps<T = any> {
 export interface TableColumnFilterIconProps<T = any> {
   filterOpened: boolean
   item: TableColumn<T>
+}
+
+export interface IndexProps<T = any> {
+  label?: string
+  width?: string | number
+  minWidth?: string | number
+  align?: 'left' | 'center' | 'right'
+  /** 如果设置了 type=index，可以通过传递 index 属性来自定义索引 */
+  index?: number | ((index: number) => number)
+  /** 自定义格式化 */
+  formatter?: (slotProps: Omit<TableColumnDefaultProps<T>, 'item'>) => VNode | string
+  /** 自定义表头 */
+  renderHeader?: (slotProps: {
+    $index: number
+    column: TableColumnCtx<T>
+    store: any
+  }) => VNode | string
+  sortable?: TableColumn['sortable']
+  sortMethod?: TableColumn['sortMethod']
+  sortOrders?: TableColumn['sortOrders']
+}
+
+export interface SelectionProps<T = any> {
+  width?: string | number
+  minWidth?: string | number
+  align?: 'left' | 'center' | 'right'
+  /** 仅对 type=selection 的列有效，类型为 Function，Function 的返回值用来决定这一行的 CheckBox 是否可以勾选 */
+  selectable?: (row: T, index: number) => boolean
+  /** 仅对 type=selection 的列有效，请注意，需指定 row-key 来让这个功能生效。 */
+  reserveSelection?: boolean
+}
+
+export interface ExpandProps {
+  width?: string | number
+  minWidth?: string | number
+  align?: 'left' | 'center' | 'right'
 }

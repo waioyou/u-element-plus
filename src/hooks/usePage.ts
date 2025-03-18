@@ -42,7 +42,7 @@ export const usePage = <F = Record<string, any>, T = Record<string, any>>(
     tableOperations,
     multipleSelection,
     handleSelectionChange,
-    hideTableColumn,
+    toggleTableColumnRendered,
     setTableColumns,
     setTableOperations,
   } = useTable<T>(() => [], {
@@ -106,7 +106,7 @@ export const usePage = <F = Record<string, any>, T = Record<string, any>>(
     tableOperations,
     multipleSelection,
     handleSelectionChange,
-    hideTableColumn,
+    toggleTableColumnRendered,
     setTableColumns,
     setTableOperations,
 
