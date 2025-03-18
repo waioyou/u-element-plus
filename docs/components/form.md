@@ -48,14 +48,12 @@
 
 ## 动态表单
 
-可以通过表单`change`事件和表单项配置中的`if`和`show`字段进行结合，从而实现动态设置表单的展示。
+通过配置表单项中的`rendered`和`display`字段，从而实现动态设置表单的展示。
 
-`change`事件会在表单数据发生变化时触发，它有两个参数`name`为当前触发事件的表单项`prop`，`item`为表单项配置。
-
-`if`和`show`值类型为：`boolean` | `Ref<boolean>` | `ComputedRef<boolean>`，用于控制表单项的隐藏和现实，分别对应`v-if`和`v-show`
+`rendered`和`display`值类型为：`boolean` | `Ref<boolean>` | `ComputedRef<boolean>`，用于控制表单项的隐藏和现实，分别对应`v-if`和`v-show`
 
 ::: tip
-建议使用计算属性，如`if: computed(() => formData.value.q1 === '1')`
+建议使用计算属性，如`rendered: computed(() => formData.value.q1 === '1')`
 :::
 <preview path="../demo/form/dynamic.vue"></preview>
 
@@ -106,8 +104,8 @@
 | attrs     | 传递给表单项组件的属性                               | `Record<string, any>`                            |
 | span      | 表单项宽度占比，如 '1/2'                             | `string`                                         |
 | view      | 是否为查看模式                                       | `boolean`                                        |
-| if        | 条件渲染（v-if）                                     | `boolean \| ((options: FormOptions) => boolean)` |
-| show      | 条件显示（v-show）                                   | `boolean \| ((options: FormOptions) => boolean)` |
+| rendered  | 条件渲染（v-if）                                     | `boolean \| ((options: FormOptions) => boolean)` |
+| display   | 条件显示（v-show）                                   | `boolean \| ((options: FormOptions) => boolean)` |
 | formatter | 查看模式下的格式化函数                               | `(value: any) => VNode \| string \| number`      |
 | component | 自定义动态组件                                       | `Component`                                      |
 | style     | 自定义样式                                           | `CSSProperties`                                  |

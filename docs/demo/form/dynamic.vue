@@ -47,7 +47,7 @@ const formOptions = ref<FormOptions>([
     },
     rules: [{ required: true, trigger: 'change', message: '请选择您去过的旅游目的地' }],
     span: '1/1',
-    if: computed(() => formData.value.q1 === '1'),
+    rendered: computed(() => formData.value.q1 === '1'),
   },
   {
     prop: 'q3',
@@ -58,7 +58,7 @@ const formOptions = ref<FormOptions>([
     },
     rules: [{ required: true, trigger: 'change', message: '请选择您最喜欢的一个旅游目的地' }],
     span: '1/1',
-    if: computed(() => formData.value.q2.length > 1),
+    rendered: computed(() => formData.value.q2.length > 1),
   },
   {
     prop: 'q4',
@@ -73,7 +73,7 @@ const formOptions = ref<FormOptions>([
     },
     rules: [{ required: true, trigger: 'change', message: '请选择您的旅行通常持续多长时间' }],
     span: '1/1',
-    if: computed(() => formData.value.q1 === '1'),
+    rendered: computed(() => formData.value.q1 === '1'),
   },
   {
     prop: 'q5',
@@ -84,7 +84,7 @@ const formOptions = ref<FormOptions>([
       rows: 3,
     },
     span: '1/1',
-    if: computed(() => formData.value.q4 === 'long'),
+    rendered: computed(() => formData.value.q4 === 'long'),
   },
   {
     prop: 'q6',
@@ -95,7 +95,7 @@ const formOptions = ref<FormOptions>([
       rows: 3,
     },
     span: '1/1',
-    show: computed(() => formData.value.q1 === '1'),
+    display: computed(() => formData.value.q1 === '1'),
   },
 ])
 

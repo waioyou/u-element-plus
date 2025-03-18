@@ -196,8 +196,8 @@ defineExpose(
   >
     <template v-for="item in options" :key="item.prop">
       <el-form-item
-        v-if="item?.if ?? true"
-        v-show="item?.show ?? true"
+        v-if="item?.rendered ?? true"
+        v-show="item?.display ?? true"
         v-bind="filterElFormItemProps(item)"
         :prop="item.prop"
         :rules="getElFormItemRules(item)"

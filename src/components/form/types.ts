@@ -128,10 +128,10 @@ export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemPr
   view?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 查看模式下格式化显示内容 */
   formatter?: (item: FormItemOption) => VNode | string | number
-  /** 是否渲染 */
-  if?: boolean | Ref<boolean> | ComputedRef<boolean>
-  /** 是否展示 */
-  show?: boolean | Ref<boolean> | ComputedRef<boolean>
+  /** 是否渲染 对应v-if */
+  rendered?: boolean | Ref<boolean> | ComputedRef<boolean>
+  /** 是否展示 对应v-show */
+  display?: boolean | Ref<boolean> | ComputedRef<boolean>
   /** 动态组件 */
   component?: Component
   /** 样式 */
