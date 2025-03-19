@@ -27,6 +27,8 @@ export interface TableProps<T = any> extends ElTableProps<T> {
   expandProps?: ExpandProps
   /** 是否显示标题栏 */
   showTitleBar?: boolean
+  /** 标题 */
+  title?: string
   /** 工具栏 */
   toolbar?: boolean | Array<'refresh' | 'fullscreen' | 'setting'>
 }

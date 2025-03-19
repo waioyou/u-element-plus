@@ -115,30 +115,32 @@ defineExpose<TableInstance>(
 
 <template>
   <div class="u-table" :class="{ 'is-fullscreen': isFullscreen }" ref="uTableRef">
-    <UTitleBar :show-icon="false">
+    <UTitleBar v-if="showTitleBar" :title="title" :show-icon="false">
       <template #default>
         <slot name="title"></slot>
       </template>
       <template #toolbar>
         <slot name="toolbar"></slot>
         <template v-if="showToolbar">
-          <el-tooltip v-if="showRefresh" content="刷新" placement="top">
+          <el-tooltip v-if="showRefresh" content="刷新" placement="top" :teleported="false">
             <el-button circle :icon="Refresh" @click="handleRefresh"></el-button>
           </el-tooltip>
           <el-tooltip
             v-if="showFullscreen"
             :content="isFullscreen ? '退出全屏' : '全屏'"
             placement="top"
+            :teleported="false"
           >
             <el-button circle :icon="FullScreen" @click="toggleFullscreen()"></el-button>
           </el-tooltip>
-          <el-tooltip v-if="showSetting" content="设置" placement="top">
+          <el-tooltip v-if="showSetting" content="设置" placement="top" :teleported="false">
             <el-button circle>
               <el-popover
                 placement="bottom-end"
                 trigger="click"
                 @before-enter="setCheckedKeys()"
                 popper-class="u-table-setting-popper"
+                :teleported="false"
               >
                 <template #reference>
                   <el-button circle :icon="Setting"></el-button>
