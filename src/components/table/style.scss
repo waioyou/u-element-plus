@@ -1,8 +1,42 @@
 .u-table {
+  &.is-fullscreen {
+    padding: 20px;
+  }
+
+  background: var(--el-bg-color);
+  .u-title-bar {
+    margin-bottom: 10px;
+    &__toolbar {
+      gap: 12px;
+      .el-button + .el-button {
+        margin-left: 0px;
+      }
+    }
+  }
   .el-form-item {
     margin-bottom: 0 !important;
     & .el-form-item__content > div {
       width: 100%;
     }
+  }
+}
+
+.u-table-setting-popper {
+  width: unset !important;
+  min-width: 140px !important;
+  max-width: 200px !important;
+  .u-table-setting {
+    .u-table-setting-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .el-tree-node__label {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

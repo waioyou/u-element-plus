@@ -1,10 +1,13 @@
 <script setup lang="ts" generic="T">
 import { computed, getCurrentInstance, ref, useAttrs } from 'vue'
 import RenderVNode from '../render-v-node/render-v-node'
+import UTitleBar from '../title-bar/title-bar.vue'
 import UTableColumn from './table-column.vue'
 import { isNil, omit } from '@/utils'
 import type { TableProps, TableInstance, TableEmits } from './type'
-import type { FormInstance } from 'element-plus'
+import type { ElTree, FormInstance } from 'element-plus'
+import { FullScreen, Refresh, Setting } from '@element-plus/icons-vue'
+import { useTableTitle } from './use-table-title'
 
 defineOptions({ name: 'UTable' })
 const props = withDefaults(defineProps<TableProps<T>>(), {
@@ -28,9 +31,15 @@ const props = withDefaults(defineProps<TableProps<T>>(), {
   showOverflowTooltip: false,
   flexible: false,
   allowDragLastColumn: true,
+  showTitleBar: true,
+  toolbar: true,
 })
 
 const emit = defineEmits<TableEmits<T>>()
+
+const instance = getCurrentInstance()!
+const tableRef = ref<TableInstance>()
+const formRef = ref<FormInstance>()
 
 // 过滤indexProps
 const filerIndexProps = computed(() => {
@@ -50,13 +59,30 @@ const filerElTableProps = computed(() => {
   emptyKeys.push('columns', 'editable')
   return omit({ ...props, ...attrs }, emptyKeys)
 })
-const instance = getCurrentInstance()!
-const tableRef = ref<TableInstance>()
-const formRef = ref<FormInstance>()
 
 const handleClickOperation = (name: string, row: T, index: number) => {
   emit('click-operation', name, row, index)
 }
+
+const {
+  _columns,
+  showToolbar,
+  showRefresh,
+  showFullscreen,
+  showSetting,
+  uTableRef,
+  handleRefresh,
+  isFullscreen,
+  toggleFullscreen,
+  treeRef,
+  setCheckedKeys,
+  checkedAll,
+  checkedIndeterminate,
+  handleChangeCheckedAll,
+  handleResetColumns,
+  handleCheckChange,
+  allowDrop,
+} = useTableTitle(props, emit)
 
 /** 不使用tableRef，使用refs，避免组件多次渲染 */
 defineExpose<TableInstance>(
@@ -88,7 +114,61 @@ defineExpose<TableInstance>(
 </script>
 
 <template>
-  <div class="u-table">
+  <div class="u-table" :class="{ 'is-fullscreen': isFullscreen }" ref="uTableRef">
+    <UTitleBar :show-icon="false">
+      <template #default>
+        <slot name="title"></slot>
+      </template>
+      <template #toolbar>
+        <slot name="toolbar"></slot>
+        <template v-if="showToolbar">
+          <el-tooltip v-if="showRefresh" content="刷新" placement="top">
+            <el-button circle :icon="Refresh" @click="handleRefresh"></el-button>
+          </el-tooltip>
+          <el-tooltip
+            v-if="showFullscreen"
+            :content="isFullscreen ? '退出全屏' : '全屏'"
+            placement="top"
+          >
+            <el-button circle :icon="FullScreen" @click="toggleFullscreen()"></el-button>
+          </el-tooltip>
+          <el-tooltip v-if="showSetting" content="设置" placement="top">
+            <el-button circle>
+              <el-popover
+                placement="bottom-end"
+                trigger="click"
+                @before-enter="setCheckedKeys()"
+                popper-class="u-table-setting-popper"
+              >
+                <template #reference>
+                  <el-button circle :icon="Setting"></el-button>
+                </template>
+                <div class="u-table-setting">
+                  <div class="u-table-setting-header">
+                    <el-checkbox
+                      v-model="checkedAll"
+                      @change="handleChangeCheckedAll"
+                      :indeterminate="checkedIndeterminate"
+                      >全选</el-checkbox
+                    >
+                    <el-button type="primary" link @click="handleResetColumns">重置</el-button>
+                  </div>
+                  <el-tree
+                    ref="treeRef"
+                    :data="_columns"
+                    node-key="prop"
+                    show-checkbox
+                    draggable
+                    :allow-drop="allowDrop"
+                    @check-change="handleCheckChange"
+                  />
+                </div>
+              </el-popover>
+            </el-button>
+          </el-tooltip>
+        </template>
+      </template>
+    </UTitleBar>
     <el-form ref="formRef" :model="data" :show-message="false">
       <el-table ref="tableRef" v-bind="filerElTableProps">
         <template v-if="$slots.empty" #empty>
@@ -114,7 +194,7 @@ defineExpose<TableInstance>(
         </el-table-column>
 
         <UTableColumn
-          v-for="item in columns"
+          v-for="item in _columns"
           :key="item.prop"
           :item="item"
           :editable="editable"

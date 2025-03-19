@@ -1,4 +1,5 @@
 <script lang="ts" setup generic="T extends Record<string, any>">
+import { computed } from 'vue'
 import RenderVNode from '../render-v-node/render-v-node'
 import UOperation from '../operation/operation.vue'
 import type { TableColumnDefaultProps, TableColumnProps } from './type'
@@ -10,10 +11,19 @@ const props = defineProps<TableColumnProps>()
 const emit = defineEmits(['click-operation'])
 
 const { getElTableColumnAttrs, getFormItemRules } = useTableColumn(props)
+
+const isRendered = computed(() => {
+  const { prop, rendered = true, show = true } = props.item
+  if (typeof rendered === 'function') {
+    return prop && rendered(props.item) && show
+  } else {
+    return prop && rendered && show
+  }
+})
 </script>
 
 <template>
-  <el-table-column v-if="item.prop && item.rendered !== false" v-bind="getElTableColumnAttrs">
+  <el-table-column v-if="isRendered" v-bind="getElTableColumnAttrs">
     <template #header="slotProps">
       <template v-if="$slots[`header-${item.prop}`]">
         <slot :name="`header-${item.prop}`" v-bind="slotProps" :item="item" />

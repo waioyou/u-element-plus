@@ -6,7 +6,7 @@ import type {
   ElForm,
   TableColumnCtx,
 } from 'element-plus'
-import type { Component, ComputedRef, Ref, VNode } from 'vue'
+import type { Component, VNode } from 'vue'
 
 export interface TableProps<T = any> extends ElTableProps<T> {
   /** 表格列配置列表 */
@@ -25,10 +25,15 @@ export interface TableProps<T = any> extends ElTableProps<T> {
   showExpand?: boolean
   /** 展开列的属性 */
   expandProps?: ExpandProps
+  /** 是否显示标题栏 */
+  showTitleBar?: boolean
+  /** 工具栏 */
+  toolbar?: boolean | Array<'refresh' | 'fullscreen' | 'setting'>
 }
 
 export interface TableEmits<T = any> {
   (e: 'click-operation', name: string, row: T, index: number): void
+  (e: 'refresh'): void
 }
 
 type ElFormInstance = InstanceType<typeof ElForm>
@@ -47,7 +52,9 @@ export type TableColumns<T = any> = TableColumn<T>[]
 export interface TableColumn<T = any> {
   // 扩展属性
   /** 是否渲染 对应v-if */
-  rendered?: boolean | ComputedRef<boolean> | Ref<boolean>
+  rendered?: boolean | ((item: TableColumn<T>) => boolean)
+  /** 是否显示，用于表格列设置判断是否选中，不建议主动设置此字段。默认true */
+  show?: boolean
   /** 多级表头 */
   children?: TableColumn<T>[]
   /** 动态组件 */

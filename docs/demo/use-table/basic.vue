@@ -122,27 +122,12 @@ onMounted(() => {
   ])
 })
 
-const handleSelectAll = () => {
-  tableRef.value?.toggleAllSelection()
-}
-
 const handleSelectNone = () => {
   tableRef.value?.clearSelection()
 }
 </script>
 
 <template>
-  <div class="mb-4">
-    <el-button type="primary" @click="handleSelectAll">全选</el-button>
-    <el-button type="primary" @click="handleSelectNone">取消全选</el-button>
-    <el-button type="primary" @click="getTableData">刷新数据</el-button>
-    <el-button type="primary" @click="toggleTableColumnRendered(['operation'])">
-      {{ isRendered ? '显示操作列' : '隐藏操作列' }}
-    </el-button>
-    <el-text class="float-right" type="primary">
-      当前选中{{ multipleSelection.length }}条数据
-    </el-text>
-  </div>
   <u-table
     v-loading="loading"
     ref="tableRef"
@@ -158,7 +143,19 @@ const handleSelectNone = () => {
     show-expand
     :expand-props="expandProps"
     @click-operation="handleClickOperation"
+    @refresh="getTableData()"
+    :toolbar="['refresh', 'fullscreen', 'setting']"
   >
+    <template #title>
+      <el-button type="primary" @click="handleSelectNone">取消全选</el-button>
+      <el-button type="primary" @click="getTableData">刷新数据</el-button>
+      <el-button type="primary" @click="toggleTableColumnRendered(['operation'])">
+        {{ isRendered ? '显示操作列' : '隐藏操作列' }}
+      </el-button>
+    </template>
+    <template #toolbar>
+      <el-text type="primary">当前选中{{ multipleSelection.length }}条数据 </el-text>
+    </template>
     <template #expand>
       <el-text> 展开行 </el-text>
     </template>
