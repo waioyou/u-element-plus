@@ -1,6 +1,9 @@
+import type { Component } from 'vue'
+
 export interface TitleBarProps {
   title?: string
-  icon?: string
+  icon?: Component | string
+  iconClass?: string
   showIcon?: boolean
 }
 

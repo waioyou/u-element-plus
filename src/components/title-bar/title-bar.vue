@@ -1,15 +1,18 @@
 <template>
   <div class="u-title-bar">
-    <div class="u-title-bar__left">
+    <div class="u-title-bar__title">
       <slot v-if="showIcon" name="icon">
-        <i v-if="icon" :class="icon"></i>
-        <div v-else class="u-title-bar__icon"></div>
+        <el-icon v-if="icon" class="u-title-bar__icon">
+          <component :is="icon" />
+        </el-icon>
+        <i v-else-if="iconClass" class="u-title-bar__icon" :class="iconClass"></i>
+        <i v-else class="u-title-bar__icon default-icon"></i>
       </slot>
-      <div class="u-title-bar__text">
+      <el-text class="u-title-bar__text" truncated size="large">
         <slot>
           {{ title }}
         </slot>
-      </div>
+      </el-text>
     </div>
     <div v-if="$slots.toolbar" class="u-title-bar__toolbar">
       <slot name="toolbar"> </slot>
