@@ -187,3 +187,15 @@ export const getUserGroupList = (limit = 10) => {
   }
   return Promise.resolve(res)
 }
+
+/** 新增用户 */
+export const createUser = () => {
+  const user = addUser()
+  userList.unshift(user)
+  const res: BaseResponse<User> = {
+    code: 200,
+    data: user,
+    msg: '新增成功',
+  }
+  return Promise.resolve(res)
+}

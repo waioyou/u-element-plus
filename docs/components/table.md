@@ -34,6 +34,24 @@ import TypePopover from '../.vitepress/plugins/TypePopover.vue'
 
 <preview  path="../demo/table/grouping.vue"></preview>
 
+## 标题栏
+
+可以通过`showTitleBar`属性开启或关闭标题栏；默认`true`。
+
+通过`title`属性设置标题；默认无标题内容。可以通过插槽`title`自定义标题区域内容。
+
+通过`toolbar`属性设置工具栏。默认`true`。 也可以传入`['refresh', 'fullscreen', 'setting']`数组，来设置工具栏的显示。
+
+::: warning
+标题栏插槽优先于`title`属性；工具栏插槽用于拓展`toolbar`属性。
+
+表格设置中无法隐藏`index`、`selection`、`expand`列。
+
+刷新功能需要配合`refresh`事件使用。
+:::
+
+<preview  path="../demo/table/title.vue"></preview>
+
 ## 序号
 
 ::: warning
@@ -104,7 +122,7 @@ import TypePopover from '../.vitepress/plugins/TypePopover.vue'
 
 | 名称           | 说明           | 类型                                                       | 默认值  |
 | -------------- | -------------- | ---------------------------------------------------------- | ------- |
-| columns        | 表格列配置列表 | `TableColumn[]`                                            | `[]`    |
+| columns        | 表格列配置列表 | `TableColumn[]` 具体请查看下方表格列配置项                 | `[]`    |
 | editable       | 是否可编辑     | `boolean`                                                  | `false` |
 | showSelection  | 是否显示多选列 | `boolean`                                                  | `false` |
 | selectionProps | 选择列的属性   | `SelectionProps` <TypePopover typeName="SelectionProps" /> | -       |
@@ -112,12 +130,15 @@ import TypePopover from '../.vitepress/plugins/TypePopover.vue'
 | indexProps     | 序号列的属性   | `IndexProps` <TypePopover typeName="IndexProps" />         | -       |
 | showExpand     | 是否显示展开列 | `boolean`                                                  | `false` |
 | expandProps    | 展开列的属性   | `ExpandProps` <TypePopover typeName="ExpandProps" />       | -       |
+| showTitleBar   | 是否显示标题栏 | `boolean`                                                  | `true`  |
+| toolbar        | 工具栏配置     | `boolean \| Array<'refresh' \| 'fullscreen' \| 'setting'>` | `false` |
 
 ### Events
 
-| 事件名          | 说明                                     | 参数                                            |
-| --------------- | ---------------------------------------- | ----------------------------------------------- |
-| click-operation | 表格操作列操作按钮触发，需要配置操作列。 | `(name: string, row: T, index: number) => void` |
+| 事件名            | 说明                                     | 参数                                            |
+| ----------------- | ---------------------------------------- | ----------------------------------------------- |
+| `click-operation` | 表格操作列操作按钮触发，需要配置操作列。 | `(name: string, row: T, index: number) => void` |
+| `refresh `        | 刷新表格数据                             | -                                               |
 
 ### Slots
 
@@ -126,6 +147,8 @@ import TypePopover from '../.vitepress/plugins/TypePopover.vue'
 | `${prop} `             | 自定义列内容   | `{ row, column, $index }` |
 | `header-${prop}`       | 自定义表头内容 | `{ column, $index }`      |
 | `filter-icon-${prop} ` | 自定义筛选图标 | `{ column, $index }`      |
+| `title`                | 自定义标题     | -                         |
+| `toolbar`              | 自定义工具栏   | -                         |
 
 ### 表格列配置项(TableColumn\<T\>)
 
