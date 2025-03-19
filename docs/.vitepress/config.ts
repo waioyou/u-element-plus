@@ -70,7 +70,10 @@ export default defineConfig({
       },
       {
         text: 'Hooks',
-        items: [{ text: 'useTable 表格Hook', link: '/hooks/use-table' }],
+        items: [
+          { text: 'useTable 表格Hook', link: '/hooks/use-table' },
+          { text: 'useFullscreen 全屏Hook', link: '/hooks/use-fullscreen' },
+        ],
       },
     ],
 
