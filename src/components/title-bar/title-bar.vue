@@ -21,11 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TitleBarProps, TitleBarSlots } from './type'
+import type { TitleBarProps, TitleBarSlots } from './types'
+
+defineOptions({ name: 'UTitleBar' })
+
 withDefaults(defineProps<TitleBarProps>(), { title: '', icon: '', showIcon: true })
 defineSlots<TitleBarSlots>()
-
-defineOptions({
-  name: 'USectionHeader',
-})
 </script>
