@@ -1,4 +1,4 @@
-import type { Component, CSSProperties } from 'vue'
+import type { Component, CSSProperties, VNode } from 'vue'
 import type { InstancePropsType, TypeNoReadonly } from './common'
 
 import type {
@@ -27,6 +27,8 @@ import type {
   TransferKey,
   CascaderProps,
 } from 'element-plus'
+import type { TitleBarProps } from '@/components/title-bar'
+import type { FormItemOption } from '@/components/form'
 
 // import type { ColorPickerProps } from 'element-plus/lib/components/index.js'
 
@@ -382,3 +384,10 @@ export type TreeSelectAttrs = FormElementAttrsPlugin<InstancePropsType<typeof El
 
 /** 上传属性 */
 export type UploadAttrs = FormElementAttrsPlugin<UploadProps>
+
+/** 标题栏属性 */
+export type TitleBarAttrs = TitleBarProps & {
+  render?: (slotProps: { item: FormItemOption; view: boolean }) => VNode | string
+  renderIcon?: (slotProps: { item: FormItemOption; view: boolean }) => VNode | string
+  renderToolbar?: (slotProps: { item: FormItemOption; view: boolean }) => VNode | string
+}

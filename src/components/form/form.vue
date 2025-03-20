@@ -278,7 +278,17 @@ defineExpose(
           <template v-else-if="item.element">
             <!-- 标题 -->
             <template v-if="item.element === 'title-bar'">
-              <UTitleBar :title="item.label"></UTitleBar>
+              <UTitleBar :title="item.label" v-bind="item.attrs">
+                <template v-if="item.attrs?.renderIcon" #icon>
+                  <RenderVNode :v-node="item.attrs.renderIcon({ item, view })" />
+                </template>
+                <template v-if="item.attrs?.renderToolbar" #toolbar>
+                  <RenderVNode :v-node="item.attrs.renderToolbar({ item, view })" />
+                </template>
+                <template v-if="item.attrs?.render" #default>
+                  <RenderVNode :v-node="item.attrs.render({ item, view })" />
+                </template>
+              </UTitleBar>
             </template>
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader

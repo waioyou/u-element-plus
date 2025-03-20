@@ -18,6 +18,7 @@ import type {
   SwitchAttrs,
   TimePickerAttrs,
   TimeSelectAttrs,
+  TitleBarAttrs,
   TransferAttrs,
   TreeSelectAttrs,
   UploadAttrs,
@@ -105,7 +106,7 @@ export interface FormItemElementAttrsMap {
   transfer: TransferAttrs
   'tree-select': TreeSelectAttrs
   upload: UploadAttrs
-  'title-bar': never
+  'title-bar': TitleBarAttrs
 }
 
 export interface FormItemOption extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {

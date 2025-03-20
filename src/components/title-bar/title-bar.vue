@@ -1,5 +1,5 @@
 <template>
-  <div class="u-title-bar">
+  <div class="u-title-bar" :class="$attrs.class as string" :style="$attrs.style as CSSProperties">
     <div class="u-title-bar__title">
       <slot v-if="showIcon" name="icon">
         <el-icon v-if="icon" class="u-title-bar__icon">
@@ -21,9 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import type { CSSProperties } from 'vue'
 import type { TitleBarProps, TitleBarSlots } from './types'
 
-defineOptions({ name: 'UTitleBar' })
+defineOptions({ name: 'UTitleBar', inheritAttrs: false })
 
 withDefaults(defineProps<TitleBarProps>(), { title: '', icon: '', showIcon: true })
 defineSlots<TitleBarSlots>()
