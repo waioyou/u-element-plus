@@ -64,6 +64,7 @@ export default defineConfig({
           { text: 'Table 表格', link: '/components/table' },
           { text: 'Operation 操作栏', link: '/components/operation' },
           { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
+          { text: 'TitleBar 标题栏', link: '/components/title-bar' },
           // { text: 'Markdown Examples', link: '/markdown-examples' },
           // { text: 'Runtime API Examples', link: '/api-examples' },
         ],

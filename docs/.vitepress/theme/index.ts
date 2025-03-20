@@ -8,8 +8,8 @@ import './style.scss'
 import { ElementPlusContainer } from '@vitepress-demo-preview/component'
 import '@vitepress-demo-preview/component/dist/style.css'
 
-// 导入组件
-import UElementPlus from 'u-element-plus'
+// // 导入组件
+// import UElementPlus from 'u-element-plus'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
