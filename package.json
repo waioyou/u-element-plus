@@ -9,8 +9,7 @@
   "exports": {
     ".": {
       "import": "./dist/u-element-plus.js",
-      "require": "./dist/u-element-plus.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/u-element-plus.umd.cjs"
     },
     "./dist/index.css": "./dist/index.css"
   },
