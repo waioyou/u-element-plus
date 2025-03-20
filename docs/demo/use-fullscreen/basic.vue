@@ -5,9 +5,11 @@ const { isFullscreen, enterFullscreen, exitFullscreen, toggleFullscreen } = useF
 </script>
 
 <template>
+  <!-- <ClientOnly> -->
   <div>
     <el-button v-if="!isFullscreen" @click="enterFullscreen">进入全屏</el-button>
     <el-button v-else @click="exitFullscreen">退出全屏</el-button>
     <el-button @click="toggleFullscreen">切换全屏</el-button>
   </div>
+  <!-- </ClientOnly> -->
 </template>

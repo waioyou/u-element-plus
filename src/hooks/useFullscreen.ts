@@ -1,5 +1,5 @@
 import { ElMessage } from 'element-plus'
-import { ref, onUnmounted, computed, type Ref } from 'vue'
+import { ref, onUnmounted, computed, type Ref, onMounted } from 'vue'
 
 export const useFullscreen = <T = any>(targetRef?: Ref<T>) => {
   /** 是否全屏 */
@@ -9,7 +9,7 @@ export const useFullscreen = <T = any>(targetRef?: Ref<T>) => {
 
   const target = computed(() => {
     if (!targetRef) {
-      return document.documentElement
+      return doc.documentElement
     }
     if (targetRef.value instanceof HTMLElement) {
       return targetRef.value
@@ -76,10 +76,12 @@ export const useFullscreen = <T = any>(targetRef?: Ref<T>) => {
     isFullscreen.value = !!(doc.fullscreenElement || doc.webkitFullscreenElement)
   }
 
-  document.addEventListener('fullscreenchange', onFullscreenChange)
-  document.addEventListener('webkitfullscreenchange', onFullscreenChange) // 兼容 Safari
-  document.addEventListener('mozfullscreenchange', onFullscreenChange) // 兼容 Firefox
-  document.addEventListener('MSFullscreenChange', onFullscreenChange) // 兼容 IE11
+  onMounted(() => {
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange) // 兼容 Safari
+    document.addEventListener('mozfullscreenchange', onFullscreenChange) // 兼容 Firefox
+    document.addEventListener('MSFullscreenChange', onFullscreenChange) // 兼容 IE11
+  })
 
   onUnmounted(() => {
     document.removeEventListener('fullscreenchange', onFullscreenChange)

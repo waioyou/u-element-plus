@@ -17,7 +17,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import 'uno.css'
-import { Theme, EnhanceAppContext } from 'vitepress'
+import { Theme } from 'vitepress'
 import { generateUserList } from '@docs/mock/user'
 generateUserList()
 export default {
@@ -27,12 +27,16 @@ export default {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
     })
   },
-  enhanceApp({ app }: EnhanceAppContext) {
+  async enhanceApp({ app }) {
+    if (!import.meta.env.SSR) {
+      const plugin = await import('u-element-plus')
+      app.use(plugin.default)
+    }
     app.component('demo-preview', ElementPlusContainer)
     app.use(ElementPlus as unknown as any, {
       locale: zhCn,
     })
-    app.use(UElementPlus)
+    // app.use(UElementPlus)
     app.component('TypePopover', TypePopover)
   },
 } satisfies Theme

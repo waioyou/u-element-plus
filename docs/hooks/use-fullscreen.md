@@ -4,7 +4,7 @@
 
 `useFullscreen` 是一个用于管理全屏状态的钩子函数，它封装了进入全屏、退出全屏和切换全屏状态的功能。
 
-<preview path="../demo/use-fullscreen/basic.vue"></preview>
+<preview path="../demo/use-fullscreen/basic-2.vue"></preview>
 
 ## 是否全屏
 
