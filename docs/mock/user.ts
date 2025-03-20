@@ -35,11 +35,11 @@ const statusDict: DictItem[] = [
   { label: '停用', value: '0', type: 'danger' },
 ]
 const scoreDict: DictItem[] = [
-  { label: '非常满意', value: 5, type: 'success' },
-  { label: '满意', value: 4, type: 'success' },
-  { label: '一般', value: 3, type: 'warning' },
-  { label: '不满意', value: 2, type: 'danger' },
   { label: '非常不满意', value: 1, type: 'danger' },
+  { label: '不满意', value: 2, type: 'danger' },
+  { label: '一般', value: 3, type: 'warning' },
+  { label: '满意', value: 4, type: 'success' },
+  { label: '非常满意', value: 5, type: 'success' },
 ]
 
 export const dicts = {
@@ -83,7 +83,7 @@ const addUser = () => {
   const schoolText = getDictText(dicts.school, school)
   const major = fakerZH_CN.helpers.arrayElement(getArrayElement(dicts.major))
   const majorText = getDictText(dicts.major, major)
-  const graduationYear = fakerZH_CN.number.int({ min: 2000, max: 2024 })
+  const graduationYear = fakerZH_CN.number.int({ min: 2000, max: 2024 }).toString()
 
   const phone = `1${fakerZH_CN.string.numeric(10)}`
   const email = fakerZH_CN.internet.email()
@@ -196,6 +196,17 @@ export const createUser = () => {
     code: 200,
     data: user,
     msg: '新增成功',
+  }
+  return Promise.resolve(res)
+}
+
+/** 获取用户信息 */
+export const getUserDetail = (index: number = 0) => {
+  const user = userList.at(index)
+  const res: BaseResponse<User> = {
+    code: 200,
+    data: user ?? ({} as User),
+    msg: '查询成功',
   }
   return Promise.resolve(res)
 }

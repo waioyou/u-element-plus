@@ -24,10 +24,12 @@
 
 ## 自定义表单项
 
-支持通过作用域插槽和表单项的`slot`属性来设置表单项的label、error、default插槽内容。
+支持通过作用域插槽和表单配置项的`render`、`renderLabel`、`renderError`属性来设置表单项的label、error、default插槽内容。
 
 ::: warning
-作用域插槽优先级高于表单项的`slot`属性。
+作用域插槽优先级高于表单配置项的`render`、`renderLabel`、`renderError`属性。
+
+`render`、`renderLabel`、`renderError` 需要返回`VNode｜string`; 可以通过`h`函数或者指定`lang="tsx"`。
 :::
 
 <preview path="../demo/form/slot.vue"></preview>
@@ -52,9 +54,10 @@
 
 `rendered`和`display`值类型为：`boolean` | `Ref<boolean>` | `ComputedRef<boolean>`，用于控制表单项的隐藏和现实，分别对应`v-if`和`v-show`
 
-::: tip
+::: warning
 建议使用计算属性，如`rendered: computed(() => formData.value.q1 === '1')`
 :::
+
 <preview path="../demo/form/dynamic.vue"></preview>
 
 ## 标签提示信息
@@ -62,6 +65,16 @@
 通过配置`tooltip`属性来设置表单项的提示信息。
 
 <preview path="../demo/form/tooltip.vue"></preview>
+
+## 行内表单
+
+通过设置表单属性 `inline` 来控制表单是否为行内表单。通过用于查询条件。
+
+行内模式时；表单有一个搜索栏插槽`searchbar`，用于放置如查询、重置按钮。
+
+行内模式时，表单元素的宽度不会自适应父容器，需要自行设置默认宽度；可以通过配置表单项的`span`、`class`、`style`属性来设置表单项的宽度。
+
+<preview path="../demo/form/inline.vue"></preview>
 
 ## API
 
@@ -71,44 +84,47 @@
 
 ### Props
 
-| 名称      | 说明                        | 类型                             | 默认值       |
-| --------- | --------------------------- | -------------------------------- | ------------ |
-| options   | 表单配置项                  | `Record<string, FormItemOption>` | `{}`         |
-| view      | 是否为查看模式              | `boolean`                        | `false`      |
-| gutter    | 栅格间隔                    | `number`                         | `20`         |
-| ~~model~~ | 已废弃，请使用`v-model`代替 | `Record<string,any> `            | 表单数据对象 |
+| 名称      | 说明                        | 类型                  | 默认值       |
+| --------- | --------------------------- | --------------------- | ------------ |
+| columns   | 表单配置项                  | `FromColumns`         | `[]`         |
+| view      | 是否为查看模式              | `boolean`             | `false`      |
+| gutter    | 栅格间隔                    | `number`              | `20`         |
+| ~~model~~ | 已废弃，请使用`v-model`代替 | `Record<string,any> ` | 表单数据对象 |
 
 ### Events
 
 | 事件名   | 说明                   | 参数类型                                                     |
 | -------- | ---------------------- | ------------------------------------------------------------ |
 | validate | 任一表单项被校验后触发 | `(field: string, isValid: boolean, message: string) => void` |
+| change   | 任一表单项被改变后触发 | `(field: string, item: FormColumn) => void`                  |
 
 ### Slots
 
-| 插槽名          | 说明             | 作用域参数                                |
-| --------------- | ---------------- | ----------------------------------------- |
-| `label-${prop}` | 自定义标签内容   | `{ item: FormItemOption, label: string }` |
-| `error-${prop}` | 自定义错误提示   | `{ item: FormItemOption, error: string }` |
-| `${prop}`       | 自定义表单项内容 | `{ item: FormItemOption}`                 |
+| 插槽名          | 说明             | 作用域参数                            |
+| --------------- | ---------------- | ------------------------------------- |
+| `label-${prop}` | 自定义标签内容   | `{ item: FormColumn, label: string }` |
+| `error-${prop}` | 自定义错误提示   | `{ item: FormColumn, error: string }` |
+| `${prop}`       | 自定义表单项内容 | `{ item: FormColumn}`                 |
 
-### FormItemOption 配置项
+### FormColumn
 
-| 名称      | 说明                                                 | 类型                                             |
-| --------- | ---------------------------------------------------- | ------------------------------------------------ |
-| element   | 表单项类型，支持所有 Element Plus 表单组件及扩展组件 | `enum` <TypePopover typeName="FormItemElement"/> |
-| value     | 表单项的值                                           | `any`                                            |
-| label     | 标签文本                                             | `string`                                         |
-| required  | 是否必填                                             | `boolean`                                        |
-| rules     | 表单验证规则                                         | `FormItemRule[]`                                 |
-| attrs     | 传递给表单项组件的属性                               | `Record<string, any>`                            |
-| span      | 表单项宽度占比，如 '1/2'                             | `string`                                         |
-| view      | 是否为查看模式                                       | `boolean`                                        |
-| rendered  | 条件渲染（v-if）                                     | `boolean \| ((options: FormOptions) => boolean)` |
-| display   | 条件显示（v-show）                                   | `boolean \| ((options: FormOptions) => boolean)` |
-| formatter | 查看模式下的格式化函数                               | `(value: any) => VNode \| string \| number`      |
-| component | 自定义动态组件                                       | `Component`                                      |
-| style     | 自定义样式                                           | `CSSProperties`                                  |
-| class     | 自定义类名                                           | `string`                                         |
-| tooltip   | 标签提示信息                                         | `string`                                         |
-| slot      | 插槽配置                                             | `FormItemSlot`                                   |
+`FormColumn` 是用于定义表单项的配置对象，支持多种属性以满足不同的表单需求。以下是 `FormColumn` 的详细配置项说明：
+
+| 名称        | 说明                                                 | 类型                                                                  |
+| ----------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| prop        | 表单项的唯一标识符                                   | `string`                                                              |
+| element     | 表单项类型，支持所有 Element Plus 表单组件及扩展组件 | `enum` <TypePopover typeName="FormItemElement"/>                      |
+| rules       | 表单验证规则                                         | `FormItemRule[]`                                                      |
+| render      | 渲染默认插槽                                         | `(slotProps: { item: FormColumn; view: boolean }) => VNode \| string` |
+| renderError | 渲染错误插槽                                         | `(slotProps: { item: FormColumn; error: string }) => VNode \| string` |
+| renderLabel | 渲染标签插槽                                         | `(slotProps: { item: FormColumn; label: string }) => VNode \| string` |
+| view        | 是否为查看模式                                       | `boolean \| Ref<boolean> \| ComputedRef<boolean>`                     |
+| formatter   | 查看模式下的格式化函数                               | `(item: FormColumn) => VNode \| string \| number`                     |
+| rendered    | 条件渲染（v-if）                                     | `boolean \| Ref<boolean> \| ComputedRef<boolean>`                     |
+| display     | 条件显示（v-show）                                   | `boolean \| Ref<boolean> \| ComputedRef<boolean>`                     |
+| component   | 自定义动态组件                                       | `Component`                                                           |
+| style       | 自定义样式                                           | `CSSProperties`                                                       |
+| class       | 自定义类名                                           | `string`                                                              |
+| span        | 表单项宽度占比，如 '1/2'                             | `string`                                                              |
+| attrs       | 传递给表单项组件的属性                               | `Record<string, any>`                                                 |
+| tooltip     | 标签提示信息                                         | `string`                                                              |

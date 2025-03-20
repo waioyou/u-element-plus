@@ -55,7 +55,9 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '组件', link: '/components/form' },
     ],
-
+    outline: {
+      level: [2, 3],
+    },
     sidebar: [
       {
         text: '组件',

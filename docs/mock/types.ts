@@ -43,7 +43,7 @@ export interface User {
   major: string
   majorText: string
   /** 毕业年份 */
-  graduationYear: number
+  graduationYear: string
 
   // 联系方式
   /** 电话 */
@@ -82,7 +82,7 @@ export interface UserGroup {
     degree: string
     school: string
     major: string
-    graduationYear: number
+    graduationYear: string
   }
   contact: {
     phone: string

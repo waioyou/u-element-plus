@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { FormOptions } from 'u-element-plus'
+import type { FormColumns } from 'u-element-plus'
 
 const formData = ref({
   autocomplete: 'vue',
@@ -34,7 +34,7 @@ const formData = ref({
   ],
 })
 
-const formOptions = ref<FormOptions>([
+const formColumns = ref<FormColumns>([
   {
     prop: 'title-bar',
     label: '基础信息',
@@ -317,7 +317,7 @@ const formOptions = ref<FormOptions>([
 
 <template>
   <div class="basic">
-    <u-form v-model="formData" :options="formOptions"></u-form>
+    <u-form v-model="formData" :columns="formColumns"></u-form>
   </div>
 </template>
 

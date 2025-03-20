@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import UForm from '../../../src/components/form'
-import type { FormOptions } from '../../../src/components/form'
+import type { FormColumns } from 'u-element-plus'
 
 const formData = ref({
   q1: '',
@@ -12,7 +11,7 @@ const formData = ref({
   q6: '',
 })
 
-const formOptions = ref<FormOptions>([
+const formColumns = ref<FormColumns>([
   {
     prop: 'sec1',
     label: '关于"旅游体验"的动态关联问卷',
@@ -100,22 +99,22 @@ const formOptions = ref<FormOptions>([
 ])
 
 const handleChange = (prop: string, item: any) => {
+  console.log('🚀 ~ handleChange ~ item:', item)
+  console.log('🚀 ~ handleChange ~ prop:', prop)
   if (prop === 'q2') {
-    const q3 = formOptions.value[3]
+    const q3 = formColumns.value[3]
     q3.attrs!.options = item.attrs.options.filter((d: any) => formData.value.q2.includes(d.value))
   }
 }
 </script>
 
 <template>
-  <div class="form-data">
-    <u-form
-      v-model="formData"
-      :options="formOptions"
-      label-position="top"
-      @change="handleChange"
-    ></u-form>
-  </div>
+  <u-form
+    v-model="formData"
+    :columns="formColumns"
+    label-position="top"
+    @change="handleChange"
+  ></u-form>
 </template>
 
 <style lang="scss" scoped>

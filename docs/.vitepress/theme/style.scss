@@ -153,9 +153,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 4857569 */
   src:
-    url('//at.alicdn.com/t/c/font_4857569_v2gwv1nqiuf.woff2?t=1742263763117') format('woff2'),
-    url('//at.alicdn.com/t/c/font_4857569_v2gwv1nqiuf.woff?t=1742263763117') format('woff'),
-    url('//at.alicdn.com/t/c/font_4857569_v2gwv1nqiuf.ttf?t=1742263763117') format('truetype');
+    url('//at.alicdn.com/t/c/font_4857569_2i9djpuaxik.woff2?t=1742459363051') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4857569_2i9djpuaxik.woff?t=1742459363051') format('woff'),
+    url('//at.alicdn.com/t/c/font_4857569_2i9djpuaxik.ttf?t=1742459363051') format('truetype');
 }
 
 .iconfont {
@@ -164,6 +164,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-pass:before {
+  content: '\e619';
+}
+
+.icon-email:before {
+  content: '\e66a';
+}
+
+.icon-fail:before {
+  content: '\e633';
+}
+
+.icon-lock:before {
+  content: '\e60c';
+}
+
+.icon-career:before {
+  content: '\e6ef';
+}
+
+.icon-degree:before {
+  content: '\e60d';
+}
+
+.icon-remark:before {
+  content: '\e719';
 }
 
 .icon-search:before {

@@ -1,54 +1,56 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import UForm from '../../../src/components/form'
-import type { FormOptions } from '../../../src/components/form'
+import { onMounted } from 'vue'
+import { useForm } from 'u-element-plus'
+import { getUserDetail } from '../../mock/user'
 
-const formData = ref({
-  name: '',
-  password: '',
+const { formData, formColumns, createFormColumnWithElement, setFormColumns } = useForm(async () => {
+  const res = await getUserDetail(2)
+  return res.data
 })
 
-const formOptions = ref<FormOptions>([
-  {
-    prop: 'name',
-    label: '用户名',
-    element: 'input',
-    attrs: {
-      placeholder: '请输入用户名',
-      maxlength: 10,
-    },
-    rules: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
-    tooltip: '用户名最多10个字符',
-    span: '1/3',
-  },
-  {
-    prop: 'password',
-    label: '密码',
-    element: 'input',
-    attrs: {
-      placeholder: '请输入密码',
-      type: 'password',
-    },
-    rules: [
-      { required: true, trigger: 'blur', message: '请输入密码' },
-      { pattern: /^[a-zA-Z0-9]+$/, message: '密码必须包含数字和字母', trigger: 'blur' },
-      { min: 6, message: '密码最少6个字符', trigger: 'blur' },
-    ],
-    tooltip: '密码最少6个字符,必须包含数字和字母',
-    span: '1/3',
-  },
-])
+onMounted(() => {
+  setFormColumns([
+    createFormColumnWithElement('input', {
+      prop: 'name',
+      label: '用户名',
+      attrs: {
+        placeholder: '请输入用户名',
+        maxlength: 10,
+      },
+      rules: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
+      tooltip: '用户名最多10个字符',
+      class: 'w-70!',
+    }),
+    createFormColumnWithElement('input', {
+      prop: 'phone',
+      label: '手机号',
+      attrs: {
+        placeholder: '请输入手机号',
+      },
+      rules: [
+        { required: true, trigger: 'blur', message: '请输入手机号' },
+        { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' },
+      ],
+      tooltip: '请输入正确的手机号',
+      class: 'w-70!',
+    }),
+    createFormColumnWithElement('input', {
+      prop: 'email',
+      label: '邮箱',
+      attrs: {
+        placeholder: '请输入邮箱',
+      },
+      rules: [
+        { required: true, trigger: 'blur', message: '请输入手机号' },
+        { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' },
+      ],
+      tooltip: '请输入正确的手机号',
+      class: 'w-70!',
+    }),
+  ])
+})
 </script>
 
 <template>
-  <div class="form-data">
-    <u-form v-model="formData" :options="formOptions" inline></u-form>
-  </div>
+  <u-form v-model="formData" :columns="formColumns" inline> </u-form>
 </template>
-
-<style lang="scss" scoped>
-.btn {
-  display: flex;
-  justify-content: center;
-}
-</style>
