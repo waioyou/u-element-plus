@@ -1,14 +1,19 @@
-import { onMounted, ref } from 'vue'
+import { markRaw, onMounted, ref } from 'vue'
 import { set } from '@/utils'
 
-import type { Ref } from 'vue'
-import type { FormInstance, FormOptions } from '@/components/form'
+import type { Component, Ref } from 'vue'
+import type {
+  FormInstance,
+  FormColumns,
+  FormColumnElementAttrsMap,
+  FormColumn,
+} from '@/components/form'
 
 export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) => {
   const loading = ref(false)
   const formRef = ref<FormInstance>()
   const formData = ref<F>({} as F) as Ref<F>
-  const formOptions = ref<FormOptions>([]) as Ref<FormOptions>
+  const formColumns = ref<FormColumns>([]) as Ref<FormColumns>
 
   /**
    * 更新表单项配置
@@ -20,8 +25,8 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
    * updateFormItem('name', 'attrs.placeholder', '请输入姓名')
    * updateFormItem('name', 'rules.0.required', true)
    */
-  const updateFormItemOption = (prop: string, path: string | string[], value: any) => {
-    const formItem = formOptions.value.find((item) => item.prop === prop)
+  const updateFormColumn = (prop: string, path: string | string[], value: any) => {
+    const formItem = formColumns.value.find((item) => item.prop === prop)
     if (formItem) {
       set(formItem, path, value)
     }
@@ -31,8 +36,8 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
    * 设置表单配置
    * @param options 表单配置
    */
-  const setFormOptions = (options: FormOptions) => {
-    formOptions.value = options
+  const setFormColumns = (columns: FormColumns) => {
+    formColumns.value = columns
   }
 
   /**
@@ -52,6 +57,55 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
     }
   }
 
+  /**
+   * 创建表单配置项 通过element创建表单配置项
+   * @param element 表单元素
+   * @param column 表单配置项
+   * @returns 表单配置
+   * @example
+   * createFormColumnWithElement('input', {
+   *   prop: 'name',
+   *   label: '姓名',
+   *   attrs: {
+   *     placeholder: '请输入姓名',
+   *   },
+   * })
+   */
+  const createFormColumnWithElement = <E extends keyof FormColumnElementAttrsMap>(
+    element: E,
+    column: Omit<FormColumn, 'attrs' | 'prop' | 'element'> & {
+      prop: keyof F | (string & {})
+      attrs?: FormColumnElementAttrsMap[E]
+    },
+  ) => ({
+    ...column,
+    element,
+  })
+
+  /**
+   * 创建表单配置项 通过组件创建表单配置项
+   * @param component 组件
+   * @param column 表单配置项
+   * @returns 表单配置项
+   * @example
+   * createFormColumnWithComponent<TitleBarProps>(UTitleBar, {
+   *   prop: 'education',
+   *   label: '教育经历',
+   *   attrs: {
+   *     iconClass: 'iconfont icon-education',
+   *   },
+   * })
+   */
+  const createFormColumnWithComponent = <C = Record<string, any>>(
+    component: Component | string,
+    column: Omit<FormColumn, 'element'> & {
+      attrs?: C
+    },
+  ) => ({
+    ...column,
+    component: typeof component === 'string' ? component : markRaw(component),
+  })
+
   onMounted(() => {
     if (auto) {
       getFormData()
@@ -62,9 +116,11 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
     loading,
     formRef,
     formData,
-    formOptions,
-    setFormOptions,
-    updateFormItemOption,
+    formColumns,
+    createFormColumnWithElement,
+    createFormColumnWithComponent,
+    setFormColumns,
+    updateFormColumn,
     getFormData,
   }
 }
