@@ -15,6 +15,7 @@ export type DictItem = {
   label: string
   value: any
   type?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
+  children?: DictItem[]
 }
 
 export interface User {

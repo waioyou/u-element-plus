@@ -1,5 +1,5 @@
 import { markRaw, onMounted, ref } from 'vue'
-import { set } from '@/utils'
+import { set, cloneDeep } from '@/utils'
 
 import type { Component, Ref } from 'vue'
 import type {
@@ -14,6 +14,7 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
   const formRef = ref<FormInstance>()
   const formData = ref<F>({} as F) as Ref<F>
   const formColumns = ref<FormColumns>([]) as Ref<FormColumns>
+  const _formData = ref<F>({} as F) as Ref<F>
 
   /**
    * 更新表单项配置
@@ -49,12 +50,17 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
       try {
         const res = await callback()
         formData.value = res
+        _formData.value = cloneDeep(res)
       } catch (error) {
         console.error(error)
       } finally {
         loading.value = false
       }
     }
+  }
+
+  const resetFormData = () => {
+    formData.value = cloneDeep(_formData.value)
   }
 
   /**
@@ -97,8 +103,8 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
    * })
    */
   const createFormColumnWithComponent = <C = Record<string, any>>(
-    component: Component | string,
-    column: Omit<FormColumn, 'element'> & {
+    component: Component,
+    column: Omit<FormColumn, 'element' | 'component'> & {
       attrs?: C
     },
   ) => ({
@@ -122,5 +128,6 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
     setFormColumns,
     updateFormColumn,
     getFormData,
+    resetFormData,
   }
 }

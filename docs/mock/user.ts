@@ -41,6 +41,25 @@ const scoreDict: DictItem[] = [
   { label: '满意', value: 4, type: 'success' },
   { label: '非常满意', value: 5, type: 'success' },
 ]
+const areaDict: DictItem[] = [
+  {
+    label: '浙江省',
+    value: '浙江省',
+    children: [
+      {
+        label: '杭州市',
+        value: '杭州市',
+        children: [
+          { label: '西湖区', value: '西湖区' },
+          { label: '上城区', value: '上城区' },
+          { label: '滨江区', value: '滨江区' },
+          { label: '萧山区', value: '萧山区' },
+          { label: '余杭区', value: '余杭区' },
+        ],
+      },
+    ],
+  },
+]
 
 export const dicts = {
   gender: genderDict,
@@ -49,6 +68,7 @@ export const dicts = {
   degree: degreeDict,
   status: statusDict,
   score: scoreDict,
+  area: areaDict,
 }
 
 let startIndex = 1
@@ -207,6 +227,18 @@ export const getUserDetail = (index: number = 0) => {
     code: 200,
     data: user ?? ({} as User),
     msg: '查询成功',
+  }
+  return Promise.resolve(res)
+}
+
+/** 更新用户信息 */
+export const updateUser = (user: User) => {
+  const index = userList.findIndex((item) => item.id === user.id)
+  userList[index] = user
+  const res: BaseResponse<string> = {
+    code: 200,
+    data: user.id,
+    msg: '更新成功',
   }
   return Promise.resolve(res)
 }
