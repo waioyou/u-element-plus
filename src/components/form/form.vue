@@ -1,16 +1,17 @@
-<script lang="ts" setup generic="T extends Record<string, any>">
+<script lang="ts" setup>
 import { computed, getCurrentInstance, ref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
-import type { FormProps, FormEmits, FormItemOption } from './types'
+import type { FormProps, FormEmits, FormColumn } from './types'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
 import { InfoFilled } from '@element-plus/icons-vue'
 import UTitleBar from '@/components/title-bar/title-bar.vue'
 defineOptions({
   name: 'UForm',
+  inheritAttrs: false,
 })
 const emit = defineEmits<FormEmits>()
-const modelValue = defineModel<T>('modelValue', { default: () => ({}) })
+const modelValue = defineModel<Record<string, any>>('modelValue', { default: () => ({}) })
 const props = withDefaults(defineProps<FormProps>(), {
   options: () => [],
   /** 是否为查看模式 */
@@ -52,7 +53,7 @@ const formRef = ref<ElFormInstance>()
 
 /** 过滤出 ElForm 需要的属性 */
 const filterElFormProps = computed(() => {
-  return omit(props, ['view', 'rules', 'options'])
+  return omit(props, ['view', 'rules', 'columns', 'modelValue'])
 })
 
 /** 根据栅格间隔计算表单的样式 */
@@ -74,17 +75,17 @@ const handleValidate = (prop: any, isValid: boolean, message: string) => {
 }
 
 /** 处理表单项的 change 事件 */
-const handleChange = (prop: string, item: FormItemOption) => {
+const handleChange = (prop: string, item: FormColumn) => {
   emit('change', prop, item)
 }
 
 /** 过滤出 ElFormItem 需要的属性 */
-const filterElFormItemProps = (item: FormItemOption) => {
+const filterElFormItemProps = (item: FormColumn) => {
   return omit(item, ['span', 'element', 'value', 'attrs', 'if', 'show', 'style', 'slot'])
 }
 
 /** 获取表单项的校验规则 */
-const getElFormItemRules = (item: FormItemOption) => {
+const getElFormItemRules = (item: FormColumn) => {
   const isInputType = ['autocomplete', 'input', 'input-number', 'input-tag', 'mention'].includes(
     item.element!,
   )
@@ -103,7 +104,7 @@ const getElFormItemRules = (item: FormItemOption) => {
 }
 
 /** 获取表单项的样式 */
-const getFormItemStyle = (prop: string, item: FormItemOption) => {
+const getFormItemStyle = (item: FormColumn) => {
   const style = item?.style ?? {}
   const span = item.span?.split('/') ?? []
   const gutter = Number(props.gutter)
@@ -121,14 +122,14 @@ const getFormItemStyle = (prop: string, item: FormItemOption) => {
     if (numerator > 0 && denominator > 0 && numerator <= denominator) {
       style.width = `${(numerator / denominator) * 100}%`
     } else {
-      console.warn(`表单项【${prop}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
+      console.warn(`表单项【${item.prop}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
     }
   }
   return style
 }
 
 /** 获取表单项的查看节点 */
-const getViewVNode = (item: FormItemOption) => {
+const getViewVNode = (item: FormColumn) => {
   const itemValue = modelValue.value[item.prop]
   if (itemValue === undefined || itemValue === null) {
     return ''
@@ -187,21 +188,22 @@ defineExpose(
 
 <template>
   <el-form
-    ref="formRef"
     class="u-form"
+    ref="formRef"
     v-bind="filterElFormProps"
     :model="modelValue"
     :style="getFormStyle"
     @validate="handleValidate"
+    :class="$attrs.class"
   >
-    <template v-for="item in options" :key="item.prop">
+    <template v-for="item in columns" :key="item.prop">
       <el-form-item
         v-if="item?.rendered ?? true"
         v-show="item?.display ?? true"
         v-bind="filterElFormItemProps(item)"
         :prop="item.prop"
         :rules="getElFormItemRules(item)"
-        :style="getFormItemStyle(item.prop, item)"
+        :style="getFormItemStyle(item)"
         class="u-form-item"
         :class="item.element === 'title-bar' ? 'u-form-item--title-bar' : ''"
         :label="item.element === 'title-bar' ? '' : item.label"
@@ -242,7 +244,7 @@ defineExpose(
         </template>
         <template #default>
           <!-- 查看模式 -->
-          <template v-if="view || item.view">
+          <template v-if="(view || item.view) && item.element !== 'title-bar'">
             <RenderVNode v-if="item.formatter" :v-node="item.formatter(item)" />
             <el-rate
               v-else-if="item.element === 'rate'"
@@ -280,13 +282,13 @@ defineExpose(
             <template v-if="item.element === 'title-bar'">
               <UTitleBar :title="item.label" v-bind="item.attrs">
                 <template v-if="item.attrs?.renderIcon" #icon>
-                  <RenderVNode :v-node="item.attrs.renderIcon({ item, view })" />
+                  <RenderVNode :v-node="item.attrs.renderIcon()" />
                 </template>
                 <template v-if="item.attrs?.renderToolbar" #toolbar>
-                  <RenderVNode :v-node="item.attrs.renderToolbar({ item, view })" />
+                  <RenderVNode :v-node="item.attrs.renderToolbar()" />
                 </template>
                 <template v-if="item.attrs?.render" #default>
-                  <RenderVNode :v-node="item.attrs.render({ item, view })" />
+                  <RenderVNode :v-node="item.attrs.render()" />
                 </template>
               </UTitleBar>
             </template>
@@ -365,5 +367,12 @@ defineExpose(
         </template>
       </el-form-item>
     </template>
+    <el-form-item
+      v-if="inline"
+      class="u-form-item--searchbar"
+      :style="getFormItemStyle({ prop: '_searchbar' })"
+    >
+      <slot name="searchbar"> </slot>
+    </el-form-item>
   </el-form>
 </template>

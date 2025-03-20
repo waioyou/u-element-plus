@@ -34,4 +34,12 @@
       margin-left: 0px !important;
     }
   }
+  .u-form-item--searchbar {
+    flex: 1;
+    .el-form-item__content {
+      display: inline-flex;
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+    }
+  }
 }
