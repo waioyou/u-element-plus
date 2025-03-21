@@ -37,7 +37,7 @@ export interface FormProps extends Partial<Omit<ElFormProps, 'model'>> {
   /** 是否查看模式 */
   view?: boolean
   /** 表单配置项 */
-  columns: FormColumn[]
+  columns: FormColumns
   /** 栅格间隔 */
   gutter?: number
 }
@@ -54,10 +54,9 @@ export type FormEmits = {
 export type FormInstance = ElFormInstance
 
 /** 表单项 */
-export type FormColumns = FormColumn[]
+export type FormColumns = Record<string, FormColumn>
 
 export interface FormColumn extends Partial<TypeNoReadonly<Omit<ElFormItemProps, 'prop'>>> {
-  prop: string
   /** 元素 */
   element?: keyof FormColumnElementAttrsMap
   /** 校验规则 */

@@ -1,5 +1,5 @@
 import { markRaw, onMounted, ref } from 'vue'
-import { set, cloneDeep } from '@/utils'
+import { cloneDeep } from '@/utils'
 
 import type { Component, Ref } from 'vue'
 import type {
@@ -9,29 +9,12 @@ import type {
   FormColumn,
 } from '@/components/form'
 
-export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) => {
+export const useForm = <F = Record<string, any>>(callback?: () => Promise<F> | F, auto = false) => {
   const loading = ref(false)
   const formRef = ref<FormInstance>()
   const formData = ref<F>({} as F) as Ref<F>
-  const formColumns = ref<FormColumns>([]) as Ref<FormColumns>
+  const formColumns = ref<FormColumns>() as Ref<FormColumns>
   const _formData = ref<F>({} as F) as Ref<F>
-
-  /**
-   * 更新表单项配置
-   * @param prop 表单项的prop
-   * @param path 对象路径
-   * @param value 表单项的值
-   * @example
-   * updateFormItem('name', 'label', '姓名')
-   * updateFormItem('name', 'attrs.placeholder', '请输入姓名')
-   * updateFormItem('name', 'rules.0.required', true)
-   */
-  const updateFormColumn = (prop: string, path: string | string[], value: any) => {
-    const formItem = formColumns.value.find((item) => item.prop === prop)
-    if (formItem) {
-      set(formItem, path, value)
-    }
-  }
 
   /**
    * 设置表单配置
@@ -80,7 +63,6 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
   const createFormColumnWithElement = <E extends keyof FormColumnElementAttrsMap>(
     element: E,
     column: Omit<FormColumn, 'attrs' | 'prop' | 'element'> & {
-      prop: keyof F | (string & {})
       attrs?: FormColumnElementAttrsMap[E]
     },
   ) => ({
@@ -126,7 +108,6 @@ export const useForm = <F = any>(callback?: () => Promise<F> | F, auto = true) =
     createFormColumnWithElement,
     createFormColumnWithComponent,
     setFormColumns,
-    updateFormColumn,
     getFormData,
     resetFormData,
   }

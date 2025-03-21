@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, getCurrentInstance, ref, unref } from 'vue'
-import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
+import { formatterDate, getDateTypeFormat, getOptionText, isEmpty, omit, treeToList } from '@/utils'
 import type { FormProps, FormEmits, FormColumn } from './types'
 import { type FormInstance as ElFormInstance } from 'element-plus'
 import RenderVNode from '@/components/render-v-node/render-v-node.ts'
@@ -13,7 +13,7 @@ defineOptions({
 const emit = defineEmits<FormEmits>()
 const modelValue = defineModel<Record<string, any>>('modelValue', { default: () => ({}) })
 const props = withDefaults(defineProps<FormProps>(), {
-  options: () => [],
+  columns: () => ({}),
   /** 是否为查看模式 */
   view: false,
   /** 栅格间隔 */
@@ -119,7 +119,7 @@ const getElFormItemRules = (item: FormColumn) => {
 }
 
 /** 获取表单项的样式 */
-const getFormItemStyle = (item: FormColumn) => {
+const getFormItemStyle = (prop: string, item: FormColumn) => {
   const style = item?.style ?? {}
   const span = item.span?.split('/') ?? []
   const gutter = Number(props.gutter)
@@ -137,15 +137,15 @@ const getFormItemStyle = (item: FormColumn) => {
     if (numerator > 0 && denominator > 0 && numerator <= denominator) {
       style.width = `${(numerator / denominator) * 100}%`
     } else {
-      console.warn(`表单项【${item.prop}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
+      console.warn(`表单项【${prop}】的【span】属性配置错误，请检查配置; 正确格式如：1/2`)
     }
   }
   return style
 }
 
 /** 获取表单项的查看节点 */
-const getViewVNode = (item: FormColumn) => {
-  const itemValue = modelValue.value[item.prop]
+const getViewVNode = (prop: string, item: FormColumn) => {
+  const itemValue = modelValue.value[prop]
   if (itemValue === undefined || itemValue === null) {
     return ''
   }
@@ -194,7 +194,10 @@ defineExpose(
         return formInstance[key]
       },
       has(_, key) {
-        return Reflect.has(formRef.value!, key)
+        if (formRef.value) {
+          return Reflect.has(formRef.value, key)
+        }
+        return false
       },
     },
   ),
@@ -203,6 +206,7 @@ defineExpose(
 
 <template>
   <el-form
+    v-if="!isEmpty(columns)"
     class="u-form"
     ref="formRef"
     v-bind="filterElFormProps"
@@ -211,14 +215,14 @@ defineExpose(
     @validate="handleValidate"
     :class="$attrs.class"
   >
-    <template v-for="item in columns" :key="item.prop">
+    <template v-for="(item, prop) in columns" :key="prop">
       <el-form-item
         v-if="handleRendered(item)"
         v-show="handleDisplay(item)"
         v-bind="filterElFormItemProps(item)"
-        :prop="item.prop"
+        :prop="prop"
         :rules="getElFormItemRules(item)"
-        :style="getFormItemStyle(item)"
+        :style="getFormItemStyle(prop, item)"
         class="u-form-item"
         :class="item.element === 'title-bar' ? 'u-form-item--title-bar' : ''"
         :label="item.element === 'title-bar' ? '' : item.label"
@@ -226,8 +230,8 @@ defineExpose(
         <!-- label 插槽处理 -->
         <template #label="slotProps">
           <slot
-            v-if="$slots[`label-${item.prop}`]"
-            :name="`label-${item.prop}`"
+            v-if="$slots[`label-${prop}`]"
+            :name="`label-${prop}`"
             :item="item"
             v-bind="slotProps"
           ></slot>
@@ -247,8 +251,8 @@ defineExpose(
         <!-- error 插槽处理 -->
         <template #error="slotProps">
           <slot
-            v-if="$slots[`error-${item.prop}`]"
-            :name="`error-${item.prop}`"
+            v-if="$slots[`error-${prop}`]"
+            :name="`error-${prop}`"
             :item="item"
             v-bind="slotProps"
           />
@@ -263,32 +267,32 @@ defineExpose(
             <RenderVNode v-if="item.formatter" :v-node="item.formatter(item)" />
             <el-rate
               v-else-if="item.element === 'rate'"
-              v-model="modelValue[item.prop]"
+              v-model="modelValue[prop]"
               v-bind="item.attrs"
               :disabled="true"
             />
             <el-upload
               v-else-if="item.element === 'upload'"
-              :file-list="modelValue[item.prop]"
+              :file-list="modelValue[prop]"
               v-bind="item.attrs"
               :disabled="true"
               class="is-view"
             />
-            <RenderVNode v-else :v-node="getViewVNode(item)" />
+            <RenderVNode v-else :v-node="getViewVNode(prop, item)" />
           </template>
 
           <!-- 默认插槽处理 -->
-          <slot v-else-if="$slots[item.prop]" :name="item.prop" :item="item"></slot>
+          <slot v-else-if="$slots[prop]" :name="prop" :item="item"></slot>
           <RenderVNode v-else-if="item.render" :v-node="item.render({ item, view: view })" />
 
           <!-- 动态组件 -->
           <template v-else-if="item.component">
             <component
               :is="item.component"
-              v-model="modelValue[item.prop]"
+              v-model="modelValue[prop]"
               v-bind="item.attrs"
               :view="view"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(prop, item)"
             />
           </template>
           <!-- 渲染表单项 -->
@@ -310,16 +314,16 @@ defineExpose(
             <!--  级联选择器特殊处理：通过 component 渲染会出现选项 label 不显示的问题-->
             <el-cascader
               v-else-if="item.element === 'cascader'"
-              v-model="modelValue[item.prop]"
+              v-model="modelValue[prop]"
               v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(prop, item)"
             />
             <!-- 上传 -->
             <el-upload
               v-else-if="item.element === 'upload'"
-              v-model:file-list="modelValue[item.prop]"
+              v-model:file-list="modelValue[prop]"
               v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(prop, item)"
             >
               <el-button v-if="item.attrs?.listType !== 'picture-card'" type="primary">
                 点击上传
@@ -328,24 +332,24 @@ defineExpose(
             <!-- 多选框-->
             <template v-else-if="item.element === 'checkbox'">
               <el-checkbox
-                v-model="modelValue[item.prop]"
+                v-model="modelValue[prop]"
                 v-bind="item.attrs"
-                @change="handleChange(item.prop, item)"
+                @change="handleChange(prop, item)"
               />
             </template>
             <template v-else-if="item.element === 'radio'">
               <el-radio
-                v-model="modelValue[item.prop]"
+                v-model="modelValue[prop]"
                 v-bind="item.attrs"
-                @change="handleChange(item.prop, item)"
+                @change="handleChange(prop, item)"
               />
             </template>
             <component
               v-else
-              v-model="modelValue[item.prop]"
+              v-model="modelValue[prop]"
               :is="`el-${item.element}`"
               v-bind="item.attrs"
-              @change="handleChange(item.prop, item)"
+              @change="handleChange(prop, item)"
             >
               <template v-if="item.attrs && (item.attrs as any).options">
                 <!-- 选择器 选项 -->
@@ -377,7 +381,7 @@ defineExpose(
           </template>
           <!-- 错误配置项提示 -->
           <template v-else>
-            <el-text type="danger">{{ `请检查表单项【${item.prop}】的配置` }}</el-text>
+            <el-text type="danger">{{ `请检查表单项【${prop}】的配置` }}</el-text>
           </template>
         </template>
       </el-form-item>
@@ -385,7 +389,7 @@ defineExpose(
     <el-form-item
       v-if="inline"
       class="u-form-item--searchbar"
-      :style="getFormItemStyle({ prop: '_searchbar' })"
+      :style="getFormItemStyle('_searchbar', {})"
     >
       <slot name="searchbar"> </slot>
     </el-form-item>
