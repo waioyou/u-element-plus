@@ -8,34 +8,17 @@
 
 <preview path="../demo/use-form/basic.vue"></preview>
 
-## 手动触发数据加载
+## 自动触发数据加载
 
-默认情况下，`useForm` 会在组件挂载时自动获取数据，但您也可以通过设置 `auto: false` 来手动调用 `getFormData` 方法控制数据加载时机：
+默认情况下，`useForm` 不会在组件挂载时自动获取数据，但您也可以通过设置 `auto: true` 来自动触发数据加载。
 
 ```typescript
-const { getFormData } = useForm(() => getUserDetail(), false)
+const { getFormData } = useForm(() => getUserDetail(), true)
 
 // 在需要的时候手动加载数据
-const handleLoadData = () => {
-  getFormData()
-}
-```
-
-## 更新表单项配置
-
-您可以使用 `updateFormColumn` 方法动态更新表单项的配置：
-
-```typescript
-const { updateFormColumn } = useForm()
-
-// 更新表单项的标签
-updateFormColumn('name', 'label', '姓名')
-
-// 更新表单项的占位符
-updateFormColumn('name', 'attrs.placeholder', '请输入姓名')
-
-// 更新表单项的验证规则
-updateFormColumn('name', 'rules.0.required', true)
+onMounted(async () => {
+  await getFormData()
+})
 ```
 
 ## 创建表单项配置
@@ -107,12 +90,8 @@ resetFormData()
 
 ::: warning
 
-1. 始终在 `onMounted` 或其他生命周期钩子中设置表单项，确保它们在组件初始化后被正确配置。
+1. 始终在调用 `getFormData` 方法后设置表单项，避免立即触发`el-form`的校验。
 
-2. 当表单数据依赖于用户交互（如搜索、筛选）时，将 `auto` 设置为 `false`，并在适当的时机手动调用 `getFormData()`。
-
-3. 合理利用 `updateFormColumn` 动态更新表单项配置，以适应不同的业务需求。
-
-4. 使用 `createFormColumnWithElement` 和 `createFormColumnWithComponent` 方法来简化表单项的创建过程。
+2. 使用 `createFormColumnWithElement` 和 `createFormColumnWithComponent` 方法来简化表单项的创建过程。
 
 :::

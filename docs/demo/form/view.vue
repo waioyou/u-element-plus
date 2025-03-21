@@ -6,22 +6,24 @@ import { ElButton } from 'element-plus'
 
 const isView = ref(false)
 
-const { formData, formColumns, createFormColumnWithElement, setFormColumns } = useForm(async () => {
-  const res = await getUserDetail(2)
-  return res.data
-})
+const { formData, formColumns, createFormColumnWithElement, setFormColumns, getFormData } = useForm(
+  async () => {
+    const res = await getUserDetail(2)
+    return res.data
+  },
+)
 
-onMounted(() => {
-  setFormColumns([
-    createFormColumnWithElement('input', {
-      prop: 'id',
+onMounted(async () => {
+  getFormData()
+
+  setFormColumns({
+    id: createFormColumnWithElement('input', {
       label: 'ID',
       span: '1/2',
       view: true,
       display: false,
     }),
-    createFormColumnWithElement('title-bar', {
-      prop: 'sec1',
+    sec1: createFormColumnWithElement('title-bar', {
       label: '基本信息',
       attrs: {
         renderToolbar: () => (
@@ -31,8 +33,7 @@ onMounted(() => {
         ),
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'name',
+    name: createFormColumnWithElement('input', {
       label: '姓名',
       span: '1/2',
       rules: [{ required: true, message: '请输入姓名' }],
@@ -41,8 +42,7 @@ onMounted(() => {
         placeholder: '请输入姓名',
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'email',
+    email: createFormColumnWithElement('input', {
       label: '邮箱',
       span: '1/2',
       rules: [{ required: true, message: '请输入邮箱' }],
@@ -50,8 +50,7 @@ onMounted(() => {
         placeholder: '请输入邮箱',
       },
     }),
-    createFormColumnWithElement('input-number', {
-      prop: 'age',
+    age: createFormColumnWithElement('input-number', {
       label: '年龄',
       span: '1/2',
       rules: [{ required: true, message: '请输入年龄' }],
@@ -61,8 +60,7 @@ onMounted(() => {
         max: 120,
       },
     }),
-    createFormColumnWithElement('radio-group', {
-      prop: 'degree',
+    degree: createFormColumnWithElement('radio-group', {
       label: '学历',
       span: '1/2',
       rules: [{ required: true, message: '请输入学历' }],
@@ -70,8 +68,7 @@ onMounted(() => {
         options: dicts.degree,
       },
     }),
-    createFormColumnWithElement('select', {
-      prop: 'major',
+    major: createFormColumnWithElement('select', {
       label: '专业',
       span: '1/2',
       attrs: {
@@ -80,8 +77,7 @@ onMounted(() => {
       },
       rules: [{ required: true, message: '请输入专业' }],
     }),
-    createFormColumnWithElement('date-picker', {
-      prop: 'graduationYear',
+    graduationYear: createFormColumnWithElement('date-picker', {
       label: '毕业年份',
       span: '1/2',
       attrs: {
@@ -91,8 +87,7 @@ onMounted(() => {
         placeholder: '请输入毕业年份',
       },
     }),
-    createFormColumnWithElement('switch', {
-      prop: 'status',
+    status: createFormColumnWithElement('switch', {
       label: '状态',
       span: '1/2',
       attrs: {
@@ -104,8 +99,7 @@ onMounted(() => {
       },
       rules: [{ required: true, message: '请输入状态' }],
     }),
-    createFormColumnWithElement('rate', {
-      prop: 'score',
+    score: createFormColumnWithElement('rate', {
       label: '评分',
       span: '1/2',
       attrs: {
@@ -117,8 +111,7 @@ onMounted(() => {
         return getDictText(dicts.score, formData.value['score'])
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'remark',
+    remark: createFormColumnWithElement('input', {
       label: '备注',
       span: '1/1',
       attrs: {
@@ -129,7 +122,7 @@ onMounted(() => {
         showPassword: true,
       },
     }),
-  ])
+  })
 })
 </script>
 

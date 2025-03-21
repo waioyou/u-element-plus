@@ -2,22 +2,23 @@
 import { h, onMounted, ref } from 'vue'
 import { useForm } from 'u-element-plus'
 import { dicts, getUserDetail } from '../../mock/user'
-import { ElButton } from 'element-plus'
+import { ElButton, ElMessage } from 'element-plus'
 
-const { formData, formColumns, createFormColumnWithElement, setFormColumns } = useForm(async () => {
-  const res = await getUserDetail(1)
-  res.data.email = '123'
-  emailType.value = 'qq.com'
-  return res.data
-})
+const { formRef, formData, formColumns, createFormColumnWithElement, setFormColumns } = useForm(
+  async () => {
+    const res = await getUserDetail(1)
+    res.data.email = '123'
+    emailType.value = 'qq.com'
+    return res.data
+  },
+)
 
 const emailType = ref('')
 const emailOptions = ['qq.com', '163.com', 'gmail.com']
 
 onMounted(() => {
-  setFormColumns([
-    createFormColumnWithElement('title-bar', {
-      prop: 'sec1',
+  setFormColumns({
+    sec1: createFormColumnWithElement('title-bar', {
       label: '基本信息',
       attrs: {
         renderToolbar: () => {
@@ -25,14 +26,20 @@ onMounted(() => {
             ElButton,
             {
               type: 'primary',
+              onClick: () => {
+                formRef.value?.validate((valid) => {
+                  if (valid) {
+                    ElMessage.success('保存成功')
+                  }
+                })
+              },
             },
             () => '保存',
           )
         },
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'name',
+    name: createFormColumnWithElement('input', {
       label: '姓名',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -45,8 +52,7 @@ onMounted(() => {
         placeholder: '请输入姓名',
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'email',
+    email: createFormColumnWithElement('input', {
       label: '邮箱',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -59,8 +65,7 @@ onMounted(() => {
         placeholder: '请输入邮箱',
       },
     }),
-    createFormColumnWithElement('input-number', {
-      prop: 'age',
+    age: createFormColumnWithElement('input-number', {
       label: '年龄',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -75,8 +80,7 @@ onMounted(() => {
         max: 120,
       },
     }),
-    createFormColumnWithElement('radio-group', {
-      prop: 'degree',
+    degree: createFormColumnWithElement('radio-group', {
       label: '学历',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -89,8 +93,7 @@ onMounted(() => {
         options: dicts.degree,
       },
     }),
-    createFormColumnWithElement('select', {
-      prop: 'major',
+    major: createFormColumnWithElement('select', {
       label: '专业',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -104,8 +107,7 @@ onMounted(() => {
       },
       rules: [{ required: true, message: '请输入专业' }],
     }),
-    createFormColumnWithElement('date-picker', {
-      prop: 'graduationYear',
+    graduationYear: createFormColumnWithElement('date-picker', {
       label: '毕业年份',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -120,8 +122,7 @@ onMounted(() => {
         placeholder: '请输入毕业年份',
       },
     }),
-    createFormColumnWithElement('switch', {
-      prop: 'status',
+    status: createFormColumnWithElement('switch', {
       label: '状态',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -138,8 +139,7 @@ onMounted(() => {
       },
       rules: [{ required: true, message: '请输入状态' }],
     }),
-    createFormColumnWithElement('rate', {
-      prop: 'score',
+    score: createFormColumnWithElement('rate', {
       label: '评分',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -153,8 +153,7 @@ onMounted(() => {
         texts: dicts.score.map((item) => item.label),
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'remark',
+    remark: createFormColumnWithElement('input', {
       label: '备注',
       renderLabel: ({ label }) => (
         <ElButton type="primary" text>
@@ -170,7 +169,7 @@ onMounted(() => {
         showPassword: true,
       },
     }),
-  ])
+  })
 })
 </script>
 

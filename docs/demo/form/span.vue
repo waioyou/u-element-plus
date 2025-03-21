@@ -9,14 +9,12 @@ const { formData, formColumns, createFormColumnWithElement, setFormColumns } = u
 })
 
 onMounted(() => {
-  setFormColumns([
-    createFormColumnWithElement('title-bar', {
-      prop: 'sec1',
+  setFormColumns({
+    sec1: createFormColumnWithElement('title-bar', {
       label: '基本信息',
       span: '1/1',
     }),
-    createFormColumnWithElement('input', {
-      prop: 'name',
+    name: createFormColumnWithElement('input', {
       label: '姓名',
       span: '1/2',
       attrs: {
@@ -24,8 +22,7 @@ onMounted(() => {
         clearable: true,
       },
     }),
-    createFormColumnWithElement('radio-group', {
-      prop: 'gender',
+    gender: createFormColumnWithElement('radio-group', {
       label: '性别',
       span: '1/2',
       attrs: {
@@ -33,8 +30,7 @@ onMounted(() => {
         clearable: true,
       },
     }),
-    createFormColumnWithElement('date-picker', {
-      prop: 'birthday',
+    birthday: createFormColumnWithElement('date-picker', {
       label: '生日',
       span: '1/2',
       attrs: {
@@ -45,8 +41,7 @@ onMounted(() => {
         clearable: true,
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'phone',
+    phone: createFormColumnWithElement('input', {
       label: '电话',
       span: '1/2',
       attrs: {
@@ -55,8 +50,7 @@ onMounted(() => {
         clearable: true,
       },
     }),
-    createFormColumnWithElement('select', {
-      prop: 'degree',
+    degree: createFormColumnWithElement('select', {
       label: '学历',
       span: '1/2',
       attrs: {
@@ -65,8 +59,7 @@ onMounted(() => {
         clearable: true,
       },
     }),
-    createFormColumnWithElement('autocomplete', {
-      prop: 'schoolText',
+    schoolText: createFormColumnWithElement('autocomplete', {
       label: '毕业学校',
       span: '1/2',
       attrs: {
@@ -77,8 +70,7 @@ onMounted(() => {
         },
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'remark',
+    remark: createFormColumnWithElement('input', {
       label: '地址',
       span: '1/1',
       attrs: {
@@ -90,7 +82,7 @@ onMounted(() => {
         clearable: true,
       },
     }),
-  ])
+  })
 })
 </script>
 

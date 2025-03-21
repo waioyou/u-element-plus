@@ -16,24 +16,21 @@ const { formData, formColumns, createFormColumnWithElement, setFormColumns } = u
 )
 
 onMounted(() => {
-  setFormColumns([
-    createFormColumnWithElement('input', {
-      prop: 'username',
+  setFormColumns({
+    username: createFormColumnWithElement('input', {
       class: 'w-55',
       attrs: {
         clearable: true,
         placeholder: '用户名',
       },
     }),
-    createFormColumnWithElement('input', {
-      prop: 'phone',
+    phone: createFormColumnWithElement('input', {
       class: 'w-55',
       attrs: {
         placeholder: '手机号',
       },
     }),
-    createFormColumnWithElement('select', {
-      prop: 'gender',
+    gender: createFormColumnWithElement('select', {
       class: 'w-55',
       attrs: {
         placeholder: '性别',
@@ -44,8 +41,7 @@ onMounted(() => {
         ],
       },
     }),
-    createFormColumnWithElement('select', {
-      prop: 'status',
+    status: createFormColumnWithElement('select', {
       class: 'w-55',
       attrs: {
         placeholder: '状态',
@@ -56,8 +52,7 @@ onMounted(() => {
         ],
       },
     }),
-    createFormColumnWithElement('date-picker', {
-      prop: 'createdAt',
+    createdAt: createFormColumnWithElement('date-picker', {
       class: 'w-70',
       attrs: {
         clearable: true,
@@ -71,8 +66,7 @@ onMounted(() => {
         },
       },
     }),
-    createFormColumnWithElement('date-picker', {
-      prop: 'updatedAt',
+    updatedAt: createFormColumnWithElement('date-picker', {
       class: 'w-70',
       attrs: {
         clearable: true,
@@ -83,7 +77,7 @@ onMounted(() => {
         endPlaceholder: '更新结束日期',
       },
     }),
-  ])
+  })
 })
 </script>
 

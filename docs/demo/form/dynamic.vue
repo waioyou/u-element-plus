@@ -1,38 +1,23 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import { useForm } from 'u-element-plus'
+import { computed, onMounted } from 'vue'
+import { FormColumn, useForm } from 'u-element-plus'
 
-const {
-  formRef,
-  formData,
-  formColumns,
-  setFormColumns,
-  createFormColumnWithElement,
-  updateFormColumn,
-} = useForm(() => ({
-  q1: '',
-  q2: [] as string[],
-  q3: '',
-  q4: '',
-  q5: '',
-  q6: '',
-}))
-const handleChange = (prop: string, item: any) => {
+const { formRef, formData, formColumns, setFormColumns, createFormColumnWithElement } = useForm()
+const handleChange = (prop: string, item: FormColumn) => {
+  console.log(prop, item)
   if (prop === 'q2') {
-    const options = item.attrs.options.filter((d: any) => formData.value.q2.includes(d.value))
-    updateFormColumn('q3', 'attrs.options', options)
+    const options = item.attrs!.options.filter((d: any) => formData.value.q2.includes(d.value))
+    formColumns.value.q3.attrs!.options = options
   }
 }
 
 onMounted(() => {
-  setFormColumns([
-    createFormColumnWithElement('title-bar', {
-      prop: 'sec1',
+  setFormColumns({
+    sec1: createFormColumnWithElement('title-bar', {
       label: '关于"旅游体验"的动态关联问卷',
       span: '1/1',
     }),
-    createFormColumnWithElement('radio-group', {
-      prop: 'q1',
+    q1: createFormColumnWithElement('radio-group', {
       label: '您在过去一年内是否进行过旅游？',
       attrs: {
         options: [
@@ -43,8 +28,7 @@ onMounted(() => {
       rules: [{ required: true, trigger: 'change', message: '请选择您是否进行过旅游' }],
       span: '1/1',
     }),
-    createFormColumnWithElement('checkbox-group', {
-      prop: 'q2',
+    q2: createFormColumnWithElement('checkbox-group', {
       label: '您去过哪些类型的旅游目的地',
       attrs: {
         options: [
@@ -59,8 +43,7 @@ onMounted(() => {
       span: '1/1',
       rendered: () => formData.value.q1 === '1',
     }),
-    createFormColumnWithElement('radio-group', {
-      prop: 'q3',
+    q3: createFormColumnWithElement('checkbox-group', {
       label: '在这些目的地中，您最喜欢哪一个？',
       attrs: {
         options: [],
@@ -69,8 +52,7 @@ onMounted(() => {
       span: '1/1',
       rendered: () => formData.value.q2?.length > 1,
     }),
-    {
-      prop: 'q4',
+    q4: {
       label: '您的旅行通常持续多长时间？',
       element: 'radio-group',
       attrs: {
@@ -84,8 +66,7 @@ onMounted(() => {
       span: '1/1',
       rendered: computed(() => formData.value.q1 === '1'),
     },
-    {
-      prop: 'q5',
+    q5: {
       label: '请简述您选择长期旅行的原因',
       element: 'input',
       attrs: {
@@ -95,8 +76,7 @@ onMounted(() => {
       span: '1/1',
       rendered: computed(() => formData.value.q4 === 'long'),
     },
-    {
-      prop: 'q6',
+    q6: {
       label: '您对未来的旅行有什么期待或建议？',
       element: 'input',
       attrs: {
@@ -106,7 +86,7 @@ onMounted(() => {
       span: '1/1',
       display: computed(() => formData.value.q1 === '1'),
     },
-  ])
+  })
 })
 </script>
 

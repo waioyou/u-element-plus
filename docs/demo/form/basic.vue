@@ -34,15 +34,13 @@ const formData = ref({
   ],
 })
 
-const formColumns = ref<FormColumns>([
-  {
-    prop: 'title-bar',
+const formColumns = ref<FormColumns>({
+  titleBar: {
     label: '基础信息',
     element: 'title-bar',
     span: '1/1',
   },
-  {
-    prop: 'autocomplete',
+  autocomplete: {
     label: '自动补全输入框',
     element: 'autocomplete',
     tooltip: '自动补全输入框',
@@ -66,8 +64,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'cascader',
+  cascader: {
     label: '级联选择器',
     element: 'cascader',
     rules: [{ required: true, trigger: 'change' }],
@@ -97,8 +94,7 @@ const formColumns = ref<FormColumns>([
     span: '1/2',
   },
 
-  {
-    prop: 'checkboxGroup',
+  checkboxGroup: {
     label: '多选框组',
     element: 'checkbox-group',
     rules: [{ required: true, trigger: 'change' }],
@@ -112,8 +108,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'colorPicker',
+  colorPicker: {
     label: '取色器',
     element: 'color-picker',
     rules: [{ required: true, trigger: 'change' }],
@@ -122,8 +117,7 @@ const formColumns = ref<FormColumns>([
       showAlpha: true,
     },
   },
-  {
-    prop: 'datePicker',
+  datePicker: {
     label: '日期选择器',
     element: 'date-picker',
     rules: [{ required: true, trigger: 'change' }],
@@ -135,8 +129,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'input',
+  input: {
     label: '输入框',
     element: 'input',
     rules: [{ required: true, trigger: 'blur' }],
@@ -149,8 +142,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'inputNumber',
+  inputNumber: {
     label: '数字输入框',
     element: 'input-number',
     rules: [{ required: true, trigger: 'change' }],
@@ -161,8 +153,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'radioGroup',
+  radioGroup: {
     label: '单选框组',
     element: 'radio-group',
     rules: [{ required: true, trigger: 'change' }],
@@ -175,8 +166,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'rate',
+  rate: {
     label: '评分',
     element: 'rate',
     rules: [{ required: true, trigger: 'change' }],
@@ -186,8 +176,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'select',
+  select: {
     label: '选择器',
     element: 'select',
     rules: [{ required: true, trigger: 'change' }],
@@ -201,8 +190,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'selectV2',
+  selectV2: {
     label: '虚拟化选择器',
     element: 'select-v2',
     rules: [{ required: true, trigger: 'change' }],
@@ -217,8 +205,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'slider',
+  slider: {
     label: '滑块',
     element: 'slider',
     rules: [{ required: true, trigger: 'change' }],
@@ -229,8 +216,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'switch',
+  switch: {
     label: '开关',
     element: 'switch',
     rules: [{ required: true, trigger: 'change' }],
@@ -240,8 +226,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'timePicker',
+  timePicker: {
     label: '时间选择器',
     element: 'time-picker',
     rules: [{ required: true, trigger: 'change' }],
@@ -253,8 +238,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/2',
   },
-  {
-    prop: 'transfer',
+  transfer: {
     label: '穿梭框',
     element: 'transfer',
     rules: [{ required: true, trigger: 'change' }],
@@ -268,8 +252,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/1',
   },
-  {
-    prop: 'treeSelect',
+  treeSelect: {
     label: '树形选择器',
     element: 'tree-select',
     rules: [{ required: true, trigger: 'change' }],
@@ -292,10 +275,9 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/1',
   },
-  {
+  upload: {
     label: '上传',
     element: 'upload',
-    prop: 'upload',
     rules: [{ required: false, trigger: 'change' }],
     view: false,
     attrs: {
@@ -312,7 +294,7 @@ const formColumns = ref<FormColumns>([
     },
     span: '1/1',
   },
-])
+})
 </script>
 
 <template>

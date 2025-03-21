@@ -3,15 +3,17 @@ import { onMounted } from 'vue'
 import { useForm } from 'u-element-plus'
 import { getUserDetail } from '../../mock/user'
 
-const { formData, formColumns, createFormColumnWithElement, setFormColumns } = useForm(async () => {
-  const res = await getUserDetail(2)
-  return res.data
-})
+const { formData, formColumns, createFormColumnWithElement, setFormColumns, getFormData } = useForm(
+  async () => {
+    const res = await getUserDetail(2)
+    return res.data
+  },
+)
 
-onMounted(() => {
-  setFormColumns([
-    createFormColumnWithElement('input', {
-      prop: 'name',
+onMounted(async () => {
+  await getFormData()
+  setFormColumns({
+    name: createFormColumnWithElement('input', {
       label: '用户名',
       attrs: {
         placeholder: '请输入用户名',
@@ -21,8 +23,7 @@ onMounted(() => {
       tooltip: '用户名最多10个字符',
       class: 'w-70!',
     }),
-    createFormColumnWithElement('input', {
-      prop: 'phone',
+    phone: createFormColumnWithElement('input', {
       label: '手机号',
       attrs: {
         placeholder: '请输入手机号',
@@ -34,8 +35,7 @@ onMounted(() => {
       tooltip: '请输入正确的手机号',
       class: 'w-70!',
     }),
-    createFormColumnWithElement('input', {
-      prop: 'email',
+    email: createFormColumnWithElement('input', {
       label: '邮箱',
       attrs: {
         placeholder: '请输入邮箱',
@@ -47,7 +47,7 @@ onMounted(() => {
       tooltip: '请输入正确的手机号',
       class: 'w-70!',
     }),
-  ])
+  })
 })
 </script>
 
