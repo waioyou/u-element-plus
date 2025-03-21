@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, getCurrentInstance, ref } from 'vue'
+import { computed, getCurrentInstance, ref, unref } from 'vue'
 import { formatterDate, getDateTypeFormat, getOptionText, omit, treeToList } from '@/utils'
 import type { FormProps, FormEmits, FormColumn } from './types'
 import { type FormInstance as ElFormInstance } from 'element-plus'
@@ -77,6 +77,21 @@ const handleValidate = (prop: any, isValid: boolean, message: string) => {
 /** 处理表单项的 change 事件 */
 const handleChange = (prop: string, item: FormColumn) => {
   emit('change', prop, item)
+}
+
+/** 处理表单项的渲染 */
+const handleRendered = (item: FormColumn) => {
+  if (typeof item.rendered === 'function') {
+    return item.rendered(item)
+  }
+  return unref(item.rendered) === false ? false : true
+}
+/** 处理表单项的显示 */
+const handleDisplay = (item: FormColumn) => {
+  if (typeof item.display === 'function') {
+    return item.display(item)
+  }
+  return unref(item.display) === false ? false : true
 }
 
 /** 过滤出 ElFormItem 需要的属性 */
@@ -198,8 +213,8 @@ defineExpose(
   >
     <template v-for="item in columns" :key="item.prop">
       <el-form-item
-        v-if="item?.rendered ?? true"
-        v-show="item?.display ?? true"
+        v-if="handleRendered(item)"
+        v-show="handleDisplay(item)"
         v-bind="filterElFormItemProps(item)"
         :prop="item.prop"
         :rules="getElFormItemRules(item)"

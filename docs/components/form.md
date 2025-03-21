@@ -12,7 +12,7 @@
 
 通过表单配置选项生成一个基础的表单, 将对应的组件属性和事件设置在`attrs`字段中。如`placeholder、disabled、size`等等,具体请查看对应组件的Element Plus文档。
 
-<preview path="../demo/form/basic.vue"></preview>
+<!-- <preview path="../demo/form/basic.vue"></preview> -->
 
 ## 混合布局
 
@@ -20,7 +20,7 @@
 
 通过表单的`gutter`属性来设置表单项之间的间距。默认为：`20`。
 
-<preview path="../demo/form/span.vue"></preview>
+<!-- <preview path="../demo/form/span.vue"></preview> -->
 
 ## 自定义表单项
 
@@ -32,7 +32,7 @@
 `render`、`renderLabel`、`renderError` 需要返回`VNode｜string`; 可以通过`h`函数或者指定`lang="tsx"`。
 :::
 
-<preview path="../demo/form/slot.vue"></preview>
+<!-- <preview path="../demo/form/slot.vue"></preview> -->
 
 ## 查看模式
 
@@ -46,7 +46,7 @@
 表单属性 `view` 优先级高于表单项的 `view` 属性。
 :::
 
-<preview path="../demo/form/view.vue"></preview>
+<!-- <preview path="../demo/form/view.vue"></preview> -->
 
 ## 动态表单
 
@@ -64,7 +64,7 @@
 
 通过配置`tooltip`属性来设置表单项的提示信息。
 
-<preview path="../demo/form/tooltip.vue"></preview>
+<!-- <preview path="../demo/form/tooltip.vue"></preview> -->
 
 ## 行内表单
 
@@ -74,7 +74,7 @@
 
 行内模式时，表单元素的宽度不会自适应父容器，需要自行设置默认宽度；可以通过配置表单项的`span`、`class`、`style`属性来设置表单项的宽度。
 
-<preview path="../demo/form/inline.vue"></preview>
+<!-- <preview path="../demo/form/inline.vue"></preview> -->
 
 ## API
 

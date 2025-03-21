@@ -73,9 +73,9 @@ export interface FormColumn extends Partial<TypeNoReadonly<Omit<ElFormItemProps,
   /** 查看模式下格式化显示内容 */
   formatter?: (item: FormColumn) => VNode | string | number
   /** 是否渲染 对应v-if */
-  rendered?: boolean | Ref<boolean> | ComputedRef<boolean>
+  rendered?: boolean | Ref<boolean> | ComputedRef<boolean> | ((item: FormColumn) => boolean)
   /** 是否展示 对应v-show */
-  display?: boolean | Ref<boolean> | ComputedRef<boolean>
+  display?: boolean | Ref<boolean> | ComputedRef<boolean> | ((item: FormColumn) => boolean)
   /** 动态组件 */
   component?: Component
   /** 样式 */
