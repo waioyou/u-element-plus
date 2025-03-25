@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { typeDefinitions } from './typeDefinitions'
 import { codeToHtml } from 'shiki'
+import { useData } from 'vitepress'
 
 const props = defineProps<{
   // 类型名称
@@ -9,6 +10,15 @@ const props = defineProps<{
   // 类型定义，如果不提供将尝试从typeMap中获取
   definition?: string
 }>()
+
+const { isDark } = useData()
+const theme = ref('github-light')
+
+// watchEffect(async () => {
+//   console.log('🚀 ~ watchEffect ~  isDark.value:', isDark.value)
+//
+//
+// },{})
 
 const typeDefinition = ref('')
 
@@ -22,14 +32,21 @@ const getTypeDefinition = async () => {
   }
   const code = await codeToHtml(result, {
     lang: 'typescript',
-    theme: 'vitesse-light',
+    theme: theme.value,
   })
   return code
 }
 
-onMounted(async () => {
-  typeDefinition.value = await getTypeDefinition()
-})
+watch(
+  () => isDark.value,
+  async () => {
+    theme.value = isDark.value ? 'github-dark' : 'github-light'
+    typeDefinition.value = await getTypeDefinition()
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 
 <template>
