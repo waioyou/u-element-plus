@@ -37,21 +37,4 @@ features:
 footer: MIT Licensed | Copyright © 2023-present
 ---
 
-<!-- ## 快速开始
-
-```bash
-# 安装依赖
-npm install u-element-plus
-```
-
-```js
-// main.ts
-import { createApp } from 'vue'
-import App from './App.vue'
-import UElementPlus from 'u-element-plus'
-import 'u-element-plus/dist/style.css'
-
-const app = createApp(App)
-app.use(UElementPlus)
-app.mount('#app')
-``` -->
+<DataPanel />

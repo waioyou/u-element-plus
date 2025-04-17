@@ -8,7 +8,7 @@
 
 <preview path="../demo/context-menu/basic.vue"></preview>
 
-## 指定触发区域
+<!-- ## 指定触发区域
 
 通过 `trigger-selectors` 属性指定触发右键菜单的元素选择器。
 
@@ -18,7 +18,7 @@
 
 通过 `manual` 属性和实例方法手动控制菜单的显示和隐藏。
 
-<preview path="../demo/context-menu/manual.vue"></preview>
+<preview path="../demo/context-menu/manual.vue"></preview> -->
 
 ## API
 
