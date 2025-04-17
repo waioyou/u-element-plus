@@ -25,7 +25,8 @@
     ".vitepress/**/*.vue",
     "components/**/*.ts",
     "components/**/*.vue",
-    "demo/**/*.vue"
+    "demo/**/*.vue",
+    "global.d.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

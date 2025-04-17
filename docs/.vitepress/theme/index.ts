@@ -1,8 +1,8 @@
 // https://vitepress.dev/guide/custom-theme
+import { Theme, inBrowser } from 'vitepress'
 import { h } from 'vue'
-import { inBrowser } from 'vitepress'
-
 import DefaultTheme from 'vitepress/theme'
+
 import './style.scss'
 
 // 使用组件demo效果预览插件
@@ -13,6 +13,9 @@ import DataPanel from '../components/data-panel.vue'
 
 // 浏览量统计
 import busuanzi from 'busuanzi.pure.js'
+//  进度条组件
+import { NProgress } from 'nprogress-v2/dist/index.js'
+import 'nprogress-v2/dist/index.css'
 
 // // 导入组件
 // import UElementPlus from 'u-element-plus'
@@ -23,7 +26,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import 'uno.css'
-import { Theme } from 'vitepress'
+
 import { generateUserList } from '@docs/mock/user'
 generateUserList()
 export default {
@@ -34,13 +37,21 @@ export default {
     })
   },
   async enhanceApp({ app, router }) {
-    if (!import.meta.env.SSR) {
+    if (!(import.meta as any).env.SSR) {
       const plugin = await import('u-element-plus')
       app.use(plugin.default)
     }
-    // 浏览量统计
+    NProgress.configure({ showSpinner: false })
+
     if (inBrowser) {
+      router.onBeforeRouteChange = () => {
+        // 开始进度条
+        NProgress.start()
+      }
       router.onAfterRouteChange = () => {
+        // 结束进度条
+        NProgress.done()
+        // 浏览量统计
         busuanzi.fetch()
       }
     }
